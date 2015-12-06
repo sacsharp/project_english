@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Lesson 1",
+    "id": "1",
+    "theme": "green",
+    "quizzes": [
+      {
+        "type": "true-false",
+        "question": "Coffee beans contain more caffeine than tea leaves.",
+        "answer": false
+      },
+      {
+        "type": "single-select-item",
+        "question": "What vegetable did Mark Twain describe as “cabbage with a college education”?",
+        "options": [
+          "Spinach",
+          "Broccoli",
+          "Cauliflower",
+          "Kale"
+        ],
+        "answer": [2]
+      },
+      {
+        "type": "fill-blank",
+        "question": "What name is given to a sugar syrup which is gently heated until it browns?",
+        "answer": "Caramel"
+      }
+    ],
+    "scores": [
+      0,
+      0,
+      0
+    ],
+    "solved": "false"
+  },
+  {
+    "name": "Lesson 1",
+    "id": "1",
+    "theme": "green",
+    "quizzes": [
+      {
+        "type": "true-false",
+        "question": "Coffee beans contain more caffeine than tea leaves.",
+        "answer": false
+      },
+      {
+        "type": "single-select-item",
+        "question": "What vegetable did Mark Twain describe as “cabbage with a college education”?",
+        "options": [
+          "Spinach",
+          "Broccoli",
+          "Cauliflower",
+          "Kale"
+        ],
+        "answer": [2]
+      },
+      {
+        "type": "fill-blank",
+        "question": "What name is given to a sugar syrup which is gently heated until it browns?",
+        "answer": "Caramel"
+      }
+    ],
+    "scores": [
+      0,
+      0,
+      0
+    ],
+    "solved": "false"
+  }
+]

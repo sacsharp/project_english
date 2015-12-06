@@ -1,0 +1,36 @@
+package com.sigrideducation.englishlearning.model.question;
+
+import android.os.Parcel;
+
+import com.sigrideducation.englishlearning.helper.AnswerHelper;
+
+
+public final class SelectItemQuestion extends OptionsQuestion<String> {
+
+    public SelectItemQuestion(String question, int[] answer, String[] options, boolean solved) {
+        super(question, answer, options, solved);
+    }
+
+    @SuppressWarnings("unused")
+    public SelectItemQuestion(Parcel in) {
+        super(in);
+        String[] options = in.createStringArray();
+        setOptions(options);
+    }
+
+    @Override
+    public QuestionType getType() {
+        return QuestionType.SINGLE_SELECT_ITEM;
+    }
+
+    @Override
+    public String getStringAnswer() {
+        return AnswerHelper.getAnswer(getAnswer(), getOptions());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeStringArray(getOptions());
+    }
+}
