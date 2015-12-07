@@ -39,7 +39,7 @@ public abstract class Question<A> implements Parcelable {
     private final String mQuestionType;
     private A mAnswer;
     /**
-     * Flag indicating whether this quiz has already been solved.
+     * Flag indicating whether this question has already been solved.
      * It does not give information whether the solution was correct or not.
      */
     private boolean mSolved;
@@ -58,7 +58,7 @@ public abstract class Question<A> implements Parcelable {
     }
 
     /**
-     * @return The {@link QuestionType} that represents this quiz.
+     * @return The {@link QuestionType} that represents this question.
      */
     public abstract QuestionType getType();
 
@@ -92,7 +92,7 @@ public abstract class Question<A> implements Parcelable {
     }
 
     /**
-     * @return The id of this quiz.
+     * @return The id of this question.
      */
     public int getId() {
         return getQuestion().hashCode();
@@ -120,18 +120,18 @@ public abstract class Question<A> implements Parcelable {
             return false;
         }
 
-        Question quiz = (Question) o;
+        Question question = (Question) o;
 
-        if (mSolved != quiz.mSolved) {
+        if (mSolved != question.mSolved) {
             return false;
         }
-        if (!mAnswer.equals(quiz.mAnswer)) {
+        if (!mAnswer.equals(question.mAnswer)) {
             return false;
         }
-        if (!mQuestion.equals(quiz.mQuestion)) {
+        if (!mQuestion.equals(question.mQuestion)) {
             return false;
         }
-        if (!mQuestionType.equals(quiz.mQuestionType)) {
+        if (!mQuestionType.equals(question.mQuestionType)) {
             return false;
         }
 

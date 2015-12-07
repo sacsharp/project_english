@@ -35,7 +35,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private int mQuestionSize;
     private ProgressBar mProgressBar;
     private Lesson mLesson;
-    private AdapterViewAnimator mQuizView;
+    private AdapterViewAnimator mQuestionView;
     private ScoreAdapter mScoreAdapter;
     private QuestionAdapter mQuestionAdapter;
     private SolvedStateListener mSolvedStateListener;
@@ -76,7 +76,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mQuizView = (AdapterViewAnimator) view.findViewById(R.id.question_view);
+        mQuestionView = (AdapterViewAnimator) view.findViewById(R.id.question_view);
         decideOnViewToDisplay();
         setQuizViewAnimations();
         initProgressToolbar(view);
@@ -88,8 +88,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         if (ApiLevelHelper.isLowerThan(Build.VERSION_CODES.LOLLIPOP)) {
             return;
         }
-        mQuizView.setInAnimation(getActivity(), R.animator.slide_in_bottom);
-        mQuizView.setOutAnimation(getActivity(), R.animator.slide_out_top);
+        mQuestionView.setInAnimation(getActivity(), R.animator.slide_in_bottom);
+        mQuestionView.setOutAnimation(getActivity(), R.animator.slide_out_top);
     }
 
     private void initProgressToolbar(View view) {
@@ -103,12 +103,12 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         setProgress(firstUnsolvedQuizPosition);
     }
 
-    private void setProgress(int currentQuizPosition) {
+    private void setProgress(int currentQuestionPosition) {
         if (!isAdded()) {
             return;
         }
-        mProgressText.setText(getString(R.string.quiz_of_quizzes, currentQuizPosition, mQuestionSize));
-        mProgressBar.setProgress(currentQuizPosition);
+        mProgressText.setText(getString(R.string.question_of_questions, currentQuestionPosition, mQuestionSize));
+        mProgressBar.setProgress(currentQuestionPosition);
     }
 
     private void decideOnViewToDisplay() {
@@ -119,14 +119,14 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
                 mSolvedStateListener.onCategorySolved();
             }
         } else {
-            mQuizView.setAdapter(getQuestionAdapter());
-            mQuizView.setSelection(mLesson.getFirstUnsolvedQuizPosition());
+            mQuestionView.setAdapter(getQuestionAdapter());
+            mQuestionView.setSelection(mLesson.getFirstUnsolvedQuizPosition());
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        View focusedChild = mQuizView.getFocusedChild();
+        View focusedChild = mQuestionView.getFocusedChild();
         if (focusedChild instanceof ViewGroup) {
             View currentView = ((ViewGroup) focusedChild).getChildAt(0);
             if (currentView instanceof AbsQuestionView) {
@@ -146,13 +146,13 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         if (null == savedInstanceState) {
             return;
         }
-        mQuizView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        mQuestionView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
-                mQuizView.removeOnLayoutChangeListener(this);
-                View currentChild = mQuizView.getChildAt(0);
+                mQuestionView.removeOnLayoutChangeListener(this);
+                View currentChild = mQuestionView.getChildAt(0);
                 if (currentChild instanceof ViewGroup) {
                     final View potentialQuizView = ((ViewGroup) currentChild).getChildAt(0);
                     if (potentialQuizView instanceof AbsQuestionView) {
@@ -178,14 +178,14 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
      * @return <code>true</code> if there's another quiz to solve, else <code>false</code>.
      */
     public boolean showNextPage() {
-        if (null == mQuizView) {
+        if (null == mQuestionView) {
             return false;
         }
-        int nextItem = mQuizView.getDisplayedChild() + 1;
+        int nextItem = mQuestionView.getDisplayedChild() + 1;
         setProgress(nextItem);
-        final int count = mQuizView.getAdapter().getCount();
+        final int count = mQuestionView.getAdapter().getCount();
         if (nextItem < count) {
-            mQuizView.showNext();
+            mQuestionView.showNext();
             ELDatabaseHelper.updateLesson(getActivity(), mLesson);
             return true;
         }
@@ -204,7 +204,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         mScoreAdapter = getScoreAdapter();
         scorecardView.setAdapter(mScoreAdapter);
         scorecardView.setVisibility(View.VISIBLE);
-        mQuizView.setVisibility(View.GONE);
+        mQuestionView.setVisibility(View.GONE);
     }
 
     private ScoreAdapter getScoreAdapter() {

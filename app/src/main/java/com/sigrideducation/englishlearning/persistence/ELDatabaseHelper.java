@@ -17,6 +17,7 @@ import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
+import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 import com.sigrideducation.englishlearning.model.question.TrueFalseQuestion;
 
 import org.json.JSONArray;
@@ -253,6 +254,9 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             case JsonAttributes.QuestionType.TRUE_FALSE: {
                 return createTrueFalseQuestion(question, answer, solved);
             }
+            case JsonAttributes.QuestionType.SPEECH_INPUT:{
+                return createSpeechInputQuestion(question,answer,solved);
+            }
             default: {
                 throw new IllegalArgumentException("Question type " + type + " is not supported");
             }
@@ -282,15 +286,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final boolean answerValue = "true".equals(answer);
         return new TrueFalseQuestion(question, answerValue, solved);
     }
-    
 
-    private static String[][] extractOptionsArrays(String options) {
-        final String[] optionsLvlOne = JsonHelper.jsonArrayToStringArray(options);
-        final String[][] optionsArray = new String[optionsLvlOne.length][];
-        for (int i = 0; i < optionsLvlOne.length; i++) {
-            optionsArray[i] = JsonHelper.jsonArrayToStringArray(optionsLvlOne[i]);
-        }
-        return optionsArray;
+    private static Question createSpeechInputQuestion(String question, String answer, boolean solved) {
+
+        return new SpeechInputQuestion(question, answer, solved);
     }
 
     /**
@@ -334,7 +333,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             try {
-                fillCategoriesAndQuizzes(db);
+                fillLessonsAndQuestions(db);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -344,7 +343,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void fillCategoriesAndQuizzes(SQLiteDatabase db) throws JSONException, IOException {
+    private void fillLessonsAndQuestions(SQLiteDatabase db) throws JSONException, IOException {
         ContentValues values = new ContentValues(); // reduce, reuse
         JSONArray jsonArray = new JSONArray(readLessonsFromResources());
         JSONObject lesson;
