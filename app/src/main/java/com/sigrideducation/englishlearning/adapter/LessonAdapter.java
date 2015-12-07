@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.sigrideducation.englishlearning.R;
@@ -51,7 +50,6 @@ public class LessonAdapter extends BaseAdapter {
         LessonViewHolder holder = (LessonViewHolder) convertView.getTag();
         Lesson lesson = getItem(position);
         Theme theme = lesson.getTheme();
-        setCategoryIcon(lesson, holder.icon);
         convertView.setBackgroundColor(getColor(theme.getWindowBackgroundColor()));
         holder.title.setText(lesson.getName());
         holder.title.setTextColor(getColor(theme.getTextPrimaryColor()));
@@ -84,17 +82,6 @@ public class LessonAdapter extends BaseAdapter {
         return false;
     }
 
-    private void setCategoryIcon(Lesson lesson, ImageView icon) {
-        final int categoryImageResource = mResources.getIdentifier(
-                ICON_CATEGORY + lesson.getId(), DRAWABLE, mPackageName);
-        final boolean solved = lesson.isSolved();
-        if (solved) {
-            LayerDrawable solvedIcon = loadSolvedIcon(lesson, categoryImageResource);
-            icon.setImageDrawable(solvedIcon);
-        } else {
-            icon.setImageResource(categoryImageResource);
-        }
-    }
 
     @Override
     public void notifyDataSetChanged() {

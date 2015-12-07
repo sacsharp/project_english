@@ -241,10 +241,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final String question = cursor.getString(3);
         final String answer = cursor.getString(4);
         final String options = cursor.getString(5);
-        final int min = cursor.getInt(6);
-        final int max = cursor.getInt(7);
-        final int step = cursor.getInt(8);
-        final boolean solved = getBooleanFromDatabase(cursor.getString(11));
+        final boolean solved = getBooleanFromDatabase(cursor.getString(8));
 
         switch (type) {
             case JsonAttributes.QuestionType.FILL_BLANK: {
@@ -264,8 +261,8 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private static Question createFillBlankQuestion(Cursor cursor, String question,
                                             String answer, boolean solved) {
-        final String start = cursor.getString(9);
-        final String end = cursor.getString(10);
+        final String start = cursor.getString(6);
+        final String end = cursor.getString(7);
         return new FillBlankQuestion(question, answer, start, end, solved);
     }
 
