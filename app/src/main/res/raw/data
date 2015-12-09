@@ -5,6 +5,11 @@
     "theme": "green",
     "quizzes": [
       {
+        "type": "content-tip",
+        "question": "Noun Details",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus, nisl aliquam porttitor porta, purus eros dictum orci, vel gravida dui ligula sit amet metus. Cras id mollis nulla. Proin imperdiet purus nunc. Praesent pharetra risus vitae interdum venenatis. Sed accumsan sodales est, quis pellentesque metus eleifend in. Sed eros ipsum, pellentesque eget turpis non, tempus tempus est. Donec eget lacus gravida, ullamcorper tellus eu, tincidunt ipsum."
+      },
+      {
         "type": "true-false",
         "question": "Coffee beans contain more caffeine than tea leaves.",
         "answer": false
@@ -29,6 +34,7 @@
     "scores": [
       0,
       0,
+      0,
       0
     ],
     "solved": "false"
@@ -36,7 +42,7 @@
   {
     "name": "Lesson 2",
     "id": "2",
-    "theme": "green",
+    "theme": "red",
     "quizzes": [
       {
         "type": "true-false",

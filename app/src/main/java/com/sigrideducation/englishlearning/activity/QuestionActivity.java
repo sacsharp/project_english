@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.animation.Interpolator;
-import android.widget.ImageView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
@@ -30,13 +29,10 @@ import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.persistence.ELDatabaseHelper;
 
-import static com.sigrideducation.englishlearning.adapter.LessonAdapter.DRAWABLE;
-
 
 public class QuestionActivity extends AppCompatActivity {
 
     private static final String TAG = "QuestionActivity";
-    private static final String IMAGE_CATEGORY = "image_category_";
     private static final String STATE_IS_PLAYING = "isPlaying";
     private static final int UNDEFINED = -1;
     private static final String FRAGMENT_TAG = "Quiz";
@@ -47,7 +43,6 @@ public class QuestionActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private FloatingActionButton mQuestionFab;
     private boolean mSavedStateIsPlaying;
-    private ImageView mIcon;
     private Animator mCircularReveal;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -98,8 +93,7 @@ public class QuestionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (mSavedStateIsPlaying) {
-            mQuestionFragment = (QuestionFragment) getSupportFragmentManager().findFragmentByTag(
-                    FRAGMENT_TAG);
+            mQuestionFragment = (QuestionFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
             findViewById(R.id.quiz_fragment_container).setVisibility(View.VISIBLE);
         }
         super.onResume();
@@ -113,19 +107,11 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mIcon == null || mQuestionFab == null) {
+        if (mQuestionFab == null) {
             // Skip the animation if icon or fab are not initialized.
             super.onBackPressed();
             return;
         }
-
-        // Scale the icon and fab to 0 size before calling onBackPressed if it exists.
-        ViewCompat.animate(mIcon)
-                .scaleX(.7f)
-                .scaleY(.7f)
-                .alpha(0f)
-                .setInterpolator(mInterpolator)
-                .start();
 
         ViewCompat.animate(mQuestionFab)
                 .scaleX(0f)
@@ -163,7 +149,6 @@ public class QuestionActivity extends AppCompatActivity {
         } else {
             fragmentContainer.setVisibility(View.VISIBLE);
             clickedView.setVisibility(View.GONE);
-            mIcon.setVisibility(View.GONE);
         }
     }
 
@@ -197,7 +182,6 @@ public class QuestionActivity extends AppCompatActivity {
         mCircularReveal.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mIcon.setVisibility(View.GONE);
                 mCircularReveal.removeListener(this);
             }
         });
@@ -292,17 +276,6 @@ public class QuestionActivity extends AppCompatActivity {
     private void initLayout(String categoryId) {
         setContentView(R.layout.activity_question);
         //noinspection PrivateResource
-        mIcon = (ImageView) findViewById(R.id.icon);
-        int resId = getResources().getIdentifier(IMAGE_CATEGORY + categoryId, DRAWABLE, getApplicationContext().getPackageName());
-        mIcon.setImageResource(resId);
-        mIcon.setImageResource(resId);
-        ViewCompat.animate(mIcon)
-                .scaleX(1)
-                .scaleY(1)
-                .alpha(1)
-                .setInterpolator(mInterpolator)
-                .setStartDelay(300)
-                .start();
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
         mQuestionFab.setImageResource(R.drawable.ic_play);
         if (mSavedStateIsPlaying) {

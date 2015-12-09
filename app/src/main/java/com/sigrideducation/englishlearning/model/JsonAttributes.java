@@ -36,6 +36,7 @@ public interface JsonAttributes {
         String FILL_BLANK = "fill-blank";
         String SINGLE_SELECT_ITEM = "single-select-item";
         String TOGGLE_TRANSLATE = "toggle-translate";
+        String CONTENT_TIP = "content-tip";
         String TRUE_FALSE = "true-false";
         String SPEECH_INPUT = "speech-input";
     }

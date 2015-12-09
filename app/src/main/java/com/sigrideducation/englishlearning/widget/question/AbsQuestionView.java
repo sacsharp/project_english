@@ -13,12 +13,14 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
@@ -81,10 +83,49 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton();
+                addFloatingActionButton(R.id.question_view);
             }
         });
     }
+
+    public AbsQuestionView(Context context, Lesson lesson, Q question,boolean show) {
+        super(context);
+        mQuestion = question;
+        mLesson = lesson;
+        mSpacingDouble = getResources().getDimensionPixelSize(R.dimen.spacing_double);
+        mLayoutInflater = LayoutInflater.from(context);
+        mSubmitAnswer = getSubmitButton();
+        mMinHeightTouchTarget = getResources().getDimensionPixelSize(R.dimen.min_height_touch_target);
+        mLinearOutSlowInInterpolator = new LinearOutSlowInInterpolator();
+        mHandler = new Handler();
+        mInputMethodManager = (InputMethodManager) context.getSystemService
+                (Context.INPUT_METHOD_SERVICE);
+
+        ScrollView scrollView = new ScrollView(context);
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        View questionContentView = getInitializedContentView();
+        scrollView.addView(questionContentView);
+        addView(scrollView, layoutParams);
+        scrollView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                allowAnswer(true);
+                return false;
+            }
+        });
+        addOnLayoutChangeListener(new OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                                       int oldLeft,
+                                       int oldTop, int oldRight, int oldBottom) {
+                removeOnLayoutChangeListener(this);
+                addFloatingActionButton(R.id.text_data);
+            }
+        });
+    }
+
+
 
     /**
      * Sets the behaviour for all question views.
@@ -122,9 +163,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         addView(container, layoutParams);
     }
 
-    private void addFloatingActionButton() {
+    private void addFloatingActionButton(int id) {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
-        int bottomOfQuestionView = findViewById(R.id.question_view).getBottom();
+        int bottomOfQuestionView = findViewById(id).getRight();
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize,
                 Gravity.END | Gravity.TOP);
         final int halfAFab = fabSize / 2;

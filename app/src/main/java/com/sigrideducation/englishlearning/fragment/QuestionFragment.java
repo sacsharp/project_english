@@ -31,7 +31,6 @@ import java.util.List;
 public class QuestionFragment extends android.support.v4.app.Fragment {
 
     private static final String KEY_USER_INPUT = "USER_INPUT";
-    private TextView mProgressText;
     private int mQuestionSize;
     private ProgressBar mProgressBar;
     private Lesson mLesson;
@@ -96,7 +95,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         final int firstUnsolvedQuizPosition = mLesson.getFirstUnsolvedQuizPosition();
         final List<Question> questions = mLesson.getQuizzes();
         mQuestionSize = questions.size();
-        mProgressText = (TextView) view.findViewById(R.id.progress_text);
         mProgressBar = ((ProgressBar) view.findViewById(R.id.progress));
         mProgressBar.setMax(mQuestionSize);
 
@@ -107,7 +105,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         if (!isAdded()) {
             return;
         }
-        mProgressText.setText(getString(R.string.question_of_questions, currentQuestionPosition, mQuestionSize));
         mProgressBar.setProgress(currentQuestionPosition);
     }
 

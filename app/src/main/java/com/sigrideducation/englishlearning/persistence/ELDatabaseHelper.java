@@ -14,6 +14,7 @@ import com.sigrideducation.englishlearning.helper.JsonHelper;
 import com.sigrideducation.englishlearning.model.JsonAttributes;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
+import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
@@ -255,7 +256,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
                 return createTrueFalseQuestion(question, answer, solved);
             }
             case JsonAttributes.QuestionType.SPEECH_INPUT:{
-                return createSpeechInputQuestion(question,answer,solved);
+                return createSpeechInputQuestion(question, answer, solved);
+            }
+            case JsonAttributes.QuestionType.CONTENT_TIP:{
+                return createContentTipQuestion(question,answer,solved);
             }
             default: {
                 throw new IllegalArgumentException("Question type " + type + " is not supported");
@@ -290,6 +294,11 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static Question createSpeechInputQuestion(String question, String answer, boolean solved) {
 
         return new SpeechInputQuestion(question, answer, solved);
+    }
+
+    private static Question createContentTipQuestion(String question, String answer, boolean solved) {
+
+        return new ContentTipQuestion(question, answer, solved);
     }
 
     /**

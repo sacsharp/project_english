@@ -10,7 +10,8 @@ public enum QuestionType {
     SINGLE_SELECT_ITEM(JsonAttributes.QuestionType.SINGLE_SELECT_ITEM, SelectItemQuestion.class),
     //TOGGLE_TRANSLATE(JsonAttributes.QuestionType.TOGGLE_TRANSLATE, ToggleTranslateQuestion.class),
     TRUE_FALSE(JsonAttributes.QuestionType.TRUE_FALSE, TrueFalseQuestion.class),
-    SPEECH_INPUT(JsonAttributes.QuestionType.SPEECH_INPUT,SpeechInputQuestion.class);
+    SPEECH_INPUT(JsonAttributes.QuestionType.SPEECH_INPUT,SpeechInputQuestion.class),
+    CONTENT_TIP(JsonAttributes.QuestionType.CONTENT_TIP,ContentTipQuestion.class);
 
     private final String mJsonName;
     private final Class<? extends Question> mType;

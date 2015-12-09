@@ -6,12 +6,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.sigrideducation.englishlearning.model.Lesson;
+import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 import com.sigrideducation.englishlearning.model.question.TrueFalseQuestion;
 import com.sigrideducation.englishlearning.widget.question.AbsQuestionView;
+import com.sigrideducation.englishlearning.widget.question.ContentTipQuestionView;
 import com.sigrideducation.englishlearning.widget.question.FillBlankQuestionView;
 import com.sigrideducation.englishlearning.widget.question.SelectItemQuestionView;
 import com.sigrideducation.englishlearning.widget.question.SpeechInputQuestionView;
@@ -82,35 +84,37 @@ public class QuestionAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Question quiz = getItem(position);
+        final Question question = getItem(position);
         if (convertView instanceof AbsQuestionView) {
-            if (((AbsQuestionView) convertView).getQuestion().equals(quiz)) {
+            if (((AbsQuestionView) convertView).getQuestion().equals(question)) {
                 return convertView;
             }
         }
-        convertView = getViewInternal(quiz);
+        convertView = getViewInternal(question);
         return convertView;
     }
 
-    private AbsQuestionView getViewInternal(Question quiz) {
-        if (null == quiz) {
+    private AbsQuestionView getViewInternal(Question question) {
+        if (null == question) {
             throw new IllegalArgumentException("Question must not be null");
         }
-        return createViewFor(quiz);
+        return createViewFor(question);
     }
 
-    private AbsQuestionView createViewFor(Question quiz) {
-        switch (quiz.getType()) {
+    private AbsQuestionView createViewFor(Question question) {
+        switch (question.getType()) {
             case FILL_BLANK:
-                return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) quiz);
+                return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);
             case SINGLE_SELECT_ITEM:
-                return new SelectItemQuestionView(mContext, mLesson, (SelectItemQuestion) quiz);
+                return new SelectItemQuestionView(mContext, mLesson, (SelectItemQuestion) question);
             case TRUE_FALSE:
-                return new TrueFalseQuestionView(mContext, mLesson, (TrueFalseQuestion) quiz);
+                return new TrueFalseQuestionView(mContext, mLesson, (TrueFalseQuestion) question);
             case SPEECH_INPUT:
-                return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) quiz);
+                return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
+            case CONTENT_TIP:
+                return new ContentTipQuestionView(mContext,mLesson,(ContentTipQuestion) question,true);
         }
         throw new UnsupportedOperationException(
-                "Question of type " + quiz.getType() + " can not be displayed.");
+                "Question of type " + question.getType() + " can not be displayed.");
     }
 }
