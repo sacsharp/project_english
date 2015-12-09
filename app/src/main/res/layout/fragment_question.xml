@@ -25,33 +25,14 @@
             android:background="?colorPrimary"
             android:elevation="@dimen/elevation_header">
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_double"
+            android:layout_marginRight="@dimen/spacing_double"
+            android:progressTint="?android:colorAccent" />
 
-            <ProgressBar
-                    android:id="@+id/progress"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/spacing_double"
-                    android:layout_marginRight="@dimen/spacing_double"
-                    android:progressTint="?android:colorAccent" />
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
-
-
-                <TextView
-                        android:id="@+id/progress_text"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-            </LinearLayout>
-        </LinearLayout>
     </android.support.v7.widget.Toolbar>
 </LinearLayout>
