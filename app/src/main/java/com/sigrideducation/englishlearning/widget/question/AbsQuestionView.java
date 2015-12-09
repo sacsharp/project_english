@@ -91,8 +91,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      */
     private void setUpQuestionView() {
         mQuestionView = (TextView) mLayoutInflater.inflate(R.layout.question, this, false);
-        mQuestionView.setBackgroundColor(ContextCompat.getColor(getContext(),
-                mLesson.getTheme().getPrimaryColor()));
+        mQuestionView.setBackgroundColor(ContextCompat.getColor(getContext(), mLesson.getTheme().getPrimaryColor()));
         mQuestionView.setText(getQuestion().getQuestion());
     }
 
@@ -143,8 +142,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     private CheckableFab  getSubmitButton() {
         if (null == mSubmitAnswer) {
-            mSubmitAnswer = (CheckableFab) getLayoutInflater()
-                    .inflate(R.layout.answer_submit, this, false);
+            mSubmitAnswer = (CheckableFab) getLayoutInflater().inflate(R.layout.answer_submit, this, false);
             mSubmitAnswer.hide();
             mSubmitAnswer.setOnClickListener(new OnClickListener() {
                 @Override

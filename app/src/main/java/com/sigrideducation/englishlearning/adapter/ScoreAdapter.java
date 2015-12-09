@@ -62,15 +62,15 @@ public class ScoreAdapter extends BaseAdapter {
             convertView = createView(parent);
         }
 
-        final Question quiz = getItem(position);
+        final Question question = getItem(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.mQuizView.setText(quiz.getQuestion());
-        viewHolder.mAnswerView.setText(quiz.getStringAnswer());
-        setSolvedStateForQuiz(viewHolder.mSolvedState, position);
+        viewHolder.mQuestionView.setText(question.getQuestion());
+        viewHolder.mAnswerView.setText(question.getStringAnswer());
+        setSolvedStateForQuestion(viewHolder.mSolvedState, position);
         return convertView;
     }
 
-    private void setSolvedStateForQuiz(ImageView solvedState, int position) {
+    private void setSolvedStateForQuestion(ImageView solvedState, int position) {
         final Context context = solvedState.getContext();
         final Drawable tintedImage;
         if (mLesson.isSolvedCorrectly(getItem(position))) {
@@ -128,11 +128,11 @@ public class ScoreAdapter extends BaseAdapter {
     private class ViewHolder {
 
         final TextView mAnswerView;
-        final TextView mQuizView;
+        final TextView mQuestionView;
         final ImageView mSolvedState;
 
         public ViewHolder(ViewGroup scorecardItem) {
-            mQuizView = (TextView) scorecardItem.findViewById(R.id.question);
+            mQuestionView = (TextView) scorecardItem.findViewById(R.id.question);
             mAnswerView = (TextView) scorecardItem.findViewById(R.id.answer);
             mSolvedState = (ImageView) scorecardItem.findViewById(R.id.solved_state);
         }

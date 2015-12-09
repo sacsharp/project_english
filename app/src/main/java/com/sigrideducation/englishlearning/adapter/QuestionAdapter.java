@@ -9,10 +9,12 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
+import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 import com.sigrideducation.englishlearning.model.question.TrueFalseQuestion;
 import com.sigrideducation.englishlearning.widget.question.AbsQuestionView;
 import com.sigrideducation.englishlearning.widget.question.FillBlankQuestionView;
 import com.sigrideducation.englishlearning.widget.question.SelectItemQuestionView;
+import com.sigrideducation.englishlearning.widget.question.SpeechInputQuestionView;
 import com.sigrideducation.englishlearning.widget.question.TrueFalseQuestionView;
 
 import java.util.ArrayList;
@@ -105,6 +107,8 @@ public class QuestionAdapter extends BaseAdapter {
                 return new SelectItemQuestionView(mContext, mLesson, (SelectItemQuestion) quiz);
             case TRUE_FALSE:
                 return new TrueFalseQuestionView(mContext, mLesson, (TrueFalseQuestion) quiz);
+            case SPEECH_INPUT:
+                return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) quiz);
         }
         throw new UnsupportedOperationException(
                 "Question of type " + quiz.getType() + " can not be displayed.");

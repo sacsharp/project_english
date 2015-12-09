@@ -63,7 +63,7 @@ public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> 
     }
 
     @Override
-    public void setUserInput(Bundle savedInput) {
+     public void setUserInput(Bundle savedInput) {
         if (savedInput == null) {
             return;
         }

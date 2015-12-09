@@ -58,9 +58,15 @@
         "type": "fill-blank",
         "question": "What name is given to a sugar syrup which is gently heated until it browns?",
         "answer": "Caramel"
+      },
+      {
+        "type": "speech-input",
+        "question": "How are you?",
+        "answer": "how are you"
       }
     ],
     "scores": [
+      0,
       0,
       0,
       0

@@ -2,11 +2,8 @@ package com.sigrideducation.englishlearning.adapter;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +23,6 @@ import java.util.List;
 public class LessonAdapter extends BaseAdapter {
 
     public static final String DRAWABLE = "drawable";
-    private static final String ICON_CATEGORY = "icon_category_";
     private final Resources mResources;
     private final String mPackageName;
     private final LayoutInflater mLayoutInflater;
@@ -93,43 +89,6 @@ public class LessonAdapter extends BaseAdapter {
         mLessons = ELDatabaseHelper.getLessons(activity, true);
     }
 
-    /**
-     * Loads an icon that indicates that a lesson has already been solved.
-     *
-     * @param lesson The solved lesson to display.
-     * @param categoryImageResource The lesson's identifying image.
-     * @return The icon indicating that the lesson has been solved.
-     */
-    private LayerDrawable loadSolvedIcon(Lesson lesson, int categoryImageResource) {
-        final Drawable done = loadTintedDoneDrawable();
-        final Drawable categoryIcon = loadTintedCategoryDrawable(lesson, categoryImageResource);
-        Drawable[] layers = new Drawable[]{categoryIcon, done}; // ordering is back to front
-        return new LayerDrawable(layers);
-    }
-
-    /**
-     * Loads and tints a drawable.
-     *
-     * @param lesson The lesson providing the tint color
-     * @param categoryImageResource The image resource to tint
-     * @return The tinted resource
-     */
-    private Drawable loadTintedCategoryDrawable(Lesson lesson, int categoryImageResource) {
-        final Drawable categoryIcon = ContextCompat.getDrawable(mActivity, categoryImageResource);
-        DrawableCompat.setTint(categoryIcon, getColor(lesson.getTheme().getPrimaryColor()));
-        return categoryIcon;
-    }
-
-    /**
-     * Loads and tints a check mark.
-     *
-     * @return The tinted check mark
-     */
-    private Drawable loadTintedDoneDrawable() {
-        final Drawable done = ContextCompat.getDrawable(mActivity, R.drawable.ic_tick);
-        DrawableCompat.setTint(done, getColor(android.R.color.white));
-        return done;
-    }
 
     /**
      * Convenience method for color loading.

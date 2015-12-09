@@ -116,7 +116,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         if (isSolved) {
             showSummary();
             if (null != mSolvedStateListener) {
-                mSolvedStateListener.onCategorySolved();
+                mSolvedStateListener.onLessonSolved();
             }
         } else {
             mQuestionView.setAdapter(getQuestionAdapter());
@@ -156,8 +156,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
                 if (currentChild instanceof ViewGroup) {
                     final View potentialQuizView = ((ViewGroup) currentChild).getChildAt(0);
                     if (potentialQuizView instanceof AbsQuestionView) {
-                        ((AbsQuestionView) potentialQuizView).setUserInput(savedInstanceState.
-                                getBundle(KEY_USER_INPUT));
+                        ((AbsQuestionView) potentialQuizView).setUserInput(savedInstanceState.getBundle(KEY_USER_INPUT));
                     }
                 }
             }
@@ -222,6 +221,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         /**
          * This method will be invoked when the category has been solved.
          */
-        void onCategorySolved();
+        void onLessonSolved();
     }
 }

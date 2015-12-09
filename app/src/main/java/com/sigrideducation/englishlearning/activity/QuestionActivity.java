@@ -148,7 +148,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void startQuizFromClickOn(final View clickedView) {
-        initQuizFragment();
+        initQuestionFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.quiz_fragment_container, mQuestionFragment, FRAGMENT_TAG).commit();
         final View fragmentContainer = findViewById(R.id.quiz_fragment_container);
@@ -210,11 +210,11 @@ public class QuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void initQuizFragment() {
+    private void initQuestionFragment() {
         mQuestionFragment = QuestionFragment.newInstance(mLessonId,
                 new QuestionFragment.SolvedStateListener() {
                     @Override
-                    public void onCategorySolved() {
+                    public void onLessonSolved() {
                         setToolbarElevation(true);
                         displayDoneFab();
                     }
@@ -315,8 +315,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void initToolbar(Lesson lesson) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_activity_quiz);
-        mToolbar.setBackgroundColor(
-                ContextCompat.getColor(this, lesson.getTheme().getPrimaryColor()));
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, lesson.getTheme().getPrimaryColor()));
         mToolbar.setTitle(lesson.getName());
         mToolbar.setNavigationOnClickListener(mOnClickListener);
         if (mSavedStateIsPlaying) {
