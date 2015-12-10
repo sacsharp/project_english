@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
@@ -28,6 +30,11 @@ import com.sigrideducation.englishlearning.fragment.QuestionFragment;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.persistence.ELDatabaseHelper;
+
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 
 public class QuestionActivity extends AppCompatActivity {
@@ -45,12 +52,16 @@ public class QuestionActivity extends AppCompatActivity {
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
 
+    TourGuide mTourGuideHandler;
+    ToolTip toolTip;
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
             switch (v.getId()) {
                 case R.id.fab_question:
                     startQuizFromClickOn(v);
+                    mTourGuideHandler.cleanUp();
                     break;
                 case R.id.submitAnswer:
                     submitAnswer();
@@ -212,16 +223,16 @@ public class QuestionActivity extends AppCompatActivity {
                             mCircularReveal.addListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    showQuizFabWithDoneIcon();
+                                    showQuestionFabWithDoneIcon();
                                     mCircularReveal.removeListener(this);
                                 }
                             });
                         } else {
-                            showQuizFabWithDoneIcon();
+                            showQuestionFabWithDoneIcon();
                         }
                     }
 
-                    private void showQuizFabWithDoneIcon() {
+                    private void showQuestionFabWithDoneIcon() {
                         mQuestionFab.setImageResource(R.drawable.ic_tick);
                         mQuestionFab.setId(R.id.question_done);
                         mQuestionFab.setVisibility(View.VISIBLE);
@@ -278,12 +289,29 @@ public class QuestionActivity extends AppCompatActivity {
         //noinspection PrivateResource
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
         mQuestionFab.setImageResource(R.drawable.ic_play);
+
+        mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
+                .setPointer(new Pointer())
+                .setToolTip(new ToolTip().setTitle("Welcome!").setDescription("Click to start the lesson......").setGravity(Gravity.TOP | Gravity.LEFT))
+                .setOverlay(new Overlay())
+                .playOn(mQuestionFab);
+
         if (mSavedStateIsPlaying) {
             mQuestionFab.hide();
         } else {
             mQuestionFab.show();
         }
         mQuestionFab.setOnClickListener(mOnClickListener);
+
+        toolTip = new ToolTip()
+                .setTitle("Next Button")
+                .setDescription("Click on Next button to proceed...")
+                .setTextColor(Color.parseColor("#bdc3c7"))
+                .setBackgroundColor(Color.parseColor("#e74c3c"))
+                .setShadow(true)
+                .setGravity(Gravity.TOP | Gravity.LEFT);
+
+
     }
 
     private void initToolbar(Lesson lesson) {

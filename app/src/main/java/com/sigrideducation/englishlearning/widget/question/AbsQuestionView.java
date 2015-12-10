@@ -1,6 +1,7 @@
 package com.sigrideducation.englishlearning.widget.question;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -23,12 +24,17 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.sigrideducation.englishlearning.GlobalApplication;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.widget.fab.CheckableFab;
+
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 /**
  * This is the base class for displaying a Question
@@ -50,7 +56,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     private Runnable mHideFabRunnable;
     private Runnable mMoveOffScreenRunnable;
     private InputMethodManager mInputMethodManager;
+    private Context mContext;
 
+    TourGuide mTourGuideHandler;
     /**
      * Enables creation of views for questionzes.
      *
@@ -60,6 +68,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      */
     public AbsQuestionView(Context context, Lesson lesson, Q question) {
         super(context);
+        mContext=context;
         mQuestion = question;
         mLesson = lesson;
         mSpacingDouble = getResources().getDimensionPixelSize(R.dimen.spacing_double);
@@ -90,6 +99,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     public AbsQuestionView(Context context, Lesson lesson, Q question,boolean show) {
         super(context);
+        mContext=context;
         mQuestion = question;
         mLesson = lesson;
         mSpacingDouble = getResources().getDimensionPixelSize(R.dimen.spacing_double);
@@ -183,12 +193,22 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     private CheckableFab  getSubmitButton() {
         if (null == mSubmitAnswer) {
+
             mSubmitAnswer = (CheckableFab) getLayoutInflater().inflate(R.layout.answer_submit, this, false);
+
             mSubmitAnswer.hide();
             mSubmitAnswer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     submitAnswer(v);
+                    if(((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
+                    {
+                        if(null != mTourGuideHandler)
+                        {
+                            mTourGuideHandler.cleanUp();
+                        }
+                    }
+
                     if (mInputMethodManager.isAcceptingText()) {
                         mInputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
@@ -253,8 +273,18 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         if (null != mSubmitAnswer) {
             if (answered) {
                 mSubmitAnswer.show();
+                if(!((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
+                {
+                    mTourGuideHandler = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
+                            .setPointer(new Pointer())
+                            .setToolTip(new ToolTip().setTitle("Done??").setDescription("Click on this button to submit the answer!!"))
+                            .playOn(mSubmitAnswer);
+                    ((GlobalApplication) ((Activity) getContext()).getApplication()).setSubmitAnswerGuideShown(true);
+                }
+
             } else {
                 mSubmitAnswer.hide();
+                mTourGuideHandler.cleanUp();
             }
             mAnswered = answered;
         }
