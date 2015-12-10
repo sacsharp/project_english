@@ -1,37 +1,97 @@
 [
   {
-    "name": "Lesson 1",
+    "name": "Difference b/w like and would like",
     "id": "1",
-    "theme": "green",
+    "theme": "yellow",
     "quizzes": [
       {
         "type": "content-tip",
-        "question": "Noun Details",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus, nisl aliquam porttitor porta, purus eros dictum orci, vel gravida dui ligula sit amet metus. Cras id mollis nulla. Proin imperdiet purus nunc. Praesent pharetra risus vitae interdum venenatis. Sed accumsan sodales est, quis pellentesque metus eleifend in. Sed eros ipsum, pellentesque eget turpis non, tempus tempus est. Donec eget lacus gravida, ullamcorper tellus eu, tincidunt ipsum."
+        "question": "",
+        "answer": "I like apples. \nThe word 'Like' expresses interest in something that the individual enjoys. \n\n\n I would like an apple. \n 'Would like' is used in the sense of 'want'"
       },
       {
         "type": "true-false",
-        "question": "Coffee beans contain more caffeine than tea leaves.",
-        "answer": false
+        "question": "Like is used for expressing your interest in something which you enjoy.",
+        "answer": true
       },
       {
         "type": "single-select-item",
-        "question": "What vegetable did Mark Twain describe as “cabbage with a college education”?",
+        "question": "I _____ a beer.",
         "options": [
-          "Spinach",
-          "Broccoli",
-          "Cauliflower",
-          "Kale"
+          "like",
+          "would like",
+          "would likes",
+          "likes"
         ],
-        "answer": [2]
+        "answer": [1]
+      },
+      {
+        "type": "single-select-item",
+        "question": "________ to have a cup of coffee?",
+        "options": [
+          "Will you like",
+          "Would you like",
+          "Do you like",
+          "He likes"
+        ],
+        "answer": [1]
+      },
+      {
+        "type": "single-select-item",
+        "question": "I ______ Sachin Tendulkar ever since I have started watching Cricket.",
+        "options": [
+          "like",
+          "would like",
+          "had like",
+          "likes"
+        ],
+        "answer": [0]
+      },
+      {
+        "type": "true-false",
+        "question": "'Would like' is used for expressing your lovingness for something.",
+        "answer": false
       },
       {
         "type": "fill-blank",
-        "question": "What name is given to a sugar syrup which is gently heated until it browns?",
-        "answer": "Caramel"
+        "question": "They _______ to seek your blessing.",
+        "answer": "would like"
+      },
+      {
+        "type": "single-select-item",
+        "question": "________ to play with us?",
+        "options": [
+          "Do you likes",
+          "Would you like",
+          "He like",
+          "Are you like"
+        ],
+        "answer": [1]
+      },
+      {
+        "type": "single-select-item",
+        "question": "They ________ Italian food.",
+        "options": [
+          "do like",
+          "would like",
+          "like",
+          "likes"
+        ],
+        "answer": [1]
+      },
+      {
+        "type": "fill-blank",
+        "question": "I _____ to play with them but they are cheaters.",
+        "answer": "like"
       }
     ],
     "scores": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       0,
       0,
