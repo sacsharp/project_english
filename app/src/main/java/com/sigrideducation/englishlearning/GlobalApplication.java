@@ -9,6 +9,7 @@ public class GlobalApplication extends Application {
     private boolean submitAnswerGuideShown=false;
     private boolean trueGuideShown=false;
     private boolean falseGuideShown=false;
+    private boolean lessonStartGuideShow=false;
 
 
     public boolean isSubmitAnswerGuideShown() {
@@ -33,5 +34,13 @@ public class GlobalApplication extends Application {
 
     public void setFalseGuideShown(boolean falseGuideShown) {
         this.falseGuideShown = falseGuideShown;
+    }
+
+    public boolean isLessonStartGuideShow() {
+        return lessonStartGuideShow;
+    }
+
+    public void setLessonStartGuideShow(boolean lessonStartGuideShow) {
+        this.lessonStartGuideShow = lessonStartGuideShow;
     }
 }

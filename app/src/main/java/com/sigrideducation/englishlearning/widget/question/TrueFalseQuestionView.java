@@ -47,26 +47,6 @@ public class TrueFalseQuestionView extends AbsQuestionView<TrueFalseQuestion> {
     protected View createQuestionContentView() {
         final ViewGroup container = (ViewGroup) getLayoutInflater().inflate(R.layout.question_radio_group_true_false, this, false);
 
-        Animation enterAnimation = new AlphaAnimation(0f, 1f);
-        enterAnimation.setDuration(600);
-        enterAnimation.setFillAfter(true);
-
-        Animation exitAnimation = new AlphaAnimation(1f, 0f);
-        exitAnimation.setDuration(600);
-        exitAnimation.setFillAfter(true);
-
-        if(!((GlobalApplication)((Activity) getContext()).getApplication()).isTrueGuideShown())
-        mTutorialHandler = TourGuide.init((Activity)getContext()).with(TourGuide.Technique.Click)
-                .setPointer(new Pointer())
-                .setToolTip(new ToolTip()
-                                .setTitle("Hey!")
-                                .setDescription("Tap on me to answer the question TRUE!!")
-                                .setGravity(Gravity.BOTTOM)
-                )
-                .setOverlay(new Overlay()
-                                .setEnterAnimation(enterAnimation)
-                                .setExitAnimation(exitAnimation)
-                );
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
@@ -74,14 +54,13 @@ public class TrueFalseQuestionView extends AbsQuestionView<TrueFalseQuestion> {
                 switch (v.getId()) {
                     case R.id.answer_true:
                         mAnswer = true;
-                        if(mTutorialHandler!=null)
-                        {mTutorialHandler.cleanUp();
-                        if(!((GlobalApplication)((Activity) getContext()).getApplication()).isFalseGuideShown())
-                        {
+                        if(mTutorialHandler!=null) {
+                            mTutorialHandler.cleanUp();
+                        if(!((GlobalApplication)((Activity) getContext()).getApplication()).isFalseGuideShown()) {
                             mTutorialHandler.setToolTip(new ToolTip().setTitle("Hey there!").setDescription("Tap on me to answer the question FALSE!!").setGravity(Gravity.BOTTOM|Gravity.LEFT)).playOn(mAnswerFalse);
                             ((GlobalApplication) ((Activity) getContext()).getApplication()).setFalseGuideShown(true);
-
-                        }}
+                        }
+                        }
                         break;
                     case R.id.answer_false:
                         mAnswer = false;
@@ -98,12 +77,25 @@ public class TrueFalseQuestionView extends AbsQuestionView<TrueFalseQuestion> {
         mAnswerFalse = container.findViewById(R.id.answer_false);
         mAnswerFalse.setOnClickListener(clickListener);
 
-        if(mTutorialHandler != null && !((GlobalApplication)((Activity) getContext()).getApplication()).isTrueGuideShown())
-        {
-            mTutorialHandler.playOn(mAnswerTrue);
+        Animation enterAnimation = new AlphaAnimation(0f, 1f);
+        enterAnimation.setDuration(600);
+        enterAnimation.setFillAfter(true);
+
+        Animation exitAnimation = new AlphaAnimation(1f, 0f);
+        exitAnimation.setDuration(600);
+        exitAnimation.setFillAfter(true);
+
+        if(!((GlobalApplication)((Activity) getContext()).getApplication()).isTrueGuideShown()) {
+            mTutorialHandler = TourGuide.init((Activity) getContext()).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer())
+                    .setToolTip(new ToolTip()
+                                    .setTitle("Hey!")
+                                    .setDescription("Tap on me to answer the question TRUE!!")
+                                    .setGravity(Gravity.BOTTOM)
+                    )
+                    .setOverlay(new Overlay()).playOn(mAnswerTrue);
             ((GlobalApplication) ((Activity) getContext()).getApplication()).setTrueGuideShown(true);
         }
-
 
         return container;
     }

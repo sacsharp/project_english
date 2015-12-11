@@ -25,6 +25,7 @@ import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.animation.Interpolator;
 
+import com.sigrideducation.englishlearning.GlobalApplication;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
@@ -52,7 +53,7 @@ public class QuestionActivity extends AppCompatActivity {
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
 
-    TourGuide mTourGuideHandler;
+    TourGuide mTourGuideHandler, mTourGuideHandler1;
     ToolTip toolTip;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -61,6 +62,7 @@ public class QuestionActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.fab_question:
                     startQuizFromClickOn(v);
+                    if(mTourGuideHandler !=null)
                     mTourGuideHandler.cleanUp();
                     break;
                 case R.id.submitAnswer:
@@ -290,11 +292,17 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
         mQuestionFab.setImageResource(R.drawable.ic_play);
 
-        mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
-                .setPointer(new Pointer())
-                .setToolTip(new ToolTip().setTitle("Welcome!").setDescription("Click to start the lesson......").setGravity(Gravity.TOP | Gravity.LEFT))
-                .setOverlay(new Overlay())
-                .playOn(mQuestionFab);
+
+
+        if(!((GlobalApplication)(this).getApplication()).isLessonStartGuideShow()){
+            mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer())
+                    .setToolTip(new ToolTip().setTitle("Welcome!").setDescription("Click to start the lesson......").setGravity(Gravity.TOP | Gravity.LEFT))
+                    .setOverlay(new Overlay())
+                    .playOn(mQuestionFab);
+            ((GlobalApplication)(this).getApplication()).setLessonStartGuideShow(true);
+        }
+
 
         if (mSavedStateIsPlaying) {
             mQuestionFab.hide();

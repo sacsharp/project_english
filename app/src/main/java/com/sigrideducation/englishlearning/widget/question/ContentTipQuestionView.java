@@ -20,8 +20,8 @@ public class ContentTipQuestionView extends AbsQuestionView<ContentTipQuestion> 
     private TextView mTextData;
 
 
-    public ContentTipQuestionView(Context context, Lesson lesson, ContentTipQuestion question,boolean show) {
-        super(context, lesson, question,show);
+    public ContentTipQuestionView(Context context, Lesson lesson, ContentTipQuestion question,int viewId) {
+        super(context, lesson, question,viewId);
     }
 
     @Override

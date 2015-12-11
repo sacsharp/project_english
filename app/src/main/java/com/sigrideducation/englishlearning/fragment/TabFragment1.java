@@ -34,16 +34,16 @@ public class TabFragment1 extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        setUpQuizList((ListView) view.findViewById(R.id.list_lessons));
+        setUpQuestionList((ListView) view.findViewById(R.id.list_lessons));
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void setUpQuizList(ListView lessonsView) {
+    private void setUpQuestionList(ListView lessonsView) {
         lessonsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity activity = getActivity();
-                startQuizActivityWithTransition(activity, view.findViewById(R.id.lesson_title),
+                startQuestionActivityWithTransition(activity, view.findViewById(R.id.lesson_title),
                         mLessonAdapter.getItem(position));
             }
         });
@@ -57,7 +57,7 @@ public class TabFragment1 extends Fragment {
         super.onResume();
     }
 
-    private void startQuizActivityWithTransition(Activity activity, View toolbar, Lesson lesson) {
+    private void startQuestionActivityWithTransition(Activity activity, View toolbar, Lesson lesson) {
 
         final Pair[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, false,
                 new Pair<>(toolbar, activity.getString(R.string.transition_toolbar)));
