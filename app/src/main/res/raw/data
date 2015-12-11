@@ -26,15 +26,9 @@
         "answer": [1]
       },
       {
-        "type": "single-select-item",
-        "question": "________ to have a cup of coffee?",
-        "options": [
-          "Will you like",
-          "Would you like",
-          "Do you like",
-          "He likes"
-        ],
-        "answer": [1]
+        "type": "make-sentence",
+        "question": "Coffee beans contain more caffeine than tea leaves.",
+        "answer": "Coffee contain caffeine"
       },
       {
         "type": "single-select-item",
@@ -105,6 +99,11 @@
     "theme": "red",
     "quizzes": [
       {
+        "type": "make-sentence",
+        "question": "Coffee beans contain more caffeine than tea leaves.",
+        "answer": "Coffee contain caffeine"
+      },
+      {
         "type": "true-false",
         "question": "Coffee beans contain more caffeine than tea leaves.",
         "answer": false
@@ -132,6 +131,7 @@
       }
     ],
     "scores": [
+      0,
       0,
       0,
       0,
