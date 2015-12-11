@@ -11,7 +11,8 @@ public enum QuestionType {
     //TOGGLE_TRANSLATE(JsonAttributes.QuestionType.TOGGLE_TRANSLATE, ToggleTranslateQuestion.class),
     TRUE_FALSE(JsonAttributes.QuestionType.TRUE_FALSE, TrueFalseQuestion.class),
     SPEECH_INPUT(JsonAttributes.QuestionType.SPEECH_INPUT,SpeechInputQuestion.class),
-    CONTENT_TIP(JsonAttributes.QuestionType.CONTENT_TIP,ContentTipQuestion.class);
+    CONTENT_TIP(JsonAttributes.QuestionType.CONTENT_TIP,ContentTipQuestion.class),
+    MAKE_SENTENCE(JsonAttributes.QuestionType.MAKE_SENTENCE,MakeSentenceQuestion.class);
 
     private final String mJsonName;
     private final Class<? extends Question> mType;

@@ -39,5 +39,6 @@ public interface JsonAttributes {
         String CONTENT_TIP = "content-tip";
         String TRUE_FALSE = "true-false";
         String SPEECH_INPUT = "speech-input";
+        String MAKE_SENTENCE = "make-sentence";
     }
 }
