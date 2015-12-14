@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,7 +80,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         List<Lesson> tmpLessons = new ArrayList<>(data.getCount());
         final SQLiteDatabase readableDatabase = ELDatabaseHelper.getReadableDatabase(context);
         do {
-            final Lesson lesson = getCategory(data, readableDatabase);
+            final Lesson lesson = getLesson(data, readableDatabase);
             tmpLessons.add(lesson);
         } while (data.moveToNext());
         return tmpLessons;
@@ -110,7 +109,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
      * @param readableDatabase The database that contains the questions.
      * @return The found lesson.
      */
-    private static Lesson getCategory(Cursor cursor, SQLiteDatabase readableDatabase) {
+    private static Lesson getLesson(Cursor cursor, SQLiteDatabase readableDatabase) {
         // "magic numbers" based on LessonTable#PROJECTION
         final String id = cursor.getString(0);
         final String name = cursor.getString(1);
@@ -118,10 +117,9 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final Theme theme = Theme.valueOf(themeName);
         final String isSolved = cursor.getString(3);
         final boolean solved = getBooleanFromDatabase(isSolved);
-        final int[] scores = JsonHelper.jsonArrayToIntArray(cursor.getString(4));
 
         final List<Question> questions = getQuizzes(id, readableDatabase);
-        return new Lesson(name, id, theme, questions, scores, solved);
+        return new Lesson(name, id, theme, questions, solved);
     }
 
     private static boolean getBooleanFromDatabase(String isSolved) {
@@ -143,23 +141,9 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
                 .query(LessonTable.NAME, LessonTable.PROJECTION, LessonTable.COLUMN_ID + "=?",
                         selectionArgs, null, null, null);
         data.moveToFirst();
-        return getCategory(data, readableDatabase);
+        return getLesson(data, readableDatabase);
     }
-
-    /**
-     * Scooooooooooore!
-     *
-     * @param context The context this is running in.
-     * @return The score over all Categories.
-     */
-    public static int getScore(Context context) {
-        final List<Lesson> lessons = getLessons(context, false);
-        int score = 0;
-        for (Lesson lesson : lessons) {
-            score += lesson.getScore();
-        }
-        return score;
-    }
+    
 
     /**
      * Updates values for a lesson.
@@ -177,7 +161,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         ContentValues lessonValues = createContentValuesFor(lesson);
         writableDatabase.update(LessonTable.NAME, lessonValues, LessonTable.COLUMN_ID + "=?",
                 new String[]{lesson.getId()});
-        final List<Question> questions = lesson.getQuizzes();
+        final List<Question> questions = lesson.getQuestions();
         updateQuestions(writableDatabase, questions);
     }
 
@@ -321,7 +305,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static ContentValues createContentValuesFor(Lesson lesson) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LessonTable.COLUMN_SOLVED, lesson.isSolved());
-        contentValues.put(LessonTable.COLUMN_SCORES, Arrays.toString(lesson.getScores()));
         return contentValues;
     }
 
@@ -391,8 +374,8 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private String readLessonsFromResources() throws IOException {
         StringBuilder lessonsJson = new StringBuilder();
-        InputStream rawCategories = mResources.openRawResource(R.raw.data);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(rawCategories));
+        InputStream dataLessons = mResources.openRawResource(R.raw.data);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(dataLessons));
         String line;
 
         while ((line = reader.readLine()) != null) {
@@ -408,7 +391,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonAttributes.NAME));
         values.put(LessonTable.COLUMN_THEME, lesson.getString(JsonAttributes.THEME));
         values.put(LessonTable.COLUMN_SOLVED, lesson.getString(JsonAttributes.SOLVED));
-        values.put(LessonTable.COLUMN_SCORES, lesson.getString(JsonAttributes.SCORES));
         db.insert(LessonTable.NAME, null, values);
     }
 

@@ -376,7 +376,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         mMoveOffScreenRunnable = new Runnable() {
             @Override
             public void run() {
-                mLesson.setScore(getQuestion(), answerCorrect);
                 if (getContext() instanceof QuestionActivity) {
                     ((QuestionActivity) getContext()).proceed();
                 }

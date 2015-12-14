@@ -202,8 +202,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     public void setToolbarElevation(boolean shouldElevate) {
         if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
-            mToolbar.setElevation(shouldElevate ?
-                    getResources().getDimension(R.dimen.elevation_header) : 0);
+            mToolbar.setElevation(shouldElevate ? getResources().getDimension(R.dimen.elevation_header) : 0);
         }
     }
 
@@ -213,39 +212,6 @@ public class QuestionActivity extends AppCompatActivity {
                     @Override
                     public void onLessonSolved() {
                         setToolbarElevation(true);
-                        displayDoneFab();
-                    }
-
-                    private void displayDoneFab() {
-                        /* We're re-using the already existing fab and give it some
-                         * new values. This has to run delayed due to the queued animation
-                         * to hide the fab initially.
-                         */
-                        if (null != mCircularReveal && mCircularReveal.isRunning()) {
-                            mCircularReveal.addListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    showQuestionFabWithDoneIcon();
-                                    mCircularReveal.removeListener(this);
-                                }
-                            });
-                        } else {
-                            showQuestionFabWithDoneIcon();
-                        }
-                    }
-
-                    private void showQuestionFabWithDoneIcon() {
-                        mQuestionFab.setImageResource(R.drawable.ic_tick);
-                        mQuestionFab.setId(R.id.question_done);
-                        mQuestionFab.setVisibility(View.VISIBLE);
-                        mQuestionFab.setScaleX(0f);
-                        mQuestionFab.setScaleY(0f);
-                        ViewCompat.animate(mQuestionFab)
-                                .scaleX(1)
-                                .scaleY(1)
-                                .setInterpolator(mInterpolator)
-                                .setListener(null)
-                                .start();
                     }
                 });
         if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {

@@ -9,13 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewAnimator;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.adapter.QuestionAdapter;
-import com.sigrideducation.englishlearning.adapter.ScoreAdapter;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
@@ -35,17 +33,15 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private ProgressBar mProgressBar;
     private Lesson mLesson;
     private AdapterViewAnimator mQuestionView;
-    private ScoreAdapter mScoreAdapter;
     private QuestionAdapter mQuestionAdapter;
     private SolvedStateListener mSolvedStateListener;
 
-    public static QuestionFragment newInstance(String categoryId,
-                                           SolvedStateListener solvedStateListener) {
-        if (categoryId == null) {
-            throw new IllegalArgumentException("The category can not be null");
+    public static QuestionFragment newInstance(String lessonId, SolvedStateListener solvedStateListener) {
+        if (lessonId == null) {
+            throw new IllegalArgumentException("The lesson can not be null");
         }
         Bundle args = new Bundle();
-        args.putString(Lesson.TAG, categoryId);
+        args.putString(Lesson.TAG, lessonId);
         QuestionFragment fragment = new QuestionFragment();
         if (solvedStateListener != null) {
             fragment.mSolvedStateListener = solvedStateListener;
@@ -56,8 +52,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        String categoryId = getArguments().getString(Lesson.TAG);
-        mLesson = ELDatabaseHelper.getCategoryWith(getActivity(), categoryId);
+        String lessonId = getArguments().getString(Lesson.TAG);
+        mLesson = ELDatabaseHelper.getCategoryWith(getActivity(), lessonId);
         super.onCreate(savedInstanceState);
     }
 
@@ -67,8 +63,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         // Create a themed Context and custom LayoutInflater
         // to get nicely themed views in this Fragment.
         final Theme theme = mLesson.getTheme();
-        final ContextThemeWrapper context = new ContextThemeWrapper(getActivity(),
-                theme.getStyleId());
+        final ContextThemeWrapper context = new ContextThemeWrapper(getActivity(),theme.getStyleId());
         final LayoutInflater themedInflater = LayoutInflater.from(context);
         return themedInflater.inflate(R.layout.fragment_question, container, false);
     }
@@ -92,13 +87,11 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     }
 
     private void initProgressToolbar(View view) {
-        final int firstUnsolvedQuizPosition = mLesson.getFirstUnsolvedQuizPosition();
-        final List<Question> questions = mLesson.getQuizzes();
+        final List<Question> questions = mLesson.getQuestions();
         mQuestionSize = questions.size();
         mProgressBar = ((ProgressBar) view.findViewById(R.id.progress));
         mProgressBar.setMax(mQuestionSize);
-
-        setProgress(firstUnsolvedQuizPosition);
+        mProgressBar.setProgress(0);
     }
 
     private void setProgress(int currentQuestionPosition) {
@@ -117,7 +110,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             }
         } else {
             mQuestionView.setAdapter(getQuestionAdapter());
-            mQuestionView.setSelection(mLesson.getFirstUnsolvedQuizPosition());
+            //mQuestionView.setSelection(mLesson.getFirstUnsolvedQuizPosition());
         }
     }
 
@@ -185,29 +178,21 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             ELDatabaseHelper.updateLesson(getActivity(), mLesson);
             return true;
         }
-        markCategorySolved();
+        markLessonAttempted();
         return false;
     }
 
-    private void markCategorySolved() {
+    private void markLessonAttempted() {
         mLesson.setSolved(true);
         ELDatabaseHelper.updateLesson(getActivity(), mLesson);
     }
 
     public void showSummary() {
         @SuppressWarnings("ConstantConditions")
-        final ListView scorecardView = (ListView) getView().findViewById(R.id.scorecard);
-        mScoreAdapter = getScoreAdapter();
-        scorecardView.setAdapter(mScoreAdapter);
+        final TextView scorecardView = (TextView) getView().findViewById(R.id.txt_score);
+        scorecardView.setText("Correct Answers:");
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
-    }
-
-    private ScoreAdapter getScoreAdapter() {
-        if (null == mScoreAdapter) {
-            mScoreAdapter = new ScoreAdapter(mLesson);
-        }
-        return mScoreAdapter;
     }
 
     /**

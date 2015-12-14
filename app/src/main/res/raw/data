@@ -79,18 +79,6 @@
         "answer": "like"
       }
     ],
-    "scores": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
     "solved": "false"
   },
   {
@@ -129,13 +117,6 @@
         "question": "How are you?",
         "answer": "how are you"
       }
-    ],
-    "scores": [
-      0,
-      0,
-      0,
-      0,
-      0
     ],
     "solved": "false"
   }

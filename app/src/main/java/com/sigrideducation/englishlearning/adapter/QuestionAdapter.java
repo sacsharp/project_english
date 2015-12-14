@@ -41,7 +41,7 @@ public class QuestionAdapter extends BaseAdapter {
     public QuestionAdapter(Context context, Lesson lesson) {
         mContext = context;
         mLesson = lesson;
-        mQuestions = lesson.getQuizzes();
+        mQuestions = lesson.getQuestions();
         mViewTypeCount = calculateViewTypeCount();
 
     }
