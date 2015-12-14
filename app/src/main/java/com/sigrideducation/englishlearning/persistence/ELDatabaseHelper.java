@@ -134,12 +134,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
      * @param lessonId Id of the lesson to look for.
      * @return The found lesson.
      */
-    public static Lesson getCategoryWith(Context context, String lessonId) {
+    public static Lesson getLessonWith(Context context, String lessonId) {
         SQLiteDatabase readableDatabase = getReadableDatabase(context);
         String[] selectionArgs = {lessonId};
-        Cursor data = readableDatabase
-                .query(LessonTable.NAME, LessonTable.PROJECTION, LessonTable.COLUMN_ID + "=?",
-                        selectionArgs, null, null, null);
+        Cursor data = readableDatabase.query(LessonTable.NAME, LessonTable.PROJECTION, LessonTable.COLUMN_ID + "=?", selectionArgs, null, null, null);
         data.moveToFirst();
         return getLesson(data, readableDatabase);
     }

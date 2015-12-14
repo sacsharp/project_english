@@ -57,7 +57,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String lessonId = getArguments().getString(Lesson.TAG);
-        mLesson = ELDatabaseHelper.getCategoryWith(getActivity(), lessonId);
+        mLesson = ELDatabaseHelper.getLessonWith(getActivity(), lessonId);
         super.onCreate(savedInstanceState);
     }
 
