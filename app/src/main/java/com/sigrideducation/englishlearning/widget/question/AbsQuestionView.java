@@ -175,7 +175,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     private void addFloatingActionButton(int id) {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
-        int bottomOfQuestionView = findViewById(id).getBottom();
+        int bottomOfQuestionView = findViewById(id).getRight();
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize,
                 Gravity.END | Gravity.TOP);
         final int halfAFab = fabSize / 2;

@@ -91,8 +91,7 @@ public class TrueFalseQuestionView extends AbsQuestionView<TrueFalseQuestion> {
                     .setToolTip(new ToolTip()
                                     .setTitle("Hey!")
                                     .setDescription("Tap on me to answer the question TRUE!!")
-                                    .setGravity(Gravity.BOTTOM)
-                    )
+                                    .setGravity(Gravity.BOTTOM))
                     .setOverlay(new Overlay()).playOn(mAnswerTrue);
             ((GlobalApplication) ((Activity) getContext()).getApplication()).setTrueGuideShown(true);
         }
