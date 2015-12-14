@@ -40,7 +40,7 @@ import java.util.List;
 public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "ELDatabaseHelper";
-    private static final String DB_NAME = "topeka";
+    private static final String DB_NAME = "englishLearning";
     private static final String DB_SUFFIX = ".db";
     private static final int DB_VERSION = 1;
     private static List<Lesson> mLessons;
@@ -52,6 +52,8 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         super(context, DB_NAME + DB_SUFFIX, null, DB_VERSION);
         mResources = context.getResources();
     }
+
+
 
     private static ELDatabaseHelper getInstance(Context context) {
         if (null == mInstance) {
@@ -201,7 +203,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Resets the contents of Topeka's database to it's initial state.
+     * Resets the contents of englishLearning's database to it's initial state.
      *
      * @param context The context this is running in.
      */
@@ -345,6 +347,19 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         /* no-op */
+        int upgradeTo = oldVersion + 1;
+        while (upgradeTo <= newVersion)
+        {
+            switch (upgradeTo)
+            {
+                case 2:
+                    db.execSQL("DROP TABLE IF EXISTS " + LessonTable.NAME);
+                    db.execSQL("DROP TABLE IF EXISTS " + QuestionTable.NAME);
+                    onCreate(db);
+                    break;
+            }
+            upgradeTo++;
+        }
     }
 
     private void preFillDatabase(SQLiteDatabase db) {
