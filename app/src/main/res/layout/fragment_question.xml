@@ -3,6 +3,28 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/progress_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:elevation="@dimen/elevation_header">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_black"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_double"
+            android:layout_marginRight="@dimen/spacing_double"
+            android:progressTint="?android:colorAccent" />
+
+    </android.support.v7.widget.Toolbar>
+
     <TextView
         android:id="@+id/txt_score"
         android:layout_width="wrap_content"
@@ -15,21 +37,5 @@
             android:layout_weight="1"
             android:background="?android:attr/windowBackground" />
 
-    <android.support.v7.widget.Toolbar
-            android:id="@+id/progress_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?colorPrimary"
-            android:elevation="@dimen/elevation_header">
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/spacing_double"
-            android:layout_marginRight="@dimen/spacing_double"
-            android:progressTint="?android:colorAccent" />
-
-    </android.support.v7.widget.Toolbar>
 </LinearLayout>

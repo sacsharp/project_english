@@ -17,7 +17,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -48,7 +47,6 @@ public class QuestionActivity extends AppCompatActivity {
     private Interpolator mInterpolator;
     private String mLessonId;
     private QuestionFragment mQuestionFragment;
-    private Toolbar mToolbar;
     private FloatingActionButton mQuestionFab;
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
@@ -152,8 +150,6 @@ public class QuestionActivity extends AppCompatActivity {
                 .replace(R.id.quiz_fragment_container, mQuestionFragment, FRAGMENT_TAG).commit();
         final View fragmentContainer = findViewById(R.id.quiz_fragment_container);
         revealFragmentContainer(clickedView, fragmentContainer);
-        // the toolbar should not have more elevation than the content while playing
-        setToolbarElevation(false);
     }
 
     private void revealFragmentContainer(final View clickedView, final View fragmentContainer) {
@@ -200,24 +196,14 @@ public class QuestionActivity extends AppCompatActivity {
         });
     }
 
-    public void setToolbarElevation(boolean shouldElevate) {
-        if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
-            mToolbar.setElevation(shouldElevate ? getResources().getDimension(R.dimen.elevation_header) : 0);
-        }
-    }
-
     private void initQuestionFragment() {
         mQuestionFragment = QuestionFragment.newInstance(mLessonId,
                 new QuestionFragment.SolvedStateListener() {
                     @Override
                     public void onLessonSolved() {
-                        setToolbarElevation(true);
+
                     }
                 });
-        if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
-            // the toolbar should not have more elevation than the content while playing
-            setToolbarElevation(false);
-        }
     }
 
     /**
@@ -233,7 +219,6 @@ public class QuestionActivity extends AppCompatActivity {
             mQuestionFragment.showSummary();
             return;
         }
-        setToolbarElevation(false);
     }
 
     private void populate(String categoryId) {
@@ -249,7 +234,6 @@ public class QuestionActivity extends AppCompatActivity {
                     lesson.getTheme().getPrimaryDarkColor()));
         }
         initLayout(lesson.getId());
-        initToolbar(lesson);
     }
 
     private void initLayout(String categoryId) {
@@ -287,16 +271,4 @@ public class QuestionActivity extends AppCompatActivity {
 
 
     }
-
-    private void initToolbar(Lesson lesson) {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_activity_quiz);
-        mToolbar.setBackgroundColor(ContextCompat.getColor(this, lesson.getTheme().getPrimaryColor()));
-        mToolbar.setTitle(lesson.getName());
-        mToolbar.setNavigationOnClickListener(mOnClickListener);
-        if (mSavedStateIsPlaying) {
-            // the toolbar should not have more elevation than the content while playing
-            setToolbarElevation(false);
-        }
-    }
-
 }

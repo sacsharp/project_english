@@ -7,39 +7,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_activity_quiz"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:layout_gravity="top"
-                android:background="?colorPrimary"
-                app:contentInsetStart="@dimen/spacing_huge"
-                android:elevation="@dimen/elevation_header"
-                app:navigationContentDescription="@string/up"
-                app:navigationIcon="@drawable/ic_arrow_back"
-                android:transitionName="@string/transition_toolbar">
-            <!--an empty tag is required to get touch feedback on the navigation icon-->
-        </android.support.v7.widget.Toolbar>
-
-        <FrameLayout android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:layout_gravity="center"
-                     android:transitionName="@string/transition_background"
-                     android:background="?android:attr/windowBackground">
-
-
-            <FrameLayout android:id="@+id/quiz_fragment_container"
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent"
-                         android:layout_gravity="center"
-                         android:visibility="invisible" />
-        </FrameLayout>
-    </LinearLayout>
+    <FrameLayout android:id="@+id/quiz_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
 
     <!-- Scale is being used during entry animation -->
     <android.support.design.widget.FloatingActionButton
