@@ -1,14 +1,17 @@
 package com.sigrideducation.englishlearning.fragment;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewAnimator;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +34,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private static final String KEY_USER_INPUT = "USER_INPUT";
     private int mQuestionSize;
     private ProgressBar mProgressBar;
+    private ImageButton mImgBtnClose;
     private Lesson mLesson;
     private AdapterViewAnimator mQuestionView;
     private QuestionAdapter mQuestionAdapter;
@@ -90,8 +94,34 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         final List<Question> questions = mLesson.getQuestions();
         mQuestionSize = questions.size();
         mProgressBar = ((ProgressBar) view.findViewById(R.id.progress));
+        mImgBtnClose = (ImageButton) view.findViewById(R.id.img_btn_close);
         mProgressBar.setMax(mQuestionSize);
         mProgressBar.setProgress(0);
+
+        mImgBtnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle("Are you sure?")
+                        .setCancelable(false)
+                        .setMessage("Your progress would get lost.")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                         }
+                }).show();
+
+            }
+        });
     }
 
     private void setProgress(int currentQuestionPosition) {
@@ -139,8 +169,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         mQuestionView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                                       int oldLeft,
-                                       int oldTop, int oldRight, int oldBottom) {
+                                       int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 mQuestionView.removeOnLayoutChangeListener(this);
                 View currentChild = mQuestionView.getChildAt(0);
                 if (currentChild instanceof ViewGroup) {
@@ -151,7 +180,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
                 }
             }
         });
-
     }
 
     private QuestionAdapter getQuestionAdapter() {
@@ -190,6 +218,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     public void showSummary() {
         @SuppressWarnings("ConstantConditions")
         final TextView scorecardView = (TextView) getView().findViewById(R.id.txt_score);
+        //mImgBtnClose.setVisibility(View.GONE);
         scorecardView.setText("Correct Answers:");
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
