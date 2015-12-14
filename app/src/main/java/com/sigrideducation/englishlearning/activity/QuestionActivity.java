@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +22,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.animation.Interpolator;
+import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.GlobalApplication;
 import com.sigrideducation.englishlearning.R;
@@ -48,6 +48,7 @@ public class QuestionActivity extends AppCompatActivity {
     private String mLessonId;
     private QuestionFragment mQuestionFragment;
     private FloatingActionButton mQuestionFab;
+    private TextView mTxtLessonName;
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
 
@@ -221,28 +222,28 @@ public class QuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void populate(String categoryId) {
-        if (null == categoryId) {
+    private void populate(String lessonId) {
+        if (null == lessonId) {
             Log.w(TAG, "Didn't find a lesson. Finishing");
             finish();
         }
-        Lesson lesson = ELDatabaseHelper.getCategoryWith(this, categoryId);
+        Lesson lesson = ELDatabaseHelper.getLessonWith(this, lessonId);
         setTheme(lesson.getTheme().getStyleId());
         if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
             Window window = getWindow();
-            window.setStatusBarColor(ContextCompat.getColor(this,
-                    lesson.getTheme().getPrimaryDarkColor()));
+            window.setStatusBarColor(ContextCompat.getColor(this, lesson.getTheme().getPrimaryDarkColor()));
         }
         initLayout(lesson.getId());
     }
 
-    private void initLayout(String categoryId) {
+    private void initLayout(String lessonId) {
         setContentView(R.layout.activity_question);
         //noinspection PrivateResource
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
         mQuestionFab.setImageResource(R.drawable.ic_play);
 
-
+        mTxtLessonName =(TextView) findViewById(R.id.txt_lesson_name);
+        mTxtLessonName.setText(ELDatabaseHelper.getLessonWith(this,lessonId).getName());
 
         if(!((GlobalApplication)(this).getApplication()).isLessonStartGuideShow()){
             mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
@@ -253,22 +254,11 @@ public class QuestionActivity extends AppCompatActivity {
             ((GlobalApplication)(this).getApplication()).setLessonStartGuideShow(true);
         }
 
-
         if (mSavedStateIsPlaying) {
             mQuestionFab.hide();
         } else {
             mQuestionFab.show();
         }
         mQuestionFab.setOnClickListener(mOnClickListener);
-
-        toolTip = new ToolTip()
-                .setTitle("Next Button")
-                .setDescription("Click on Next button to proceed...")
-                .setTextColor(Color.parseColor("#bdc3c7"))
-                .setBackgroundColor(Color.parseColor("#e74c3c"))
-                .setShadow(true)
-                .setGravity(Gravity.TOP | Gravity.LEFT);
-
-
     }
 }
