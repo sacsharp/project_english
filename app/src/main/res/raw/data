@@ -10,11 +10,6 @@
         "answer": "I like apples. \nThe word 'Like' expresses interest in something that the individual enjoys. \n\n\n I would like an apple. \n 'Would like' is used in the sense of 'want'"
       },
       {
-        "type": "true-false",
-        "question": "Like is used for expressing your interest in something which you enjoy.",
-        "answer": true
-      },
-      {
         "type": "single-select-item",
         "question": "I _____ a beer.",
         "options": [
@@ -40,11 +35,6 @@
           "likes"
         ],
         "answer": [0]
-      },
-      {
-        "type": "true-false",
-        "question": "'Would like' is used for expressing your lovingness for something.",
-        "answer": false
       },
       {
         "type": "fill-blank",
@@ -90,11 +80,6 @@
         "type": "make-sentence",
         "question": "Coffee beans contain more caffeine than tea leaves.",
         "answer": "Coffee contain caffeine"
-      },
-      {
-        "type": "true-false",
-        "question": "Coffee beans contain more caffeine than tea leaves.",
-        "answer": false
       },
       {
         "type": "single-select-item",

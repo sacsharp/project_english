@@ -20,7 +20,6 @@ import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
-import com.sigrideducation.englishlearning.model.question.TrueFalseQuestion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -237,9 +236,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             case JsonAttributes.QuestionType.SINGLE_SELECT_ITEM: {
                 return createSelectItemQuestion(question, answer, options, solved);
             }
-            case JsonAttributes.QuestionType.TRUE_FALSE: {
-                return createTrueFalseQuestion(question, answer, solved);
-            }
             case JsonAttributes.QuestionType.SPEECH_INPUT:{
                 return createSpeechInputQuestion(question, answer, solved);
             }
@@ -268,16 +264,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final String[] optionsArray = JsonHelper.jsonArrayToStringArray(options);
         return new SelectItemQuestion(question, answerArray, optionsArray, solved);
     }
-    
 
-    private static Question createTrueFalseQuestion(String question, String answer, boolean solved) {
-    /*
-     * parsing json with the potential values "true" and "false"
-     * see res/raw/lessons.json for reference
-     */
-        final boolean answerValue = "true".equals(answer);
-        return new TrueFalseQuestion(question, answerValue, solved);
-    }
 
     private static Question createSpeechInputQuestion(String question, String answer, boolean solved) {
 

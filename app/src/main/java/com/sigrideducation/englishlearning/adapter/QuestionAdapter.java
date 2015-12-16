@@ -13,14 +13,12 @@ import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
-import com.sigrideducation.englishlearning.model.question.TrueFalseQuestion;
 import com.sigrideducation.englishlearning.widget.question.AbsQuestionView;
 import com.sigrideducation.englishlearning.widget.question.ContentTipQuestionView;
 import com.sigrideducation.englishlearning.widget.question.FillBlankQuestionView;
 import com.sigrideducation.englishlearning.widget.question.MakeSentenceQuestionView;
 import com.sigrideducation.englishlearning.widget.question.SelectItemQuestionView;
 import com.sigrideducation.englishlearning.widget.question.SpeechInputQuestionView;
-import com.sigrideducation.englishlearning.widget.question.TrueFalseQuestionView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -110,8 +108,6 @@ public class QuestionAdapter extends BaseAdapter {
                 return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);
             case SINGLE_SELECT_ITEM:
                 return new SelectItemQuestionView(mContext, mLesson, (SelectItemQuestion) question);
-            case TRUE_FALSE:
-                return new TrueFalseQuestionView(mContext, mLesson, (TrueFalseQuestion) question);
             case SPEECH_INPUT:
                 return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
             case CONTENT_TIP:
