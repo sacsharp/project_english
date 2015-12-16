@@ -104,6 +104,11 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        if (mSavedStateIsPlaying) {
+            mQuestionFragment = (QuestionFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+            findViewById(R.id.question_fragment_container).setVisibility(View.VISIBLE);
+        }
+
         super.onResume();
     }
 
