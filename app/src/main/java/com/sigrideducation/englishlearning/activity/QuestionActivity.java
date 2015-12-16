@@ -142,6 +142,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void startQuizFromClickOn(final View clickedView) {
+        mTxtLessonName.setVisibility(View.GONE);
         initQuestionFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.question_fragment_container, mQuestionFragment, FRAGMENT_TAG).commit();

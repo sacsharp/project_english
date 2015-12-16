@@ -3,6 +3,7 @@ package com.sigrideducation.englishlearning.widget.question;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,8 +40,8 @@ import tourguide.tourguide.TourGuide;
  */
 public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
-    private static final int ANSWER_HIDE_DELAY = 500;
-    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 750;
+    private static final int ANSWER_HIDE_DELAY = 250;
+    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 500;
     protected final int mMinHeightTouchTarget;
     private final int mSpacingDouble;
     private final LayoutInflater mLayoutInflater;
@@ -140,6 +141,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      */
     private void setUpQuestionView() {
         mQuestionView = (TextView) mLayoutInflater.inflate(R.layout.question, this, false);
+        mQuestionView.setTextColor(Color.BLACK);
         mQuestionView.setText(getQuestion().getQuestion());
     }
 
@@ -172,12 +174,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     private void addFloatingActionButton(int id) {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
-        int bottomOfQuestionView = findViewById(id).getRight();
-        final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize,
-                Gravity.END | Gravity.TOP);
-        final int halfAFab = fabSize / 2;
+        final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left
-                bottomOfQuestionView - halfAFab, //top
+                0, //top
                 0, // right
                 mSpacingDouble); // bottom
         MarginLayoutParamsCompat.setMarginEnd(fabLayoutParams, mSpacingDouble);
@@ -274,7 +273,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 {
                     mTourGuideHandler = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
                             .setPointer(new Pointer())
-                            .setToolTip(new ToolTip().setTitle("Done??").setDescription("Click on this button to submit the answer!!"))
+                            .setToolTip(new ToolTip().setTitle("Done??").setGravity(Gravity.TOP).setDescription("Click on this button to submit the answer!!"))
                             .playOn(mSubmitAnswer);
                     ((GlobalApplication) ((Activity) getContext()).getApplication()).setSubmitAnswerGuideShown(true);
                 }
