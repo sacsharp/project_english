@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -142,7 +143,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      */
     private void setUpQuestionView() {
         mQuestionView = (TextView) mLayoutInflater.inflate(R.layout.question, this, false);
-        mQuestionView.setBackgroundColor(ContextCompat.getColor(getContext(), mLesson.getTheme().getPrimaryColor()));
         mQuestionView.setText(getQuestion().getQuestion());
     }
 
