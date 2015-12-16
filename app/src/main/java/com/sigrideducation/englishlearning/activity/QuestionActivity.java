@@ -42,7 +42,7 @@ public class QuestionActivity extends AppCompatActivity {
     private static final String TAG = "QuestionActivity";
     private static final String STATE_IS_PLAYING = "isPlaying";
     private static final int UNDEFINED = -1;
-    private static final String FRAGMENT_TAG = "Quiz";
+    private static final String FRAGMENT_TAG = "Question";
 
     private Interpolator mInterpolator;
     private String mLessonId;
@@ -104,10 +104,6 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (mSavedStateIsPlaying) {
-            mQuestionFragment = (QuestionFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-            findViewById(R.id.quiz_fragment_container).setVisibility(View.VISIBLE);
-        }
         super.onResume();
     }
 
@@ -148,8 +144,8 @@ public class QuestionActivity extends AppCompatActivity {
     private void startQuizFromClickOn(final View clickedView) {
         initQuestionFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.quiz_fragment_container, mQuestionFragment, FRAGMENT_TAG).commit();
-        final View fragmentContainer = findViewById(R.id.quiz_fragment_container);
+                .replace(R.id.question_fragment_container, mQuestionFragment, FRAGMENT_TAG).commit();
+        final View fragmentContainer = findViewById(R.id.question_fragment_container);
         revealFragmentContainer(clickedView, fragmentContainer);
     }
 
