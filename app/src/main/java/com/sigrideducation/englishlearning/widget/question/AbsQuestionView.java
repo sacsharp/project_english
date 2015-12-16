@@ -91,12 +91,12 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(R.id.question_view);
+                addFloatingActionButton();
             }
         });
     }
 
-    public AbsQuestionView(Context context, Lesson lesson, Q question, final int viewId) {
+    public AbsQuestionView(Context context, Lesson lesson, Q question, final boolean isScroll) {
         super(context);
         mContext=context;
         mQuestion = question;
@@ -129,7 +129,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(viewId);
+                addFloatingActionButton();
             }
         });
     }
@@ -172,7 +172,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         addView(container, layoutParams);
     }
 
-    private void addFloatingActionButton(int id) {
+    private void addFloatingActionButton() {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left

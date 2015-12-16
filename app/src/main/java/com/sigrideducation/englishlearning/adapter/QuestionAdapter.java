@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
@@ -111,9 +110,9 @@ public class QuestionAdapter extends BaseAdapter {
             case SPEECH_INPUT:
                 return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
             case CONTENT_TIP:
-                return new ContentTipQuestionView(mContext,mLesson,(ContentTipQuestion) question, R.id.text_data);
+                return new ContentTipQuestionView(mContext,mLesson,(ContentTipQuestion) question,true);
             case MAKE_SENTENCE:
-                return new MakeSentenceQuestionView(mContext,mLesson,(MakeSentenceQuestion) question,R.id.flow_layout_parts);
+                return new MakeSentenceQuestionView(mContext,mLesson,(MakeSentenceQuestion) question,true);
         }
         throw new UnsupportedOperationException(
                 "Question of type " + question.getType() + " can not be displayed.");
