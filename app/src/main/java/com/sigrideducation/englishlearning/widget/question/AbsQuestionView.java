@@ -1,6 +1,5 @@
 package com.sigrideducation.englishlearning.widget.question;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,7 +10,6 @@ import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -323,7 +321,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         final int backgroundColor = ContextCompat.getColor(getContext(),
                 answerCorrect ? R.color.green : R.color.red);
         adjustFab(answerCorrect, backgroundColor);
-        resizeView();
         moveViewOffScreen(answerCorrect);
         // Animate the foreground color to match the background color.
         // This overlays all content within the current view.
@@ -339,23 +336,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             }
         };
         mHandler.postDelayed(mHideFabRunnable, ANSWER_HIDE_DELAY);
-    }
-
-    private void resizeView() {
-        final float widthHeightRatio = (float) getHeight() / (float) getWidth();
-        // Animate X and Y scaling separately to allow different start delays.
-        // object animators for x and y with different durations and then run them independently
-        resizeViewProperty(View.SCALE_X, .5f, 200);
-        resizeViewProperty(View.SCALE_Y, .5f / widthHeightRatio, 250);
-    }
-
-    private void resizeViewProperty(Property<View, Float> property,
-                                    float targetScale, int durationOffset) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(this, property,
-                1f, targetScale);
-        animator.setInterpolator(mLinearOutSlowInInterpolator);
-        animator.setStartDelay(FOREGROUND_COLOR_CHANGE_DELAY + durationOffset);
-        animator.start();
     }
 
     @Override
@@ -380,8 +360,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 }
             }
         };
-        mHandler.postDelayed(mMoveOffScreenRunnable,
-                FOREGROUND_COLOR_CHANGE_DELAY * 2);
+        mHandler.postDelayed(mMoveOffScreenRunnable, FOREGROUND_COLOR_CHANGE_DELAY);
     }
 
     private void setMinHeightInternal(View view, @DimenRes int resId) {
