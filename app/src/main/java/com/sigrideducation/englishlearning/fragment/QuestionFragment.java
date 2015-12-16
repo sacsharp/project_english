@@ -76,13 +76,13 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mQuestionView = (AdapterViewAnimator) view.findViewById(R.id.question_view);
         decideOnViewToDisplay();
-        setQuizViewAnimations();
+        setQuestionViewAnimations();
         initProgressToolbar(view);
         super.onViewCreated(view, savedInstanceState);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setQuizViewAnimations() {
+    private void setQuestionViewAnimations() {
         if (ApiLevelHelper.isLowerThan(Build.VERSION_CODES.LOLLIPOP)) {
             return;
         }

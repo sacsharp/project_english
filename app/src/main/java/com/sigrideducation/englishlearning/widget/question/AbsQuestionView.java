@@ -1,9 +1,9 @@
 package com.sigrideducation.englishlearning.widget.question;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +11,6 @@ import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,8 +40,8 @@ import tourguide.tourguide.TourGuide;
  */
 public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
-    private static final int ANSWER_HIDE_DELAY = 500;
-    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 750;
+    private static final int ANSWER_HIDE_DELAY = 250;
+    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 500;
     protected final int mMinHeightTouchTarget;
     private final int mSpacingDouble;
     private final LayoutInflater mLayoutInflater;
@@ -92,12 +91,12 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(R.id.question_view);
+                addFloatingActionButton();
             }
         });
     }
 
-    public AbsQuestionView(Context context, Lesson lesson, Q question, final int viewId) {
+    public AbsQuestionView(Context context, Lesson lesson, Q question, final boolean isScroll) {
         super(context);
         mContext=context;
         mQuestion = question;
@@ -130,7 +129,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(viewId);
+                addFloatingActionButton();
             }
         });
     }
@@ -142,7 +141,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      */
     private void setUpQuestionView() {
         mQuestionView = (TextView) mLayoutInflater.inflate(R.layout.question, this, false);
-        mQuestionView.setBackgroundColor(ContextCompat.getColor(getContext(), mLesson.getTheme().getPrimaryColor()));
+        mQuestionView.setTextColor(Color.BLACK);
         mQuestionView.setText(getQuestion().getQuestion());
     }
 
@@ -173,14 +172,11 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         addView(container, layoutParams);
     }
 
-    private void addFloatingActionButton(int id) {
+    private void addFloatingActionButton() {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
-        int bottomOfQuestionView = findViewById(id).getRight();
-        final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize,
-                Gravity.END | Gravity.TOP);
-        final int halfAFab = fabSize / 2;
+        final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left
-                bottomOfQuestionView - halfAFab, //top
+                0, //top
                 0, // right
                 mSpacingDouble); // bottom
         MarginLayoutParamsCompat.setMarginEnd(fabLayoutParams, mSpacingDouble);
@@ -277,7 +273,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 {
                     mTourGuideHandler = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
                             .setPointer(new Pointer())
-                            .setToolTip(new ToolTip().setTitle("Done??").setDescription("Click on this button to submit the answer!!"))
+                            .setToolTip(new ToolTip().setTitle("Done??").setGravity(Gravity.TOP).setDescription("Click on this button to submit the answer!!"))
                             .playOn(mSubmitAnswer);
                     ((GlobalApplication) ((Activity) getContext()).getApplication()).setSubmitAnswerGuideShown(true);
                 }
@@ -324,7 +320,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         final int backgroundColor = ContextCompat.getColor(getContext(),
                 answerCorrect ? R.color.green : R.color.red);
         adjustFab(answerCorrect, backgroundColor);
-        resizeView();
         moveViewOffScreen(answerCorrect);
         // Animate the foreground color to match the background color.
         // This overlays all content within the current view.
@@ -340,23 +335,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             }
         };
         mHandler.postDelayed(mHideFabRunnable, ANSWER_HIDE_DELAY);
-    }
-
-    private void resizeView() {
-        final float widthHeightRatio = (float) getHeight() / (float) getWidth();
-        // Animate X and Y scaling separately to allow different start delays.
-        // object animators for x and y with different durations and then run them independently
-        resizeViewProperty(View.SCALE_X, .5f, 200);
-        resizeViewProperty(View.SCALE_Y, .5f / widthHeightRatio, 250);
-    }
-
-    private void resizeViewProperty(Property<View, Float> property,
-                                    float targetScale, int durationOffset) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(this, property,
-                1f, targetScale);
-        animator.setInterpolator(mLinearOutSlowInInterpolator);
-        animator.setStartDelay(FOREGROUND_COLOR_CHANGE_DELAY + durationOffset);
-        animator.start();
     }
 
     @Override
@@ -381,8 +359,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 }
             }
         };
-        mHandler.postDelayed(mMoveOffScreenRunnable,
-                FOREGROUND_COLOR_CHANGE_DELAY * 2);
+        mHandler.postDelayed(mMoveOffScreenRunnable, FOREGROUND_COLOR_CHANGE_DELAY);
     }
 
     private void setMinHeightInternal(View view, @DimenRes int resId) {

@@ -26,8 +26,8 @@ public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuesti
     private String[] mQuestionParts;
 
 
-    public MakeSentenceQuestionView(Context context, Lesson lesson, MakeSentenceQuestion question, int viewId) {
-        super(context, lesson, question,viewId);
+    public MakeSentenceQuestionView(Context context, Lesson lesson, MakeSentenceQuestion question, boolean isScroll) {
+        super(context, lesson, question,isScroll);
     }
 
 

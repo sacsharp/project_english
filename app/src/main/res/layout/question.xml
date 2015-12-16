@@ -20,11 +20,8 @@
         android:id="@+id/question_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?colorPrimary"
-        android:elevation="@dimen/elevation_header"
         android:gravity="center_vertical"
         android:minHeight="@dimen/min_height_question"
         android:padding="@dimen/spacing_double"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         tools:ignore="Overdraw" />
