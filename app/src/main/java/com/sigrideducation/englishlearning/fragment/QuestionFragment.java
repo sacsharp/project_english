@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private static final String KEY_USER_INPUT = "USER_INPUT";
     private int mQuestionSize;
     private ProgressBar mProgressBar;
+    private Toolbar mProgressToolbar;
     private ImageButton mImgBtnClose;
     private Lesson mLesson;
     private AdapterViewAnimator mQuestionView;
@@ -94,6 +96,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private void initProgressToolbar(View view) {
         final List<Question> questions = mLesson.getQuestions();
         mQuestionSize = questions.size();
+        mProgressToolbar =(Toolbar) view.findViewById(R.id.progress_toolbar);
         mProgressBar = ((ProgressBar) view.findViewById(R.id.progress));
         mImgBtnClose = (ImageButton) view.findViewById(R.id.img_btn_close);
         mProgressBar.setMax(mQuestionSize);
@@ -219,7 +222,13 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     public void showSummary() {
         @SuppressWarnings("ConstantConditions")
         final TextView scorecardView = (TextView) getView().findViewById(R.id.txt_score);
-        //mImgBtnClose.setVisibility(View.GONE);
+        if(mProgressToolbar != null)
+            mProgressToolbar.setVisibility(View.GONE);
+        else{
+            mProgressToolbar = (Toolbar)getView().findViewById(R.id.progress_toolbar);
+            mProgressToolbar.setVisibility(View.GONE);
+        }
+
         scorecardView.setText("Correct Answers:");
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
