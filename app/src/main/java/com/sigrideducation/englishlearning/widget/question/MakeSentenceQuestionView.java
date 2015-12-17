@@ -57,9 +57,9 @@ public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuesti
                             anyViewVisible=true;
                     }
                     if(anyViewVisible)
-                        allowAnswer(true);
+                        allowCheckAnswer(true);
                     else
-                        allowAnswer(false);
+                        allowCheckAnswer(false);
                 }
             };
 
@@ -74,7 +74,7 @@ public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuesti
                 buttonSentence.setTag(v.getId());
                 buttonSentence.setOnClickListener(onClickSentence);
                 mFlowLayoutSentence.addView(buttonSentence);
-                allowAnswer(true);
+                allowCheckAnswer(true);
             }
         };
         int id=1000;

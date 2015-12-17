@@ -3,7 +3,7 @@
 <com.sigrideducation.englishlearning.widget.fab.CheckableFab
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@id/checkAnswer"
+        android:id="@id/moveToNext"
         app:borderWidth="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

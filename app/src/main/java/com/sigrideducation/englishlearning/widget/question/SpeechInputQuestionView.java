@@ -199,7 +199,7 @@ public class SpeechInputQuestionView extends AbsQuestionView<SpeechInputQuestion
             //Log.d(TAG, "onResults"); //$NON-NLS-1$
             ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             mTextSpeechInput.setText(matches.get(0).toString());
-            allowAnswer();
+            allowCheckAnswer();
             // matches are the return values of speech recognition engine
             // Use these values for whatever you wish to do
         }

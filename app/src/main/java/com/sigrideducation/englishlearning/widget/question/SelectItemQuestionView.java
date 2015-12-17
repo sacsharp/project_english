@@ -41,7 +41,7 @@ public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                allowAnswer();
+                allowCheckAnswer();
                 toggleAnswerFor(position);
             }
         });

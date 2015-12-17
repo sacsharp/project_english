@@ -1,6 +1,7 @@
 package com.sigrideducation.englishlearning.widget.question;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -11,6 +12,8 @@ import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,8 +43,8 @@ import tourguide.tourguide.TourGuide;
  */
 public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
-    private static final int ANSWER_HIDE_DELAY = 250;
-    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 500;
+    private static final int ANSWER_HIDE_DELAY = 100;
+    private static final int FOREGROUND_COLOR_CHANGE_DELAY = 250;
     protected final int mMinHeightTouchTarget;
     private final int mSpacingDouble;
     private final LayoutInflater mLayoutInflater;
@@ -50,12 +53,14 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     private Interpolator mLinearOutSlowInInterpolator;
     private boolean mAnswered;
     private TextView mQuestionView;
-    private CheckableFab mSubmitAnswer;
+    private CheckableFab mCheckAnswer;
+    private CheckableFab mMoveToNext;
     private Handler mHandler;
     private Runnable mHideFabRunnable;
     private Runnable mMoveOffScreenRunnable;
     private InputMethodManager mInputMethodManager;
     private Context mContext;
+    private TextView mTextAnswerStatus;
 
     TourGuide mTourGuideHandler;
     /**
@@ -72,7 +77,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         mLesson = lesson;
         mSpacingDouble = getResources().getDimensionPixelSize(R.dimen.spacing_double);
         mLayoutInflater = LayoutInflater.from(context);
-        mSubmitAnswer = getSubmitButton();
+        mCheckAnswer = getCheckAnswerButton();
+        mMoveToNext = getMoveToNextButton();
+        mTextAnswerStatus = getAnswerStatusView();
         mMinHeightTouchTarget = getResources()
                 .getDimensionPixelSize(R.dimen.min_height_touch_target);
         mLinearOutSlowInInterpolator = new LinearOutSlowInInterpolator();
@@ -91,7 +98,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton();
+                addFloatingActionButton(mCheckAnswer);
+                addFloatingActionButton(mMoveToNext);
+                addAnswerStatusText();
             }
         });
     }
@@ -103,7 +112,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         mLesson = lesson;
         mSpacingDouble = getResources().getDimensionPixelSize(R.dimen.spacing_double);
         mLayoutInflater = LayoutInflater.from(context);
-        mSubmitAnswer = getSubmitButton();
+        mCheckAnswer = getCheckAnswerButton();
+        mMoveToNext = getMoveToNextButton();
+        mTextAnswerStatus = getAnswerStatusView();
         mMinHeightTouchTarget = getResources().getDimensionPixelSize(R.dimen.min_height_touch_target);
         mLinearOutSlowInInterpolator = new LinearOutSlowInInterpolator();
         mHandler = new Handler();
@@ -119,7 +130,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         scrollView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                allowAnswer(true);
+                allowCheckAnswer(true);
                 return false;
             }
         });
@@ -129,7 +140,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton();
+                addFloatingActionButton(mCheckAnswer);
+                addFloatingActionButton(mMoveToNext);
+                addAnswerStatusText();
             }
         });
     }
@@ -172,7 +185,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         addView(container, layoutParams);
     }
 
-    private void addFloatingActionButton() {
+    private void addFloatingActionButton(CheckableFab fab) {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left
@@ -182,21 +195,25 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         MarginLayoutParamsCompat.setMarginEnd(fabLayoutParams, mSpacingDouble);
         if (ApiLevelHelper.isLowerThan(Build.VERSION_CODES.LOLLIPOP)) {
             // Account for the fab's emulated shadow.
-            fabLayoutParams.topMargin -= (mSubmitAnswer.getPaddingTop() / 2);
+            fabLayoutParams.topMargin -= (fab.getPaddingTop() / 2);
         }
-        addView(mSubmitAnswer, fabLayoutParams);
+        addView(fab, fabLayoutParams);
     }
 
-    private CheckableFab  getSubmitButton() {
-        if (null == mSubmitAnswer) {
+    private void addAnswerStatusText() {
+        final LayoutParams textLayoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+        addView(mTextAnswerStatus, textLayoutParams);
+    }
 
-            mSubmitAnswer = (CheckableFab) getLayoutInflater().inflate(R.layout.answer_submit, this, false);
+    private CheckableFab  getCheckAnswerButton() {
+        if (null == mCheckAnswer) {
 
-            mSubmitAnswer.hide();
-            mSubmitAnswer.setOnClickListener(new OnClickListener() {
+            mCheckAnswer = (CheckableFab) getLayoutInflater().inflate(R.layout.answer_submit, this, false);
+            mCheckAnswer.hide();
+            mCheckAnswer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    submitAnswer(v);
+                    checkAnswer(v);
                     if(((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
                     {
                         if(null != mTourGuideHandler)
@@ -211,7 +228,92 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 }
             });
         }
-        return mSubmitAnswer;
+        return mCheckAnswer;
+    }
+
+    private CheckableFab  getMoveToNextButton() {
+        if (null == mMoveToNext) {
+
+            mMoveToNext = (CheckableFab) getLayoutInflater().inflate(R.layout.move_to_next, this, false);
+            mMoveToNext.setImageResource(R.drawable.ic_arrow_forward_black_48dp);
+            mMoveToNext.hide();
+            mMoveToNext.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moveToText(v);
+                    if (((GlobalApplication) ((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown()) {
+                        if (null != mTourGuideHandler) {
+                            mTourGuideHandler.cleanUp();
+                        }
+                    }
+
+                    if (mInputMethodManager.isAcceptingText()) {
+                        mInputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            });
+        }
+        return mMoveToNext;
+    }
+
+    private TextView  getAnswerStatusView() {
+        if (null == mTextAnswerStatus) {
+
+            mTextAnswerStatus = new TextView(getContext());
+            mTextAnswerStatus.setElevation(4);
+            mTextAnswerStatus.setPadding(10,10,10,10);
+            mTextAnswerStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.White));
+            mTextAnswerStatus.setBackgroundColor(ContextCompat.getColor(getContext(),mLesson.getTheme().getPrimaryColor()));
+            mTextAnswerStatus.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                        ClipData data = ClipData.newPlainText("", "");
+                        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                        //start dragging the item touched
+                        v.startDrag(data, shadowBuilder, v, 0);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+            getRootView().setOnDragListener(new OnDragListener() {
+                @Override
+                public boolean onDrag(View v, DragEvent event) {
+                    switch (event.getAction()) {
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            //no action necessary
+                            break;
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                            //no action necessary
+                            break;
+                        case DragEvent.ACTION_DRAG_EXITED:
+                            //no action necessary
+                            break;
+                        case DragEvent.ACTION_DROP:
+                            View view = (View) event.getLocalState();
+                            view.setVisibility(VISIBLE);
+
+                            float x = event.getX();
+                            float y = event.getY();
+                            final LayoutParams textLayoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            textLayoutParams.setMargins(0, (int) y, 0, 0);
+                            mTextAnswerStatus.setLayoutParams(textLayoutParams);
+
+                            return true;
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            break;
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
+            mTextAnswerStatus.setVisibility(GONE);
+        }
+        return mTextAnswerStatus;
     }
 
     private void setDefaultPadding(View view) {
@@ -265,21 +367,21 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      *
      * @param answered <code>true</code> if an answer was selected, else <code>false</code>.
      */
-    protected void allowAnswer(final boolean answered) {
-        if (null != mSubmitAnswer) {
+    protected void allowCheckAnswer(final boolean answered) {
+        if (null != mCheckAnswer) {
             if (answered) {
-                mSubmitAnswer.show();
+                mCheckAnswer.show();
                 if(!((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
                 {
                     mTourGuideHandler = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
                             .setPointer(new Pointer())
                             .setToolTip(new ToolTip().setTitle("Done??").setGravity(Gravity.TOP).setDescription("Click on this button to submit the answer!!"))
-                            .playOn(mSubmitAnswer);
+                            .playOn(mCheckAnswer);
                     ((GlobalApplication) ((Activity) getContext()).getApplication()).setSubmitAnswerGuideShown(true);
                 }
 
             } else {
-                mSubmitAnswer.hide();
+                mCheckAnswer.hide();
                 mTourGuideHandler.cleanUp();
             }
             mAnswered = answered;
@@ -290,23 +392,45 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
      * Sets the question to answered if it not already has been answered.
      * Otherwise does nothing.
      */
-    protected void allowAnswer() {
+    protected void allowCheckAnswer() {
         if (!isAnswered()) {
-            allowAnswer(true);
+            allowCheckAnswer(true);
         }
     }
 
     /**
      * Allows children to submit an answer via code.
      */
-    protected void submitAnswer() {
-        submitAnswer(findViewById(R.id.submitAnswer));
+    protected void checkAnswer() {
+        checkAnswer(findViewById(R.id.checkAnswer));
     }
 
     @SuppressWarnings("UnusedParameters")
-    private void submitAnswer(final View v) {
+    private void checkAnswer(final View v) {
         final boolean answerCorrect = isAnswerCorrect();
         mQuestion.setSolved(true);
+        mTextAnswerStatus.setVisibility(VISIBLE);
+        mTextAnswerStatus.setTextSize(30);
+        mTextAnswerStatus.setBackgroundColor(Color.GRAY);
+        if(answerCorrect)
+            mTextAnswerStatus.setText("Correct");
+        else
+            mTextAnswerStatus.setText("It's Wrong!!");
+
+        mCheckAnswer.hide();
+        mMoveToNext.show();
+    }
+
+    /**
+     * Allows children to submit an answer via code.
+     */
+    protected void moveToText() {
+        moveToText(findViewById(R.id.moveToNext));
+    }
+
+    @SuppressWarnings("UnusedParameters")
+    private void moveToText(final View v) {
+        final boolean answerCorrect = isAnswerCorrect();
         performScoreAnimation(answerCorrect);
     }
 
@@ -326,12 +450,12 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     }
 
     private void adjustFab(boolean answerCorrect, int backgroundColor) {
-        mSubmitAnswer.setChecked(answerCorrect);
-        mSubmitAnswer.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
+        mCheckAnswer.setChecked(answerCorrect);
+        mCheckAnswer.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
         mHideFabRunnable = new Runnable() {
             @Override
             public void run() {
-                mSubmitAnswer.hide();
+                mCheckAnswer.hide();
             }
         };
         mHandler.postDelayed(mHideFabRunnable, ANSWER_HIDE_DELAY);

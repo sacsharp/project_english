@@ -64,9 +64,7 @@ public class QuestionActivity extends AppCompatActivity {
                     if(mTourGuideHandler !=null)
                     mTourGuideHandler.cleanUp();
                     break;
-                case R.id.submitAnswer:
-                    submitAnswer();
-                    break;
+
                 case R.id.question_done:
                     ActivityCompat.finishAfterTransition(QuestionActivity.this);
                     break;
@@ -213,11 +211,10 @@ public class QuestionActivity extends AppCompatActivity {
      * Proceeds the quiz to it's next state.
      */
     public void proceed() {
-        submitAnswer();
+        moveToNext();
     }
-    
 
-    private void submitAnswer() {
+    private void moveToNext(){
         if (!mQuestionFragment.showNextPage()) {
             mQuestionFragment.showSummary();
             return;

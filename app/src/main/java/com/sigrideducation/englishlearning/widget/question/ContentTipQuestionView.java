@@ -33,7 +33,7 @@ public class ContentTipQuestionView extends AbsQuestionView<ContentTipQuestion> 
         container.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                allowAnswer(true);
+                allowCheckAnswer(true);
                 return true;
             }
         });

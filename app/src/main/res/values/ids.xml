@@ -15,7 +15,8 @@
   -->
 
 <resources>
-    <item name="submitAnswer" type="id" />
+    <item name="checkAnswer" type="id" />
+    <item name="moveToNext" type="id" />
     <item name="absQuestionViewContainer" type="id" />
     <item name="question_content" type="id" />
     <item name="question_done" type="id" />

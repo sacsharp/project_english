@@ -39,6 +39,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private AdapterViewAnimator mQuestionView;
     private QuestionAdapter mQuestionAdapter;
     private SolvedStateListener mSolvedStateListener;
+    private TextView mTextAnswerStatus;
 
     public static QuestionFragment newInstance(String lessonId, SolvedStateListener solvedStateListener) {
         if (lessonId == null) {
@@ -117,8 +118,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                         }
-                }).show();
+                            }
+                        }).show();
 
             }
         });
@@ -223,6 +224,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
     }
+
 
     /**
      * Interface definition for a callback to be invoked when the quiz is started.

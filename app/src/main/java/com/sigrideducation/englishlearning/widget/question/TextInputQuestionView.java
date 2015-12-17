@@ -32,9 +32,9 @@ public abstract class TextInputQuestionView<Q extends Question> extends AbsQuest
     }
 
     @Override
-    protected void submitAnswer() {
+    protected void checkAnswer() {
         hideKeyboard(this);
-        super.submitAnswer();
+        super.checkAnswer();
     }
 
     /**
@@ -57,9 +57,9 @@ public abstract class TextInputQuestionView<Q extends Question> extends AbsQuest
         if (TextUtils.isEmpty(v.getText())) {
             return false;
         }
-        allowAnswer();
+        allowCheckAnswer();
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            submitAnswer();
+            checkAnswer();
             hideKeyboard(v);
             return true;
         }
@@ -78,6 +78,6 @@ public abstract class TextInputQuestionView<Q extends Question> extends AbsQuest
 
     @Override
     public void afterTextChanged(Editable s) {
-        allowAnswer(!TextUtils.isEmpty(s));
+        allowCheckAnswer(!TextUtils.isEmpty(s));
     }
 }
