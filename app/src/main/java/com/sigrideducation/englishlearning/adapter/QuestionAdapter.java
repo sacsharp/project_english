@@ -33,6 +33,7 @@ public class QuestionAdapter extends BaseAdapter {
     private final List<Question> mQuestions;
     private final Lesson mLesson;
     private final int mViewTypeCount;
+    private int mScore=0;
     private List<String> mQuestionType;
 
     public QuestionAdapter(Context context, Lesson lesson) {
@@ -116,5 +117,17 @@ public class QuestionAdapter extends BaseAdapter {
         }
         throw new UnsupportedOperationException(
                 "Question of type " + question.getType() + " can not be displayed.");
+    }
+
+    public int getScore() {
+        int tempScore=0;
+        for (int i = 0; i < mQuestions.size(); i++) {
+            if(mQuestions.get(i).isUserAnswerCorrect())
+            {
+                ++tempScore;
+            }
+        }
+        mScore = tempScore;
+        return mScore;
     }
 }

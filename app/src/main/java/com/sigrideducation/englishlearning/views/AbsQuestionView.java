@@ -407,7 +407,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     @SuppressWarnings("UnusedParameters")
     private void checkAnswer(final View v) {
         final boolean answerCorrect = isAnswerCorrect();
-        mQuestion.setSolved(true);
+        mQuestion.setUserAnswerCorrect(answerCorrect);
         mTextAnswerStatus.setVisibility(VISIBLE);
         mTextAnswerStatus.setTextSize(30);
         mTextAnswerStatus.setBackgroundColor(Color.GRAY);

@@ -42,19 +42,19 @@ public abstract class Question<A> implements Parcelable {
      * Flag indicating whether this question has already been solved.
      * It does not give information whether the solution was correct or not.
      */
-    private boolean mSolved;
+    private boolean mUserAnswerCorrect;
 
-    protected Question(String question, A answer, boolean solved) {
+    protected Question(String question, A answer, boolean status) {
         mQuestion = question;
         mAnswer = answer;
         mQuestionType = getType().getJsonName();
-        mSolved = solved;
+        mUserAnswerCorrect = status;
     }
 
     protected Question(Parcel in) {
         mQuestion = in.readString();
         mQuestionType = getType().getJsonName();
-        mSolved = ParcelableHelper.readBoolean(in);
+        mUserAnswerCorrect = ParcelableHelper.readBoolean(in);
     }
 
     /**
@@ -83,12 +83,12 @@ public abstract class Question<A> implements Parcelable {
         return mAnswer.equals(answer);
     }
 
-    public boolean isSolved() {
-        return mSolved;
+    public boolean isUserAnswerCorrect() {
+        return mUserAnswerCorrect;
     }
 
-    public void setSolved(boolean solved) {
-        mSolved = solved;
+    public void setUserAnswerCorrect(boolean status) {
+        mUserAnswerCorrect = status;
     }
 
     /**
@@ -107,7 +107,7 @@ public abstract class Question<A> implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         ParcelableHelper.writeEnumValue(dest, getType());
         dest.writeString(mQuestion);
-        ParcelableHelper.writeBoolean(dest, mSolved);
+        ParcelableHelper.writeBoolean(dest, mUserAnswerCorrect);
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -122,7 +122,7 @@ public abstract class Question<A> implements Parcelable {
 
         Question question = (Question) o;
 
-        if (mSolved != question.mSolved) {
+        if (mUserAnswerCorrect != question.mUserAnswerCorrect) {
             return false;
         }
         if (!mAnswer.equals(question.mAnswer)) {
@@ -143,7 +143,7 @@ public abstract class Question<A> implements Parcelable {
         int result = mQuestion.hashCode();
         result = 31 * result + mAnswer.hashCode();
         result = 31 * result + mQuestionType.hashCode();
-        result = 31 * result + (mSolved ? 1 : 0);
+        result = 31 * result + (mUserAnswerCorrect ? 1 : 0);
         return result;
     }
 

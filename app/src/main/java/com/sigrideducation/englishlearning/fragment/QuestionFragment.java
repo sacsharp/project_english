@@ -229,7 +229,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             mProgressToolbar.setVisibility(View.GONE);
         }
 
-        scorecardView.setText("Correct Answers:");
+        int score = mQuestionAdapter.getScore();
+        scorecardView.setText("Correct Answers:"+ score);
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
     }

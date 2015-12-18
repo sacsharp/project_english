@@ -164,9 +164,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Updates a list of given questions.
-     *
-     * @param writableDatabase The database to write the questions to.
-     * @param questions The questions to write.
      */
     private static void updateQuestions(SQLiteDatabase writableDatabase, List<Question> questions) {
         Question question;
@@ -175,7 +172,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         for (int i = 0; i < questions.size(); i++) {
             question = questions.get(i);
             questionValues.clear();
-            questionValues.put(QuestionTable.COLUMN_CORRECT, question.isSolved());
+            questionValues.put(QuestionTable.COLUMN_CORRECT, question.isUserAnswerCorrect());
 
             questionArgs[0] = question.getQuestion();
             writableDatabase.update(QuestionTable.NAME, questionValues, QuestionTable.COLUMN_QUESTION + "=?",
