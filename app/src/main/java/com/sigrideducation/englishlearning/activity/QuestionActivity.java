@@ -51,9 +51,7 @@ public class QuestionActivity extends AppCompatActivity {
     private TextView mTxtLessonName;
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
-
     TourGuide mTourGuideHandler, mTourGuideHandler1;
-    ToolTip toolTip;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -68,6 +66,7 @@ public class QuestionActivity extends AppCompatActivity {
                 case R.id.question_done:
                     ActivityCompat.finishAfterTransition(QuestionActivity.this);
                     break;
+
                 case UNDEFINED:
                     final CharSequence contentDescription = v.getContentDescription();
                     if (contentDescription != null && contentDescription
@@ -75,10 +74,10 @@ public class QuestionActivity extends AppCompatActivity {
                         onBackPressed();
                         break;
                     }
+
                 default:
                     throw new UnsupportedOperationException(
-                            "OnClick has not been implemented for " + getResources().
-                                    getResourceName(v.getId()));
+                            "OnClick has not been implemented for " + getResources().getResourceName(v.getId()));
             }
         }
     };

@@ -20,13 +20,16 @@ public interface JsonAttributes {
 
     String ANSWER = "answer";
     String END = "end";
-    String ID = "id";
-    String NAME = "name";
+    String CID = "cid";
+    String LID = "lid";
+    String CNAME = "cname";
+    String LNAME = "lname";
     String OPTIONS = "options";
     String QUESTION = "question";
-    String QUIZZES = "quizzes";
+    String QUESTIONS = "questions";
+    String LESSONS = "lessons";
     String START = "start";
-    String THEME = "theme";
+    String THEME = "ltheme";
     String TYPE = "type";
     String SCORES = "scores";
     String SOLVED = "solved";

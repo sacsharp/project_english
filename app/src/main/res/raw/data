@@ -1,108 +1,49 @@
 [
-  {
-    "name": "Difference b/w like and would like",
-    "id": "1",
-    "theme": "yellow",
-    "quizzes": [
-      {
-        "type": "content-tip",
-        "question": "",
-        "answer": "I like apples. \nThe word 'Like' expresses interest in something that the individual enjoys. \n\n\n I would like an apple. \n 'Would like' is used in the sense of 'want'"
-      },
-      {
-        "type": "single-select-item",
-        "question": "I _____ a beer.",
-        "options": [
-          "like",
-          "would like",
-          "would likes",
-          "likes"
-        ],
-        "answer": [1]
-      },
-      {
-        "type": "make-sentence",
-        "question": "Coffee beans contain more caffeine than tea leaves.",
-        "answer": "Coffee contain caffeine"
-      },
-      {
-        "type": "single-select-item",
-        "question": "I ______ Sachin Tendulkar ever since I have started watching Cricket.",
-        "options": [
-          "like",
-          "would like",
-          "had like",
-          "likes"
-        ],
-        "answer": [0]
-      },
-      {
-        "type": "fill-blank",
-        "question": "They _______ to seek your blessing.",
-        "answer": "would like"
-      },
-      {
-        "type": "single-select-item",
-        "question": "________ to play with us?",
-        "options": [
-          "Do you likes",
-          "Would you like",
-          "He like",
-          "Are you like"
-        ],
-        "answer": [1]
-      },
-      {
-        "type": "single-select-item",
-        "question": "They ________ Italian food.",
-        "options": [
-          "do like",
-          "would like",
-          "like",
-          "likes"
-        ],
-        "answer": [1]
-      },
-      {
-        "type": "fill-blank",
-        "question": "I _____ to play with them but they are cheaters.",
-        "answer": "like"
-      }
-    ],
-    "solved": "false"
-  },
-  {
-    "name": "Lesson 2",
-    "id": "2",
-    "theme": "red",
-    "quizzes": [
-      {
-        "type": "make-sentence",
-        "question": "Coffee beans contain more caffeine than tea leaves.",
-        "answer": "Coffee contain caffeine"
-      },
-      {
-        "type": "single-select-item",
-        "question": "What vegetable did Mark Twain describe as “cabbage with a college education”?",
-        "options": [
-          "Spinach",
-          "Broccoli",
-          "Cauliflower",
-          "Kale"
-        ],
-        "answer": [2]
-      },
-      {
-        "type": "fill-blank",
-        "question": "What name is given to a sugar syrup which is gently heated until it browns?",
-        "answer": "Caramel"
-      },
-      {
-        "type": "speech-input",
-        "question": "How are you?",
-        "answer": "how are you"
-      }
-    ],
-    "solved": "false"
-  }
+    {
+      "cid": "1",
+      "cname": "Chapter 1",
+      "lessons": [
+        {
+          "lid": "1",
+          "lname": "Lesson 1",
+          "ltheme": "yellow",
+          "solved": "false",
+          "questions": [
+            {
+              "type": "content-tip",
+              "question": "",
+              "answer": "I like apples. \nThe word 'Like' expresses interest in something that the individual enjoys. \n\n\n I would like an apple. \n 'Would like' is used in the sense of 'want'"
+            },
+            {
+              "type": "make-sentence",
+              "question": "Coffee beans contain more caffeine than tea leaves.",
+              "answer": "Coffee contain caffeine"
+            },
+            {
+              "type": "single-select-item",
+              "question": "I ______ Sachin Tendulkar ever since I have started watching Cricket.",
+              "options": [
+                "like",
+                "would like",
+                "had like",
+                "likes"
+              ],
+              "answer": [
+                0
+              ]
+            },
+            {
+              "type": "fill-blank",
+              "question": "I _____ to play with them but they are cheaters.",
+              "answer": "like"
+            },
+            {
+              "type": "speech-input",
+              "question": "How are you?",
+              "answer": "how are you"
+            }
+          ]
+        }
+      ]
+    }
 ]

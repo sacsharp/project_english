@@ -75,7 +75,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static List<Lesson> loadLessons(Context context) {
-        Cursor data = ELDatabaseHelper.getCategoryCursor(context);
+        Cursor data = ELDatabaseHelper.getLessonCursor(context);
         List<Lesson> tmpLessons = new ArrayList<>(data.getCount());
         final SQLiteDatabase readableDatabase = ELDatabaseHelper.getReadableDatabase(context);
         do {
@@ -93,7 +93,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
      * @param context The context this is running in.
      * @return All lessons stored in the database.
      */
-    private static Cursor getCategoryCursor(Context context) {
+    private static Cursor getLessonCursor(Context context) {
         SQLiteDatabase readableDatabase = getReadableDatabase(context);
         Cursor data = readableDatabase
                 .query(LessonTable.NAME, LessonTable.PROJECTION, null, null, null, null, null);
@@ -111,10 +111,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static Lesson getLesson(Cursor cursor, SQLiteDatabase readableDatabase) {
         // "magic numbers" based on LessonTable#PROJECTION
         final String id = cursor.getString(0);
-        final String name = cursor.getString(1);
-        final String themeName = cursor.getString(2);
+        final String name = cursor.getString(2);
+        final String themeName = cursor.getString(3);
         final Theme theme = Theme.valueOf(themeName);
-        final String isSolved = cursor.getString(3);
+        final String isSolved = cursor.getString(4);
         final boolean solved = getBooleanFromDatabase(isSolved);
 
         final List<Question> questions = getQuizzes(id, readableDatabase);
@@ -175,7 +175,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         for (int i = 0; i < questions.size(); i++) {
             question = questions.get(i);
             questionValues.clear();
-            questionValues.put(QuestionTable.COLUMN_SOLVED, question.isSolved());
+            questionValues.put(QuestionTable.COLUMN_CORRECT, question.isSolved());
 
             questionArgs[0] = question.getQuestion();
             writableDatabase.update(QuestionTable.NAME, questionValues, QuestionTable.COLUMN_QUESTION + "=?",
@@ -307,6 +307,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
          * create the lesson table first, as question table has a foreign key
          * constraint on lesson id
          */
+        db.execSQL(ChapterTable.CREATE);
         db.execSQL(LessonTable.CREATE);
         db.execSQL(QuestionTable.CREATE);
         preFillDatabase(db);
@@ -334,7 +335,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             try {
-                fillLessonsAndQuestions(db);
+                fillChaptersAndLessonsAndQuestions(db);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -344,20 +345,27 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void fillLessonsAndQuestions(SQLiteDatabase db) throws JSONException, IOException {
+    private void fillChaptersAndLessonsAndQuestions(SQLiteDatabase db) throws JSONException, IOException {
         ContentValues values = new ContentValues(); // reduce, reuse
-        JSONArray jsonArray = new JSONArray(readLessonsFromResources());
-        JSONObject lesson;
-        for (int i = 0; i < jsonArray.length(); i++) {
-            lesson = jsonArray.getJSONObject(i);
-            final String lessonId = lesson.getString(JsonAttributes.ID);
-            fillLesson(db, values, lesson, lessonId);
-            final JSONArray questions = lesson.getJSONArray(JsonAttributes.QUIZZES);
-            fillQuestionsForLesson(db, values, questions, lessonId);
+        JSONArray chapterArray = new JSONArray(readChaptersFromResources());
+        JSONObject chapter,lesson;
+        for (int i = 0; i < chapterArray.length(); i++) {
+            chapter = chapterArray.getJSONObject(i);
+            final String chapterId = chapter.getString(JsonAttributes.CID);
+            final JSONArray lessonArray = chapter.getJSONArray(JsonAttributes.LESSONS);
+            fillChapter(db, values, chapter, chapterId,lessonArray.length());
+
+            for(int j=0;j<lessonArray.length();j++){
+                lesson = lessonArray.getJSONObject(j);
+                final String lessonId = lesson.getString(JsonAttributes.LID);
+                fillLesson(db, values, lesson, lessonId);
+                final JSONArray questions = lesson.getJSONArray(JsonAttributes.QUESTIONS);
+                fillQuestionsForLesson(db, values, questions, lessonId);
+            }
         }
     }
 
-    private String readLessonsFromResources() throws IOException {
+    private String readChaptersFromResources() throws IOException {
         StringBuilder lessonsJson = new StringBuilder();
         InputStream dataLessons = mResources.openRawResource(R.raw.data);
         BufferedReader reader = new BufferedReader(new InputStreamReader(dataLessons));
@@ -368,12 +376,20 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
         return lessonsJson.toString();
     }
+    private void fillChapter(SQLiteDatabase db, ContentValues values, JSONObject chapter,
+                            String chapterId,int lessons) throws JSONException {
+        values.clear();
+        values.put(ChapterTable.COLUMN_ID, chapterId);
+        values.put(ChapterTable.COLUMN_NAME, chapter.getString(JsonAttributes.CNAME));
+        values.put(ChapterTable.COLUMN_LESSONS, lessons);
+        db.insert(ChapterTable.NAME, null, values);
+    }
 
     private void fillLesson(SQLiteDatabase db, ContentValues values, JSONObject lesson,
                               String lessonId) throws JSONException {
         values.clear();
         values.put(LessonTable.COLUMN_ID, lessonId);
-        values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonAttributes.NAME));
+        values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonAttributes.LNAME));
         values.put(LessonTable.COLUMN_THEME, lesson.getString(JsonAttributes.THEME));
         values.put(LessonTable.COLUMN_SOLVED, lesson.getString(JsonAttributes.SOLVED));
         db.insert(LessonTable.NAME, null, values);

@@ -33,10 +33,10 @@ public interface QuestionTable {
     String COLUMN_OPTIONS = "options";
     String COLUMN_START = "start";
     String COLUMN_END = "end";
-    String COLUMN_SOLVED = "solved";
+    String COLUMN_CORRECT = "status";
 
     String[] PROJECTION = new String[]{COLUMN_ID, FK_LESSON, COLUMN_TYPE,
-            COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_OPTIONS, COLUMN_START, COLUMN_END, COLUMN_SOLVED};
+            COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_OPTIONS, COLUMN_START, COLUMN_END, COLUMN_CORRECT};
 
     String CREATE = "CREATE TABLE " + NAME + " ("
             + COLUMN_ID + " INTEGER PRIMARY KEY, "
@@ -48,5 +48,5 @@ public interface QuestionTable {
             + COLUMN_OPTIONS + " TEXT, "
             + COLUMN_START + " TEXT, "
             + COLUMN_END + " TEXT, "
-            + COLUMN_SOLVED + ");";
+            + COLUMN_CORRECT + ");";
 }
