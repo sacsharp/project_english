@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.widget.question;
+package com.sigrideducation.englishlearning.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

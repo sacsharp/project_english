@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
-import com.sigrideducation.englishlearning.persistence.ELDatabaseHelper;
+import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 
 import java.util.List;
 

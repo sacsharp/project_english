@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.persistence;
+package com.sigrideducation.englishlearning.database;
 
 import android.provider.BaseColumns;
 

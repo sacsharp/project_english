@@ -29,7 +29,7 @@ import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
-import com.sigrideducation.englishlearning.persistence.ELDatabaseHelper;
+import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 
 import tourguide.tourguide.Overlay;
 import tourguide.tourguide.Pointer;

@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.widget.question;
+package com.sigrideducation.englishlearning.views;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -12,7 +12,6 @@ import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +31,7 @@ import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.widget.fab.CheckableFab;
+import com.sigrideducation.englishlearning.widget.CheckableFab;
 
 import tourguide.tourguide.Pointer;
 import tourguide.tourguide.ToolTip;

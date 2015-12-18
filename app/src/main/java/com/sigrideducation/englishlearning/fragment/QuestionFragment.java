@@ -22,8 +22,8 @@ import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.persistence.ELDatabaseHelper;
-import com.sigrideducation.englishlearning.widget.question.AbsQuestionView;
+import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
+import com.sigrideducation.englishlearning.views.AbsQuestionView;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning;
+package com.sigrideducation.englishlearning.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.adapter.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {

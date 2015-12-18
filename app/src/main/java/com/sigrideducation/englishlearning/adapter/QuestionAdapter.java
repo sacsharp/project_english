@@ -12,12 +12,12 @@ import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
-import com.sigrideducation.englishlearning.widget.question.AbsQuestionView;
-import com.sigrideducation.englishlearning.widget.question.ContentTipQuestionView;
-import com.sigrideducation.englishlearning.widget.question.FillBlankQuestionView;
-import com.sigrideducation.englishlearning.widget.question.MakeSentenceQuestionView;
-import com.sigrideducation.englishlearning.widget.question.SelectItemQuestionView;
-import com.sigrideducation.englishlearning.widget.question.SpeechInputQuestionView;
+import com.sigrideducation.englishlearning.views.AbsQuestionView;
+import com.sigrideducation.englishlearning.views.ContentTipQuestionView;
+import com.sigrideducation.englishlearning.views.FillBlankQuestionView;
+import com.sigrideducation.englishlearning.views.MakeSentenceQuestionView;
+import com.sigrideducation.englishlearning.views.SelectItemQuestionView;
+import com.sigrideducation.englishlearning.views.SpeechInputQuestionView;
 
 import java.util.ArrayList;
 import java.util.HashSet;

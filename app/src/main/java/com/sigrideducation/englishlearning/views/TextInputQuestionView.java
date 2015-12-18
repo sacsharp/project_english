@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.widget.question;
+package com.sigrideducation.englishlearning.views;
 
 import android.content.Context;
 import android.text.Editable;

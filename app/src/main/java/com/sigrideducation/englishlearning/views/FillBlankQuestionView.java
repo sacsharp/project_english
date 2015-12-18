@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.widget.question;
+package com.sigrideducation.englishlearning.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -84,7 +84,7 @@ public class FillBlankQuestionView extends TextInputQuestionView<FillBlankQuesti
      */
     private void setExistingContentOrHide(TextView view, String content) {
         if (null == content) {
-            view.setVisibility(View.GONE);
+            view.setVisibility(GONE);
         } else {
             view.setText(content);
         }

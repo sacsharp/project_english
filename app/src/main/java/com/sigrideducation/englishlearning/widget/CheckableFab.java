@@ -1,4 +1,4 @@
-package com.sigrideducation.englishlearning.widget.fab;
+package com.sigrideducation.englishlearning.widget;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
