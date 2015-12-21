@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.helper.JsonHelper;
 import com.sigrideducation.englishlearning.model.JsonAttributes;
 import com.sigrideducation.englishlearning.model.Lesson;
@@ -25,10 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +41,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static ELDatabaseHelper mInstance;
     private final Resources mResources;
 
-    private ELDatabaseHelper(Context context) {
+    public ELDatabaseHelper(Context context) {
         //prevents external instance creation
         super(context, DB_NAME + DB_SUFFIX, null, DB_VERSION);
         mResources = context.getResources();
@@ -185,11 +181,12 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
      *
      * @param context The context this is running in.
      */
-    public static void reset(Context context) {
+    public static void reset(Context context,String data) {
         SQLiteDatabase writableDatabase = getWritableDatabase(context);
+        writableDatabase.delete(ChapterTable.NAME,null,null);
         writableDatabase.delete(LessonTable.NAME, null, null);
         writableDatabase.delete(QuestionTable.NAME, null, null);
-        getInstance(context).preFillDatabase(writableDatabase);
+        getInstance(context).preFillDatabase(writableDatabase, data);
     }
 
     /**
@@ -307,7 +304,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(ChapterTable.CREATE);
         db.execSQL(LessonTable.CREATE);
         db.execSQL(QuestionTable.CREATE);
-        preFillDatabase(db);
+        //preFillDatabase(db);
     }
 
     @Override
@@ -328,11 +325,11 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void preFillDatabase(SQLiteDatabase db) {
+    private void preFillDatabase(SQLiteDatabase db,String data) {
         try {
             db.beginTransaction();
             try {
-                fillChaptersAndLessonsAndQuestions(db);
+                fillChaptersAndLessonsAndQuestions(db,data);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -342,9 +339,9 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void fillChaptersAndLessonsAndQuestions(SQLiteDatabase db) throws JSONException, IOException {
-        ContentValues values = new ContentValues(); // reduce, reuse
-        JSONArray chapterArray = new JSONArray(readChaptersFromResources());
+    public void fillChaptersAndLessonsAndQuestions(SQLiteDatabase db,String data) throws JSONException, IOException {
+        ContentValues values = new ContentValues();
+        JSONArray chapterArray = new JSONArray(data);
         JSONObject chapter,lesson;
         for (int i = 0; i < chapterArray.length(); i++) {
             chapter = chapterArray.getJSONObject(i);
@@ -362,17 +359,18 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private String readChaptersFromResources() throws IOException {
-        StringBuilder lessonsJson = new StringBuilder();
-        InputStream dataLessons = mResources.openRawResource(R.raw.data);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(dataLessons));
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            lessonsJson.append(line);
-        }
-        return lessonsJson.toString();
-    }
+    // To get the data from raw folder.
+//    private String readChaptersFromResources() throws IOException {
+//        StringBuilder lessonsJson = new StringBuilder();
+//        InputStream dataLessons = mResources.openRawResource(R.raw.data);
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(dataLessons));
+//        String line;
+//
+//        while ((line = reader.readLine()) != null) {
+//            lessonsJson.append(line);
+//        }
+//        return lessonsJson.toString();
+//    }
     private void fillChapter(SQLiteDatabase db, ContentValues values, JSONObject chapter,
                             String chapterId,int lessons) throws JSONException {
         values.clear();
