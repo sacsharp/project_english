@@ -138,7 +138,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private void decideOnViewToDisplay() {
         final boolean isSolved = mLesson.isSolved();
         if (isSolved) {
-            showSummary();
+            showSummary(mLesson.getId());
             if (null != mSolvedStateListener) {
                 mSolvedStateListener.onLessonSolved();
             }
@@ -219,7 +219,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         ELDatabaseHelper.updateLesson(getActivity(), mLesson);
     }
 
-    public void showSummary() {
+    public void showSummary(String lessonId) {
         @SuppressWarnings("ConstantConditions")
         final TextView scorecardView = (TextView) getView().findViewById(R.id.txt_score);
         if(mProgressToolbar != null)
@@ -229,7 +229,14 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             mProgressToolbar.setVisibility(View.GONE);
         }
 
-        int score = mQuestionAdapter.getScore();
+        int score;
+        if(mQuestionAdapter !=null){
+            score = mQuestionAdapter.getScore();
+        }
+        else {
+            mQuestionAdapter = getQuestionAdapter();
+            score = mQuestionAdapter.getScore();
+        }
         scorecardView.setText("Correct Answers:"+ score);
         scorecardView.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);

@@ -215,7 +215,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     private void moveToNext(){
         if (!mQuestionFragment.showNextPage()) {
-            mQuestionFragment.showSummary();
+            mQuestionFragment.showSummary(mLessonId);
             return;
         }
     }
