@@ -3,6 +3,7 @@ package com.sigrideducation.englishlearning.views;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
@@ -25,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.sigrideducation.englishlearning.GlobalApplication;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
@@ -61,7 +61,8 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     private Context mContext;
     private TextView mTextAnswerStatus;
 
-    TourGuide mTourGuideHandler;
+    TourGuide mTourGuideHandler,mTourGuideHandler1;
+    SharedPreferences sharedPreferences;
     /**
      * Enables creation of views for questionzes.
      *
@@ -213,7 +214,8 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     checkAnswer(v);
-                    if(((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
+                    sharedPreferences = getContext().getSharedPreferences("MY_PREF",Context.MODE_PRIVATE);
+                    if(sharedPreferences.getBoolean("CheckAnswerTipShown",true))
                     {
                         if(null != mTourGuideHandler)
                         {
@@ -240,7 +242,8 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     moveToText(v);
-                    if (((GlobalApplication) ((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown()) {
+                    sharedPreferences = getContext().getSharedPreferences("MY_PREF", Context.MODE_PRIVATE);
+                    if (sharedPreferences.getBoolean("MoveNextTipShown", true)) {
                         if (null != mTourGuideHandler) {
                             mTourGuideHandler.cleanUp();
                         }
@@ -370,13 +373,16 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         if (null != mCheckAnswer) {
             if (answered) {
                 mCheckAnswer.show();
-                if(!((GlobalApplication)((Activity) getContext()).getApplication()).isSubmitAnswerGuideShown())
+                sharedPreferences = getContext().getSharedPreferences("MY_PREF",Context.MODE_PRIVATE);
+                if(!sharedPreferences.getBoolean("CheckAnswerTipShown",false))
                 {
                     mTourGuideHandler = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
                             .setPointer(new Pointer())
                             .setToolTip(new ToolTip().setTitle("Done??").setGravity(Gravity.TOP).setDescription("Click on this button to submit the answer!!"))
                             .playOn(mCheckAnswer);
-                    ((GlobalApplication) ((Activity) getContext()).getApplication()).setSubmitAnswerGuideShown(true);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("CheckAnswerTipShown",true);
+                    editor.commit();
                 }
 
             } else {
@@ -417,6 +423,17 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mTextAnswerStatus.setText("It's Wrong!!");
 
         mCheckAnswer.hide();
+        sharedPreferences = getContext().getSharedPreferences("MY_PREF",Context.MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("MoveNextTipShown",false))
+        {
+            mTourGuideHandler1 = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer())
+                    .setToolTip(new ToolTip().setTitle("Done??").setGravity(Gravity.TOP).setDescription("Click on this button to move to next question!!"))
+                    .playOn(mMoveToNext);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("MoveNextTipShown",true);
+            editor.commit();
+        }
         mMoveToNext.show();
     }
 
@@ -430,6 +447,8 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     @SuppressWarnings("UnusedParameters")
     private void moveToText(final View v) {
         final boolean answerCorrect = isAnswerCorrect();
+        if(mTourGuideHandler1!=null)
+            mTourGuideHandler1.cleanUp();
         performScoreAnimation(answerCorrect);
     }
 

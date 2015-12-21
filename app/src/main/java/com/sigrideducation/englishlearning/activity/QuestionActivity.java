@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,12 +25,11 @@ import android.view.Window;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
-import com.sigrideducation.englishlearning.GlobalApplication;
 import com.sigrideducation.englishlearning.R;
+import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
-import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 
 import tourguide.tourguide.Overlay;
 import tourguide.tourguide.Pointer;
@@ -241,15 +241,18 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionFab.setImageResource(R.drawable.ic_play);
 
         mTxtLessonName =(TextView) findViewById(R.id.txt_lesson_name);
-        mTxtLessonName.setText(ELDatabaseHelper.getLessonWith(this,lessonId).getName());
+        mTxtLessonName.setText(ELDatabaseHelper.getLessonWith(this, lessonId).getName());
 
-        if(!((GlobalApplication)(this).getApplication()).isLessonStartGuideShow()){
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_PREF",MODE_PRIVATE);
+        if(!sharedPreferences.getBoolean("hasLessonStartGuideShown",false)){
             mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
                     .setPointer(new Pointer())
                     .setToolTip(new ToolTip().setTitle("Welcome!").setDescription("Click to start the lesson......").setGravity(Gravity.TOP | Gravity.LEFT))
                     .setOverlay(new Overlay())
                     .playOn(mQuestionFab);
-            ((GlobalApplication)(this).getApplication()).setLessonStartGuideShow(true);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("hasLessonStartGuideShown",true);
+            editor.commit();
         }
 
         if (mSavedStateIsPlaying) {
