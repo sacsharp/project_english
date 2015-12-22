@@ -19,6 +19,6 @@
         <color android:color="@color/light_grey" />
     </item>
     <item>
-        <color android:color="@color/topeka_primary" />
+        <color android:color="@color/colorPrimary" />
     </item>
 </selector>
