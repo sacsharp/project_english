@@ -265,7 +265,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mTextAnswerStatus.setElevation(4);
             mTextAnswerStatus.setPadding(10,10,10,10);
             mTextAnswerStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.White));
-            mTextAnswerStatus.setBackgroundColor(ContextCompat.getColor(getContext(),mLesson.getTheme().getPrimaryColor()));
             mTextAnswerStatus.setOnTouchListener(new OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

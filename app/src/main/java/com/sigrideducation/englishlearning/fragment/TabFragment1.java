@@ -23,7 +23,6 @@ import com.sigrideducation.englishlearning.model.Lesson;
  */
 public class TabFragment1 extends Fragment {
 
-    ListView mListLessons;
     private LessonAdapter mLessonAdapter;
 
     @Override
@@ -34,11 +33,11 @@ public class TabFragment1 extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        setUpQuestionList((ListView) view.findViewById(R.id.list_lessons));
+        setUpLessionList((ListView) view.findViewById(R.id.list_lessons));
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void setUpQuestionList(ListView lessonsView) {
+    private void setUpLessionList(ListView lessonsView) {
         lessonsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
