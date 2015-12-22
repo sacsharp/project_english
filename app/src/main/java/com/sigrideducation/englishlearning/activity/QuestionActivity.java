@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.animation.Interpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
@@ -48,6 +49,7 @@ public class QuestionActivity extends AppCompatActivity {
     private String mLessonId;
     private QuestionFragment mQuestionFragment;
     private FloatingActionButton mQuestionFab;
+    private LinearLayout mQuestionContainer;
     private TextView mTxtLessonName;
     private boolean mSavedStateIsPlaying;
     private Animator mCircularReveal;
@@ -240,6 +242,10 @@ public class QuestionActivity extends AppCompatActivity {
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
         mQuestionFab.setImageResource(R.drawable.ic_play);
 
+        Lesson lesson = ELDatabaseHelper.getLessonWith(this, lessonId);
+        mQuestionContainer = (LinearLayout)findViewById(R.id.question_container);
+        mQuestionContainer.setBackgroundColor(ContextCompat.getColor(this, lesson.getTheme().getWindowBackgroundColor()));
+
         mTxtLessonName =(TextView) findViewById(R.id.txt_lesson_name);
         mTxtLessonName.setText(ELDatabaseHelper.getLessonWith(this, lessonId).getName());
 
@@ -257,8 +263,10 @@ public class QuestionActivity extends AppCompatActivity {
 
         if (mSavedStateIsPlaying) {
             mQuestionFab.hide();
+            mTxtLessonName.setVisibility(View.GONE);
         } else {
             mQuestionFab.show();
+            mTxtLessonName.setVisibility(View.VISIBLE);
         }
         mQuestionFab.setOnClickListener(mOnClickListener);
     }
