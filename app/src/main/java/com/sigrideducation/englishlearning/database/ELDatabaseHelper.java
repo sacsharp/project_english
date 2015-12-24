@@ -189,6 +189,11 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         getInstance(context).preFillDatabase(writableDatabase, data);
     }
 
+    public static void update(Context context,String data) {
+        SQLiteDatabase writableDatabase = getWritableDatabase(context);
+        getInstance(context).preFillDatabase(writableDatabase, data);
+    }
+
     /**
      * Creates objects for questions according to a lesson id.
      *
