@@ -3,6 +3,7 @@ package com.sigrideducation.englishlearning.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ import java.net.URL;
 public class HomeActivity extends AppCompatActivity {
 
     private static String url = "http://getcult.com/static/Data/data";
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +57,29 @@ public class HomeActivity extends AppCompatActivity {
             if(hasActiveInternetConnection(getApplicationContext()))
             {
                 try {
+                    sharedPreferences = getSharedPreferences("MY_PREF",MODE_PRIVATE);
+                    if(sharedPreferences.getBoolean("IS_FIRST_LAUNCH",true))
+                    {
+                        sharedPreferences.edit().putBoolean("IS_FIRST_LAUNCH",false).apply();
+                    }
+                    else {
+                        url=url+sharedPreferences.getInt("CURRENT_VERSION",1);
+                    }
                     HttpClient httpclient = new DefaultHttpClient();
                     HttpPost httppost = new HttpPost(url);
                     HttpResponse httpResponse = httpclient.execute(httppost);
                     HttpEntity httpEntity = httpResponse.getEntity();
-
                     response = EntityUtils.toString(httpEntity);
 
                     JSONArray jsonArray = new JSONArray(response);
-                    Log.i("response is", jsonArray.toString());
 
-                    return jsonArray.toString();
+                    final int CURRENT_VERSION=jsonArray.getJSONObject(0).getInt("version");
+                    Log.i("File to download","data"+CURRENT_VERSION);
+                    sharedPreferences.edit().putInt("CURRENT_VERSION",CURRENT_VERSION).apply();
+
+                    final JSONArray resultArray = jsonArray.getJSONObject(0).getJSONArray("chapters");
+                    return resultArray.toString();
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -83,7 +97,7 @@ public class HomeActivity extends AppCompatActivity {
             if(json !=null)
             {
                 ELDatabaseHelper elDatabaseHelper = new ELDatabaseHelper(getApplicationContext());
-                elDatabaseHelper.reset(getApplicationContext(), json);
+                elDatabaseHelper.update(getApplicationContext(), json);
             }
             Intent intent = new Intent(HomeActivity.this,MainActivity.class);
             startActivity(intent);
