@@ -189,7 +189,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left
-                0, //top
+                mSpacingDouble, //top
                 0, // right
                 mSpacingDouble); // bottom
         MarginLayoutParamsCompat.setMarginEnd(fabLayoutParams, mSpacingDouble);
@@ -262,7 +262,9 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         if (null == mTextAnswerStatus) {
 
             mTextAnswerStatus = new TextView(getContext());
-            mTextAnswerStatus.setElevation(4);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mTextAnswerStatus.setElevation(4);
+            }
             mTextAnswerStatus.setPadding(10,10,10,10);
             mTextAnswerStatus.setTextColor(ContextCompat.getColor(getContext(),R.color.White));
             mTextAnswerStatus.setOnTouchListener(new OnTouchListener() {
@@ -271,7 +273,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                         ClipData data = ClipData.newPlainText("", "");
-                        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                        DragShadowBuilder shadowBuilder = new DragShadowBuilder(v);
                         //start dragging the item touched
                         v.startDrag(data, shadowBuilder, v, 0);
                         return true;
@@ -386,6 +388,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
             } else {
                 mCheckAnswer.hide();
+                if(mTourGuideHandler!=null)
                 mTourGuideHandler.cleanUp();
             }
             mAnswered = answered;
