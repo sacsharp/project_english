@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -60,7 +62,7 @@ public class QuestionActivity extends AppCompatActivity {
         public void onClick(final View v) {
             switch (v.getId()) {
                 case R.id.fab_question:
-                    startQuizFromClickOn(v);
+                    startLessonFromClickOn(v);
                     if(mTourGuideHandler !=null)
                     mTourGuideHandler.cleanUp();
                     break;
@@ -107,7 +109,6 @@ public class QuestionActivity extends AppCompatActivity {
             mQuestionFragment = (QuestionFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
             findViewById(R.id.question_fragment_container).setVisibility(View.VISIBLE);
         }
-
         super.onResume();
     }
 
@@ -121,7 +122,7 @@ public class QuestionActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mQuestionFab == null) {
             // Skip the animation if icon or fab are not initialized.
-            super.onBackPressed();
+            showAlert();
             return;
         }
 
@@ -139,13 +140,34 @@ public class QuestionActivity extends AppCompatActivity {
                                         && isDestroyed())) {
                             return;
                         }
-                        QuestionActivity.super.onBackPressed();
+                        showAlert();
                     }
                 })
                 .start();
     }
 
-    private void startQuizFromClickOn(final View clickedView) {
+    private void showAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Are you sure to exit?")
+                .setCancelable(false)
+                .setMessage("Your progress would get lost.")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        QuestionActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+
+    public void startLessonFromClickOn(final View clickedView) {
         mTxtLessonName.setVisibility(View.GONE);
         initQuestionFragment();
         getSupportFragmentManager().beginTransaction()
@@ -199,13 +221,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void initQuestionFragment() {
-        mQuestionFragment = QuestionFragment.newInstance(mLessonId,
-                new QuestionFragment.SolvedStateListener() {
-                    @Override
-                    public void onLessonSolved() {
-
-                    }
-                });
+        mQuestionFragment = QuestionFragment.newInstance(mLessonId);
     }
 
     /**
