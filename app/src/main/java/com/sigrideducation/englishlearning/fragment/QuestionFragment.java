@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
+import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.adapter.QuestionAdapter;
+import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.views.AbsQuestionView;
 
 import java.util.List;
@@ -40,19 +43,19 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     private Lesson mLesson;
     private AdapterViewAnimator mQuestionView;
     private QuestionAdapter mQuestionAdapter;
-    private SolvedStateListener mSolvedStateListener;
     private TextView mTextAnswerStatus;
+    private TextView mScoreCard;
+    private FloatingActionButton mRestartLesson;
+    private FloatingActionButton mNextLesson;
+    private String mLessonId;
 
-    public static QuestionFragment newInstance(String lessonId, SolvedStateListener solvedStateListener) {
+    public static QuestionFragment newInstance(String lessonId) {
         if (lessonId == null) {
             throw new IllegalArgumentException("The lesson can not be null");
         }
         Bundle args = new Bundle();
         args.putString(Lesson.TAG, lessonId);
         QuestionFragment fragment = new QuestionFragment();
-        if (solvedStateListener != null) {
-            fragment.mSolvedStateListener = solvedStateListener;
-        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +63,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String lessonId = getArguments().getString(Lesson.TAG);
+        mLessonId = ""+(Integer.parseInt(lessonId)+1);
+        Log.i("LessonId",mLessonId);
         mLesson = ELDatabaseHelper.getLessonWith(getActivity(), lessonId);
         super.onCreate(savedInstanceState);
     }
@@ -76,8 +81,45 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         mQuestionView = (AdapterViewAnimator) view.findViewById(R.id.question_view);
+        mRestartLesson = (FloatingActionButton) view.findViewById(R.id.restart_lesson);
+        mRestartLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle("Do you want to retake this test?")
+                        .setCancelable(false)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                resetLesson();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).show();
+            }
+        });
+        mRestartLesson.setVisibility(View.INVISIBLE);
+
+        mNextLesson = (FloatingActionButton) view.findViewById(R.id.next_lesson);
+        mNextLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Integer.parseInt(mLessonId)!=0){
+                    startActivity(QuestionActivity.getStartIntent(getContext(), ELDatabaseHelper.getLessonWith(getContext(), mLessonId)));
+                    getActivity().finish();
+                }
+
+            }
+        });
+        mNextLesson.setVisibility(View.INVISIBLE);
+
         decideOnViewToDisplay();
         setQuestionViewAnimations();
         initProgressToolbar(view);
@@ -99,31 +141,14 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         mProgressToolbar =(Toolbar) view.findViewById(R.id.progress_toolbar);
         mProgressBar = ((ProgressBar) view.findViewById(R.id.progress));
         mImgBtnClose = (ImageButton) view.findViewById(R.id.img_btn_close);
+        mScoreCard = (TextView) view.findViewById(R.id.txt_score);
         mProgressBar.setMax(mQuestionSize);
         mProgressBar.setProgress(0);
 
         mImgBtnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-                alertDialog.setTitle("Are you sure?")
-                        .setCancelable(false)
-                        .setMessage("Your progress would get lost.")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        })
-                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        }).show();
-
+                getActivity().onBackPressed();
             }
         });
     }
@@ -139,12 +164,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         final boolean isSolved = mLesson.isSolved();
         if (isSolved) {
             showSummary(mLesson.getId());
-            if (null != mSolvedStateListener) {
-                mSolvedStateListener.onLessonSolved();
-            }
         } else {
             mQuestionView.setAdapter(getQuestionAdapter());
-            //mQuestionView.setSelection(mLesson.getFirstUnsolvedQuizPosition());
         }
     }
 
@@ -211,6 +232,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             return true;
         }
         markLessonAttempted();
+        showSummary(mLesson.getId());
         return false;
     }
 
@@ -220,8 +242,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
     }
 
     public void showSummary(String lessonId) {
-        @SuppressWarnings("ConstantConditions")
-        final TextView scorecardView = (TextView) getView().findViewById(R.id.txt_score);
         if(mProgressToolbar != null)
             mProgressToolbar.setVisibility(View.GONE);
         else{
@@ -237,20 +257,26 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             mQuestionAdapter = getQuestionAdapter();
             score = mQuestionAdapter.getScore();
         }
-        scorecardView.setText("Correct Answers:"+ score);
-        scorecardView.setVisibility(View.VISIBLE);
+        if(mScoreCard !=null)
+        mScoreCard.setText("Correct Answers:"+ score);
+        else{
+            mScoreCard = (TextView) getView().findViewById(R.id.txt_score);
+            mScoreCard.setText("Correct Answers:"+ score);
+        }
+        mScoreCard.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
+        mRestartLesson.setVisibility(View.VISIBLE);
+        mRestartLesson.setImageResource(R.drawable.ic_refresh_black_48dp);
+        mNextLesson.setVisibility(View.VISIBLE);
+        mNextLesson.setImageResource(R.drawable.ic_arrow_forward_black_48dp);
     }
 
-
-    /**
-     * Interface definition for a callback to be invoked when the quiz is started.
-     */
-    public interface SolvedStateListener {
-
-        /**
-         * This method will be invoked when the category has been solved.
-         */
-        void onLessonSolved();
+    private void resetLesson()
+    {
+        mQuestionView.setAdapter(getQuestionAdapter());
+        mQuestionView.setVisibility(View.VISIBLE);
+        mProgressToolbar.setVisibility(View.VISIBLE);
+        mScoreCard.setVisibility(View.INVISIBLE);
+        mProgressBar.setProgress(0);
     }
 }

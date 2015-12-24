@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/progress_toolbar"
@@ -38,5 +39,33 @@
             android:id="@+id/question_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/restart_lesson"
+            app:fabSize="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="@dimen/spacing_double"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="@dimen/spacing_double"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/next_lesson"
+            app:fabSize="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/spacing_double"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="@dimen/spacing_double"/>
+    </RelativeLayout>
 
 </LinearLayout>
