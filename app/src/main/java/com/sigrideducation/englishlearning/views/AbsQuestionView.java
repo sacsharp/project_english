@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
-import com.sigrideducation.englishlearning.model.JsonAttributes;
+import com.sigrideducation.englishlearning.model.JsonParts;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.widget.CheckableFab;

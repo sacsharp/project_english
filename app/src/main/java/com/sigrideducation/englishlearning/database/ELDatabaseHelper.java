@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sigrideducation.englishlearning.model.JsonAttributes;
+import com.sigrideducation.englishlearning.model.JsonParts;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
@@ -228,19 +228,19 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final boolean solved = getBooleanFromDatabase(cursor.getString(8));
 
         switch (type) {
-            case JsonAttributes.QuestionType.FILL_BLANK: {
+            case JsonParts.QuestionType.FILL_BLANK: {
                 return createFillBlankQuestion(cursor, question, answer, solved);
             }
-            case JsonAttributes.QuestionType.SINGLE_SELECT_ITEM: {
+            case JsonParts.QuestionType.SINGLE_SELECT_ITEM: {
                 return createSelectItemQuestion(question, answer, options, solved);
             }
-            case JsonAttributes.QuestionType.SPEECH_INPUT:{
+            case JsonParts.QuestionType.SPEECH_INPUT:{
                 return createSpeechInputQuestion(question, answer, solved);
             }
-            case JsonAttributes.QuestionType.CONTENT_TIP:{
+            case JsonParts.QuestionType.CONTENT_TIP:{
                 return createContentTipQuestion(question, answer, solved);
             }
-            case JsonAttributes.QuestionType.MAKE_SENTENCE:{
+            case JsonParts.QuestionType.MAKE_SENTENCE:{
                 return createMakeSentenceQuestion(question,answer,solved);
             }
             default: {
@@ -363,15 +363,15 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         JSONObject chapter,lesson;
         for (int i = 0; i < chapterArray.length(); i++) {
             chapter = chapterArray.getJSONObject(i);
-            final String chapterId = chapter.getString(JsonAttributes.CID);
-            final JSONArray lessonArray = chapter.getJSONArray(JsonAttributes.LESSONS);
+            final String chapterId = chapter.getString(JsonParts.CID);
+            final JSONArray lessonArray = chapter.getJSONArray(JsonParts.LESSONS);
             fillChapter(db, values, chapter, chapterId,lessonArray.length());
 
             for(int j=0;j<lessonArray.length();j++){
                 lesson = lessonArray.getJSONObject(j);
-                final String lessonId = lesson.getString(JsonAttributes.LID);
+                final String lessonId = lesson.getString(JsonParts.LID);
                 fillLesson(db, values, lesson, lessonId);
-                final JSONArray questions = lesson.getJSONArray(JsonAttributes.QUESTIONS);
+                final JSONArray questions = lesson.getJSONArray(JsonParts.QUESTIONS);
                 fillQuestionsForLesson(db, values, questions, lessonId);
             }
         }
@@ -393,7 +393,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
                             String chapterId,int lessons) throws JSONException {
         values.clear();
         values.put(ChapterTable.COLUMN_ID, chapterId);
-        values.put(ChapterTable.COLUMN_NAME, chapter.getString(JsonAttributes.CNAME));
+        values.put(ChapterTable.COLUMN_NAME, chapter.getString(JsonParts.CNAME));
         values.put(ChapterTable.COLUMN_LESSONS, lessons);
         db.insert(ChapterTable.NAME, null, values);
     }
@@ -402,9 +402,9 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
                               String lessonId) throws JSONException {
         values.clear();
         values.put(LessonTable.COLUMN_ID, lessonId);
-        values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonAttributes.LNAME));
-        values.put(LessonTable.COLUMN_THEME, lesson.getString(JsonAttributes.THEME));
-        values.put(LessonTable.COLUMN_SOLVED, lesson.getString(JsonAttributes.SOLVED));
+        values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonParts.LNAME));
+        values.put(LessonTable.COLUMN_THEME, lesson.getString(JsonParts.THEME));
+        values.put(LessonTable.COLUMN_SOLVED, lesson.getString(JsonParts.SOLVED));
         db.insert(LessonTable.NAME, null, values);
     }
 
@@ -415,12 +415,12 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             question = questions.getJSONObject(i);
             values.clear();
             values.put(QuestionTable.FK_LESSON, lessonId);
-            values.put(QuestionTable.COLUMN_TYPE, question.getString(JsonAttributes.TYPE));
-            values.put(QuestionTable.COLUMN_QUESTION, question.getString(JsonAttributes.QUESTION));
-            values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonAttributes.ANSWER));
-            putNonEmptyString(values, question, JsonAttributes.OPTIONS, QuestionTable.COLUMN_OPTIONS);
-            putNonEmptyString(values, question, JsonAttributes.START, QuestionTable.COLUMN_START);
-            putNonEmptyString(values, question, JsonAttributes.END, QuestionTable.COLUMN_END);
+            values.put(QuestionTable.COLUMN_TYPE, question.getString(JsonParts.TYPE));
+            values.put(QuestionTable.COLUMN_QUESTION, question.getString(JsonParts.QUESTION));
+            values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
+            putNonEmptyString(values, question, JsonParts.OPTIONS, QuestionTable.COLUMN_OPTIONS);
+            putNonEmptyString(values, question, JsonParts.START, QuestionTable.COLUMN_START);
+            putNonEmptyString(values, question, JsonParts.END, QuestionTable.COLUMN_END);
             db.insert(QuestionTable.NAME, null, values);
         }
     }
