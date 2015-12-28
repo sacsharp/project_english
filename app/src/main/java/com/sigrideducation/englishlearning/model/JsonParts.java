@@ -19,7 +19,6 @@ package com.sigrideducation.englishlearning.model;
 public interface JsonParts {
 
     String ANSWER = "answer";
-    String END = "end";
     String CID = "cid";
     String LID = "lid";
     String CNAME = "cname";
@@ -28,7 +27,6 @@ public interface JsonParts {
     String QUESTION = "question";
     String QUESTIONS = "questions";
     String LESSONS = "lessons";
-    String START = "start";
     String THEME = "ltheme";
     String TYPE = "type";
     String SCORE = "score";

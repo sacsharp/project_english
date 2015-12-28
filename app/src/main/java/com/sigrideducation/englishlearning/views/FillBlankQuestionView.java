@@ -1,11 +1,15 @@
 package com.sigrideducation.englishlearning.views;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
@@ -13,28 +17,27 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 
 
-@SuppressLint("ViewConstructor")
-public class FillBlankQuestionView extends TextInputQuestionView<FillBlankQuestion> {
+public class FillBlankQuestionView extends AbsQuestionView<FillBlankQuestion>
+        implements TextWatcher, TextView.OnEditorActionListener {
 
     private static final String KEY_ANSWER = "ANSWER";
-
     private EditText mAnswerView;
 
-    public FillBlankQuestionView(Context context, Lesson lesson, FillBlankQuestion question) {
-        super(context, lesson, question);
+    public FillBlankQuestionView(Context context, Lesson category, FillBlankQuestion question) {
+        super(context, category, question);
     }
 
     @Override
     protected View createQuestionContentView() {
-        String start = getQuestion().getStart();
-        String end = getQuestion().getEnd();
-        if (null != start || null != end) {
-            return getStartEndView(start, end);
-        }
         if (null == mAnswerView) {
             mAnswerView = createEditText();
         }
         return mAnswerView;
+    }
+
+    @Override
+    protected boolean isAnswerCorrect() {
+        return getQuestion().isAnswerCorrect(mAnswerView.getText().toString());
     }
 
     @Override
@@ -52,46 +55,54 @@ public class FillBlankQuestionView extends TextInputQuestionView<FillBlankQuesti
         mAnswerView.setText(savedInput.getString(KEY_ANSWER));
     }
 
-    /**
-     * Creates and returns views that display the start and end of a question.
-     *
-     * @param start The content of the start view.
-     * @param end The content of the end view.
-     * @return The created views within an appropriate container.
-     */
-    private View getStartEndView(String start, String end) {
-        LinearLayout container = (LinearLayout) getLayoutInflater().inflate(
-                R.layout.question_fill_blank_with_surroundings, this, false);
-        mAnswerView = (EditText) container.findViewById(R.id.question_edit_text);
-        mAnswerView.addTextChangedListener(this);
-        mAnswerView.setOnEditorActionListener(this);
-        //noinspection PrivateResource
-        TextView startView = (TextView) container.findViewById(R.id.start);
-        setExistingContentOrHide(startView, start);
-
-        //noinspection PrivateResource
-        TextView endView = (TextView) container.findViewById(R.id.end);
-        setExistingContentOrHide(endView, end);
-
-        return container;
-    }
-
-    /**
-     * Sets content to a {@link TextView}. If content is null, the view will not be displayed.
-     *
-     * @param view The view to hold the text.
-     * @param content The text to display.
-     */
-    private void setExistingContentOrHide(TextView view, String content) {
-        if (null == content) {
-            view.setVisibility(GONE);
-        } else {
-            view.setText(content);
-        }
+    protected final EditText createEditText() {
+        EditText editText = (EditText) getLayoutInflater().inflate(R.layout.question_edit_text, this, false);
+        editText.addTextChangedListener(this);
+        editText.setOnEditorActionListener(this);
+        return editText;
     }
 
     @Override
-    protected boolean isAnswerCorrect() {
-        return getQuestion().isAnswerCorrect(mAnswerView.getText().toString());
+    protected void checkAnswer() {
+        hideKeyboard(this);
+        super.checkAnswer();
+    }
+
+    protected void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = getInputMethodManager();
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private InputMethodManager getInputMethodManager() {
+        return (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (TextUtils.isEmpty(v.getText())) {
+            return false;
+        }
+        allowCheckAnswer();
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            checkAnswer();
+            hideKeyboard(v);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        /* no-op */
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        /* no-op */
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        allowCheckAnswer(!TextUtils.isEmpty(s));
     }
 }

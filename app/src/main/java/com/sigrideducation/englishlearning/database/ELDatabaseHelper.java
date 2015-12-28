@@ -160,11 +160,11 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final String question = cursor.getString(3);
         final String answer = cursor.getString(4);
         final String options = cursor.getString(5);
-        final boolean solved = getBooleanFromDatabase(cursor.getString(8));
+        final boolean solved = getBooleanFromDatabase(cursor.getString(6));
 
         switch (type) {
             case JsonParts.QuestionType.FILL_BLANK: {
-                return createFillBlankQuestion(cursor, question, answer, solved);
+                return createFillBlankQuestion(question, answer, solved);
             }
             case JsonParts.QuestionType.SINGLE_SELECT_ITEM: {
                 return createSelectItemQuestion(question, answer, options, solved);
@@ -184,15 +184,11 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private static Question createFillBlankQuestion(Cursor cursor, String question,
-                                            String answer, boolean solved) {
-        final String start = cursor.getString(6);
-        final String end = cursor.getString(7);
-        return new FillBlankQuestion(question, answer, start, end, solved);
+    private static Question createFillBlankQuestion(String question, String answer, boolean solved) {
+        return new FillBlankQuestion(question, answer, solved);
     }
 
-    private static Question createSelectItemQuestion(String question, String answer,
-                                             String options, boolean solved) {
+    private static Question createSelectItemQuestion(String question, String answer, String options, boolean solved) {
         final String[] optionsArray = jsonArrayToStringArray(options);
         return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray, solved);
     }
@@ -343,10 +339,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             values.put(QuestionTable.COLUMN_TYPE, question.getString(JsonParts.TYPE));
             values.put(QuestionTable.COLUMN_QUESTION, question.getString(JsonParts.QUESTION));
             values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
-            values.put(QuestionTable.COLUMN_OPTIONS,question.getString(JsonParts.OPTIONS));
             putNonEmptyString(values, question, JsonParts.OPTIONS, QuestionTable.COLUMN_OPTIONS);
-            putNonEmptyString(values, question, JsonParts.START, QuestionTable.COLUMN_START);
-            putNonEmptyString(values, question, JsonParts.END, QuestionTable.COLUMN_END);
             db.insert(QuestionTable.NAME, null, values);
         }
     }
