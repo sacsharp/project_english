@@ -2,10 +2,7 @@ package com.sigrideducation.englishlearning.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +12,6 @@ import android.widget.ListView;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.adapter.LessonAdapter;
-import com.sigrideducation.englishlearning.helper.TransitionHelper;
-import com.sigrideducation.englishlearning.model.Lesson;
 
 /**
  * Created by Sachin on 12/6/2015.
@@ -42,8 +37,7 @@ public class TabFragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity activity = getActivity();
-                startQuestionActivityWithTransition(activity, view.findViewById(R.id.lesson_title),
-                        mLessonAdapter.getItem(position));
+                startActivity(QuestionActivity.getStartIntent(activity, mLessonAdapter.getItem(position)));
             }
         });
         mLessonAdapter = new LessonAdapter(getActivity());
@@ -54,18 +48,5 @@ public class TabFragment1 extends Fragment {
     public void onResume() {
         mLessonAdapter.notifyDataSetChanged();
         super.onResume();
-    }
-
-    private void startQuestionActivityWithTransition(Activity activity, View toolbar, Lesson lesson) {
-
-        final Pair[] pairs = TransitionHelper.createSafeTransitionParticipants(activity, false,
-                new Pair<>(toolbar, activity.getString(R.string.transition_toolbar)));
-        ActivityOptionsCompat sceneTransitionAnimation = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(activity, pairs);
-
-        // Start the activity with the participants, animating from one to the other.
-        final Bundle transitionBundle = sceneTransitionAnimation.toBundle();
-        ActivityCompat.startActivity(getActivity(),
-                QuestionActivity.getStartIntent(activity, lesson), transitionBundle);
     }
 }
