@@ -2,7 +2,6 @@ package com.sigrideducation.englishlearning.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -38,15 +37,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static List<Lesson> mLessons;
     private static ELDatabaseHelper mInstance;
-    private final Resources mResources;
 
     public ELDatabaseHelper(Context context) {
-        //prevents external instance creation
         super(context, DB_NAME + DB_SUFFIX, null, DB_VERSION);
-        mResources = context.getResources();
     }
-
-
 
     private static ELDatabaseHelper getInstance(Context context) {
         if (null == mInstance) {
@@ -55,56 +49,25 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         return mInstance;
     }
 
-    /**
-     * Gets all lessons with their questions.
-     *
-     * @param context The context this is running in.
-     * @param fromDatabase <code>true</code> if a data refresh is needed, else <code>false</code>.
-     * @return All lessons stored in the database.
-     */
+    //Gets all lessons with their questions.
     public static List<Lesson> getLessons(Context context, boolean fromDatabase) {
         if (null == mLessons || fromDatabase) {
-            mLessons = loadLessons(context);
+            SQLiteDatabase readableDatabase = getReadableDatabase(context);
+            Cursor data = readableDatabase.query(LessonTable.NAME, LessonTable.PROJECTION, null, null, null, null, null);
+            data.moveToFirst();
+            List<Lesson> tmpLessons = new ArrayList<>(data.getCount());
+            do {
+                final Lesson lesson = getLesson(data, readableDatabase);
+                tmpLessons.add(lesson);
+            } while (data.moveToNext());
+            mLessons = tmpLessons;
         }
         return mLessons;
     }
 
-    private static List<Lesson> loadLessons(Context context) {
-        Cursor data = ELDatabaseHelper.getLessonCursor(context);
-        List<Lesson> tmpLessons = new ArrayList<>(data.getCount());
-        final SQLiteDatabase readableDatabase = ELDatabaseHelper.getReadableDatabase(context);
-        do {
-            final Lesson lesson = getLesson(data, readableDatabase);
-            tmpLessons.add(lesson);
-        } while (data.moveToNext());
-        return tmpLessons;
-    }
 
-
-    /**
-     * Gets all lessons wrapped in a {@link Cursor} positioned at it's first element.
-     * <p>There are <b>no questions</b> within the lessons obtained from this cursor</p>
-     *
-     * @param context The context this is running in.
-     * @return All lessons stored in the database.
-     */
-    private static Cursor getLessonCursor(Context context) {
-        SQLiteDatabase readableDatabase = getReadableDatabase(context);
-        Cursor data = readableDatabase
-                .query(LessonTable.NAME, LessonTable.PROJECTION, null, null, null, null, null);
-        data.moveToFirst();
-        return data;
-    }
-
-    /**
-     * Gets a lesson from the given position of the cursor provided.
-     *
-     * @param cursor The Cursor containing the data.
-     * @param readableDatabase The database that contains the questions.
-     * @return The found lesson.
-     */
+    //Gets a lesson from the given position of the cursor provided.
     private static Lesson getLesson(Cursor cursor, SQLiteDatabase readableDatabase) {
-        // "magic numbers" based on LessonTable#PROJECTION
         final String id = cursor.getString(0);
         final String name = cursor.getString(2);
         final String themeName = cursor.getString(3);
@@ -112,7 +75,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final String isSolved = cursor.getString(4);
         final boolean solved = getBooleanFromDatabase(isSolved);
 
-        final List<Question> questions = getQuizzes(id, readableDatabase);
+        final List<Question> questions = getQuestions(id, readableDatabase);
         return new Lesson(name, id, theme, questions, solved);
     }
 
@@ -121,13 +84,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         return null != isSolved && isSolved.length() == 1 && Integer.valueOf(isSolved) == 1;
     }
 
-    /**
-     * Looks for a lesson with a given id.
-     *
-     * @param context The context this is running in.
-     * @param lessonId Id of the lesson to look for.
-     * @return The found lesson.
-     */
+    // Get a lesson with gived lessonId
     public static Lesson getLessonWith(Context context, String lessonId) {
         SQLiteDatabase readableDatabase = getReadableDatabase(context);
         String[] selectionArgs = {lessonId};
@@ -137,12 +94,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     }
     
 
-    /**
-     * Updates values for a lesson.
-     *
-     * @param context The context this is running in.
-     * @param lesson The lesson to update.
-     */
+    // Updates values for a lesson.
     public static void updateLesson(Context context, Lesson lesson) {
         if (mLessons != null && mLessons.contains(lesson)) {
             final int location = mLessons.indexOf(lesson);
@@ -157,9 +109,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         updateQuestions(writableDatabase, questions);
     }
 
-    /**
-     * Updates a list of given questions.
-     */
+    // Updates a list of given questions.
     private static void updateQuestions(SQLiteDatabase writableDatabase, List<Question> questions) {
         Question question;
         ContentValues questionValues = new ContentValues();
@@ -175,52 +125,37 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Resets the contents of englishLearning's database to it's initial state.
-     *
-     * @param context The context this is running in.
-     */
+    //Resets the contents of  database to it's initial state.
     public static void reset(Context context,String data) {
         SQLiteDatabase writableDatabase = getWritableDatabase(context);
         writableDatabase.delete(ChapterTable.NAME,null,null);
         writableDatabase.delete(LessonTable.NAME, null, null);
         writableDatabase.delete(QuestionTable.NAME, null, null);
-        getInstance(context).preFillDatabase(writableDatabase, data);
+        getInstance(context).fillDatabase(writableDatabase, data);
     }
-
+    
+    //update the database with the given data.
     public static void update(Context context,String data) {
         SQLiteDatabase writableDatabase = getWritableDatabase(context);
-        getInstance(context).preFillDatabase(writableDatabase, data);
+        getInstance(context).fillDatabase(writableDatabase, data);
     }
 
-    /**
-     * Creates objects for questions according to a lesson id.
-     *
-     * @param lessonId The lesson to create questions for.
-     * @param database The database containing the questions.
-     * @return The found questions or an empty list if none were available.
-     */
-    private static List<Question> getQuizzes(final String lessonId, SQLiteDatabase database) {
+    //Creates objects for questions according to a lesson id.
+    private static List<Question> getQuestions(final String lessonId, SQLiteDatabase database) {
         final List<Question> questions = new ArrayList<>();
         final Cursor cursor = database.query(QuestionTable.NAME, QuestionTable.PROJECTION,
                 QuestionTable.FK_LESSON + " LIKE ?", new String[]{lessonId}, null, null, null);
         cursor.moveToFirst();
         do {
-            questions.add(createQuizDueToType(cursor));
+            questions.add(createQuestion(cursor));
         } while (cursor.moveToNext());
         cursor.close();
         return questions;
     }
 
-    /**
-     * Creates a question corresponding to the projection provided from a cursor row.
-     * Currently only {@link QuestionTable#PROJECTION} is supported.
-     *
-     * @param cursor The Cursor containing the data.
-     * @return The created question.
-     */
-    private static Question createQuizDueToType(Cursor cursor) {
-        // "magic numbers" based on QuestionTable#PROJECTION
+    //Creates a question corresponding to the projection provided from a cursor row.
+    private static Question createQuestion(Cursor cursor) {
+        //based on QuestionTable's PROJECTION
         final String type = cursor.getString(2);
         final String question = cursor.getString(3);
         final String answer = cursor.getString(4);
@@ -293,12 +228,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         return new MakeSentenceQuestion(question, answer, solved);
     }
 
-    /**
-     * Creates the content values to update a lesson in the database.
-     *
-     * @param lesson The lesson to update.
-     * @return ContentValues containing updatable data.
-     */
+    //Creates the content values to update a lesson in the database.
     private static ContentValues createContentValuesFor(Lesson lesson) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LessonTable.COLUMN_SOLVED, lesson.isSolved());
@@ -315,19 +245,14 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*
-         * create the lesson table first, as question table has a foreign key
-         * constraint on lesson id
-         */
+        //create all three tables.
         db.execSQL(ChapterTable.CREATE);
         db.execSQL(LessonTable.CREATE);
         db.execSQL(QuestionTable.CREATE);
-        //preFillDatabase(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /* no-op */
         int upgradeTo = oldVersion + 1;
         while (upgradeTo <= newVersion)
         {
@@ -343,7 +268,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void preFillDatabase(SQLiteDatabase db,String data) {
+    private void fillDatabase(SQLiteDatabase db,String data) {
         try {
             db.beginTransaction();
             try {
@@ -353,7 +278,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
                 db.endTransaction();
             }
         } catch (IOException | JSONException e) {
-            Log.e(TAG, "preFillDatabase", e);
+            Log.e(TAG, "FillDatabase", e);
         }
     }
 
@@ -418,6 +343,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             values.put(QuestionTable.COLUMN_TYPE, question.getString(JsonParts.TYPE));
             values.put(QuestionTable.COLUMN_QUESTION, question.getString(JsonParts.QUESTION));
             values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
+            values.put(QuestionTable.COLUMN_OPTIONS,question.getString(JsonParts.OPTIONS));
             putNonEmptyString(values, question, JsonParts.OPTIONS, QuestionTable.COLUMN_OPTIONS);
             putNonEmptyString(values, question, JsonParts.START, QuestionTable.COLUMN_START);
             putNonEmptyString(values, question, JsonParts.END, QuestionTable.COLUMN_END);
@@ -427,6 +353,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Puts a non-empty string to ContentValues provided.
+     *
      *
      * @param values The place where the data should be put.
      * @param question The question potentially containing the data.
