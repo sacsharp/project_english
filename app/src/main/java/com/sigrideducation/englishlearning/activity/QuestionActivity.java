@@ -31,7 +31,6 @@ import android.widget.TextView;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
-import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 
 import tourguide.tourguide.Overlay;
@@ -136,7 +135,7 @@ public class QuestionActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(View view) {
                         if (isFinishing() ||
-                                (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                (( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                                         && isDestroyed())) {
                             return;
                         }
@@ -177,7 +176,7 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void revealFragmentContainer(final View clickedView, final View fragmentContainer) {
-        if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
             revealFragmentContainerLollipop(clickedView, fragmentContainer);
         } else {
             fragmentContainer.setVisibility(View.VISIBLE);
@@ -245,7 +244,7 @@ public class QuestionActivity extends AppCompatActivity {
         }
         Lesson lesson = ELDatabaseHelper.getLessonWith(this, lessonId);
         setTheme(lesson.getTheme().getStyleId());
-        if (ApiLevelHelper.isAtLeast(Build.VERSION_CODES.LOLLIPOP)) {
+        if ( Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP ) {
             Window window = getWindow();
             window.setStatusBarColor(ContextCompat.getColor(this, lesson.getTheme().getPrimaryDarkColor()));
         }

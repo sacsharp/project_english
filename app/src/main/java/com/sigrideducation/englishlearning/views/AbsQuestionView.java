@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
-import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
+import com.sigrideducation.englishlearning.model.JsonAttributes;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.widget.CheckableFab;
@@ -193,7 +193,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                 0, // right
                 mSpacingDouble); // bottom
         MarginLayoutParamsCompat.setMarginEnd(fabLayoutParams, mSpacingDouble);
-        if (ApiLevelHelper.isLowerThan(Build.VERSION_CODES.LOLLIPOP)) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             // Account for the fab's emulated shadow.
             fabLayoutParams.topMargin -= (fab.getPaddingTop() / 2);
         }

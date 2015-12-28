@@ -22,7 +22,6 @@ import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.adapter.QuestionAdapter;
 import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
-import com.sigrideducation.englishlearning.helper.ApiLevelHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.Question;
@@ -128,7 +127,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setQuestionViewAnimations() {
-        if (ApiLevelHelper.isLowerThan(Build.VERSION_CODES.LOLLIPOP)) {
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ) {
             return;
         }
         mQuestionView.setInAnimation(getActivity(), R.animator.slide_in_bottom);
