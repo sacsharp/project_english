@@ -31,7 +31,7 @@ public interface JsonAttributes {
     String START = "start";
     String THEME = "ltheme";
     String TYPE = "type";
-    String SCORES = "scores";
+    String SCORE = "score";
     String SOLVED = "solved";
 
     interface QuestionType {

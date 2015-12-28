@@ -2,12 +2,10 @@ package com.sigrideducation.englishlearning.model.question;
 
 import android.os.Parcel;
 
-import com.sigrideducation.englishlearning.helper.AnswerHelper;
-
 
 public final class SelectItemQuestion extends OptionsQuestion<String> {
 
-    public SelectItemQuestion(String question, int[] answer, String[] options, boolean solved) {
+    public SelectItemQuestion(String question, int answer, String[] options, boolean solved) {
         super(question, answer, options, solved);
     }
 
@@ -25,7 +23,7 @@ public final class SelectItemQuestion extends OptionsQuestion<String> {
 
     @Override
     public String getStringAnswer() {
-        return AnswerHelper.getAnswer(getAnswer(), getOptions());
+        return getAnswer().toString();
     }
 
     @Override

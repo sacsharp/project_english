@@ -3,7 +3,6 @@ package com.sigrideducation.englishlearning.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -12,21 +11,20 @@ import android.widget.ListView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.adapter.OptionsQuestionAdapter;
-import com.sigrideducation.englishlearning.helper.AnswerHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 
 @SuppressLint("ViewConstructor")
 public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> {
 
-    private static final String KEY_ANSWERS = "ANSWERS";
+    private static final String KEY_ANSWER = "ANSWER";
 
-    private boolean[] mAnswers;
+    private int mAnswer;
     private ListView mListView;
 
     public SelectItemQuestionView(Context context, Lesson lesson, SelectItemQuestion question) {
         super(context, lesson, question);
-        mAnswers = getAnswers();
+        mAnswer = getAnswer();
     }
 
     @Override
@@ -42,7 +40,6 @@ public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 allowCheckAnswer();
-                toggleAnswerFor(position);
             }
         });
         return mListView;
@@ -50,15 +47,15 @@ public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> 
 
     @Override
     protected boolean isAnswerCorrect() {
-        final SparseBooleanArray checkedItemPositions = mListView.getCheckedItemPositions();
-        final int[] answer = getQuestion().getAnswer();
-        return AnswerHelper.isAnswerCorrect(checkedItemPositions, answer);
+        final Integer checkedItemPosition = mListView.getCheckedItemPosition();
+        final int answer = getQuestion().getAnswer();
+        return checkedItemPosition.equals(answer);
     }
 
     @Override
     public Bundle getUserInput() {
         Bundle bundle = new Bundle();
-        bundle.putBooleanArray(KEY_ANSWERS, mAnswers);
+        bundle.putInt(KEY_ANSWER, mAnswer);
         return bundle;
     }
 
@@ -67,24 +64,12 @@ public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> 
         if (savedInput == null) {
             return;
         }
-        mAnswers = savedInput.getBooleanArray(KEY_ANSWERS);
-        if (mAnswers == null) {
-            return;
-        }
+        mAnswer = savedInput.getInt(KEY_ANSWER);
         final ListAdapter adapter = mListView.getAdapter();
-        for (int i = 0; i < mAnswers.length; i++) {
-            mListView.performItemClick(mListView.getChildAt(i), i, adapter.getItemId(i));
-        }
+        mListView.performItemClick(mListView.getChildAt(mAnswer), mAnswer, adapter.getItemId(mAnswer));
     }
 
-    private void toggleAnswerFor(int answerId) {
-        getAnswers()[answerId] = !mAnswers[answerId];
-    }
-
-    private boolean[] getAnswers() {
-        if (null == mAnswers) {
-            mAnswers = new boolean[getQuestion().getOptions().length];
-        }
-        return mAnswers;
+    private int getAnswer() {
+        return mAnswer;
     }
 }

@@ -259,9 +259,8 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private static Question createSelectItemQuestion(String question, String answer,
                                              String options, boolean solved) {
-        final int[] answerArray = JsonHelper.jsonArrayToIntArray(answer);
         final String[] optionsArray = JsonHelper.jsonArrayToStringArray(options);
-        return new SelectItemQuestion(question, answerArray, optionsArray, solved);
+        return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray, solved);
     }
 
 
