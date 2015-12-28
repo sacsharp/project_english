@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.sigrideducation.englishlearning.helper.JsonHelper;
 import com.sigrideducation.englishlearning.model.JsonAttributes;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
@@ -259,9 +258,24 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private static Question createSelectItemQuestion(String question, String answer,
                                              String options, boolean solved) {
-        final String[] optionsArray = JsonHelper.jsonArrayToStringArray(options);
+        final String[] optionsArray = jsonArrayToStringArray(options);
         return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray, solved);
     }
+
+    private static String[] jsonArrayToStringArray(String json) {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            String[] stringArray = new String[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                stringArray[i] = jsonArray.getString(i);
+            }
+            return stringArray;
+        } catch (JSONException e) {
+            Log.e(TAG, "Error during Json processing: ", e);
+        }
+        return new String[0];
+    }
+
 
 
     private static Question createSpeechInputQuestion(String question, String answer, boolean solved) {
