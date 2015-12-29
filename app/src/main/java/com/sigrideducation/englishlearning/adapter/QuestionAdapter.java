@@ -12,7 +12,7 @@ import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
-import com.sigrideducation.englishlearning.views.AbsQuestionView;
+import com.sigrideducation.englishlearning.views.BaseQuestionView;
 import com.sigrideducation.englishlearning.views.ContentTipQuestionView;
 import com.sigrideducation.englishlearning.views.FillBlankQuestionView;
 import com.sigrideducation.englishlearning.views.MakeSentenceQuestionView;
@@ -86,8 +86,8 @@ public class QuestionAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Question question = getItem(position);
-        if (convertView instanceof AbsQuestionView) {
-            if (((AbsQuestionView) convertView).getQuestion().equals(question)) {
+        if (convertView instanceof BaseQuestionView) {
+            if (((BaseQuestionView) convertView).getQuestion().equals(question)) {
                 return convertView;
             }
         }
@@ -95,14 +95,14 @@ public class QuestionAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private AbsQuestionView getViewInternal(Question question) {
+    private BaseQuestionView getViewInternal(Question question) {
         if (null == question) {
             throw new IllegalArgumentException("Question must not be null");
         }
         return createViewFor(question);
     }
 
-    private AbsQuestionView createViewFor(Question question) {
+    private BaseQuestionView createViewFor(Question question) {
         switch (question.getType()) {
             case FILL_BLANK:
                 return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);

@@ -39,7 +39,7 @@ import tourguide.tourguide.TourGuide;
 /**
  * This is the base class for displaying a Question
  */
-public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
+public abstract class BaseQuestionView<Q extends Question> extends FrameLayout {
 
     private static final int ANSWER_HIDE_DELAY = 100;
     private static final int FOREGROUND_COLOR_CHANGE_DELAY = 250;
@@ -63,7 +63,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
     TourGuide mTourGuideHandler,mTourGuideHandler1;
     SharedPreferences sharedPreferences;
 
-    public AbsQuestionView(Context context, Lesson lesson, Q question) {
+    public BaseQuestionView(Context context, Lesson lesson, Q question) {
         super(context);
         mContext=context;
         mQuestion = question;
@@ -107,7 +107,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         });
     }
 
-    public AbsQuestionView(Context context, Lesson lesson, Q question, final boolean isScroll) {
+    public BaseQuestionView(Context context, Lesson lesson, Q question, final boolean isScroll) {
         super(context);
         mContext=context;
         mQuestion = question;

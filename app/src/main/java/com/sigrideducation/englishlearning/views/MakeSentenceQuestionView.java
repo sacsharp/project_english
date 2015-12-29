@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressLint("ViewConstructor")
-public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuestion> {
+public class MakeSentenceQuestionView extends BaseQuestionView<MakeSentenceQuestion> {
 
     private static final String KEY_ANSWER = "ANSWER";
 
@@ -124,14 +124,14 @@ public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuesti
 
     @Override
     public Bundle getUserInput() {
-        String answer = "";
+        String[] answer = new String[mFlowLayoutSentence.getChildCount()];
         for(int i=0;i<mFlowLayoutSentence.getChildCount();i++)
         {
             if(mFlowLayoutSentence.getChildAt(i).getVisibility() == VISIBLE)
-                answer += mFlowLayoutSentence.getChildAt(i).toString()+ " ";
+                answer[i]= mFlowLayoutSentence.getChildAt(i).toString()+ " ";
         }
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_ANSWER,answer.trim());
+        bundle.putStringArray(KEY_ANSWER,answer);
         return bundle;
     }
 
@@ -140,6 +140,7 @@ public class MakeSentenceQuestionView extends AbsQuestionView<MakeSentenceQuesti
         if (savedInput == null) {
             return;
         }
+
 
     }
 

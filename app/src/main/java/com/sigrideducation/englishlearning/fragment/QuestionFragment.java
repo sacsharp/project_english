@@ -25,7 +25,7 @@ import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.views.AbsQuestionView;
+import com.sigrideducation.englishlearning.views.BaseQuestionView;
 
 import java.util.List;
 
@@ -173,8 +173,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         View focusedChild = mQuestionView.getFocusedChild();
         if (focusedChild instanceof ViewGroup) {
             View currentView = ((ViewGroup) focusedChild).getChildAt(0);
-            if (currentView instanceof AbsQuestionView) {
-                outState.putBundle(KEY_USER_INPUT, ((AbsQuestionView) currentView).getUserInput());
+            if (currentView instanceof BaseQuestionView) {
+                outState.putBundle(KEY_USER_INPUT, ((BaseQuestionView) currentView).getUserInput());
             }
         }
         super.onSaveInstanceState(outState);
@@ -198,8 +198,8 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
                 View currentChild = mQuestionView.getChildAt(0);
                 if (currentChild instanceof ViewGroup) {
                     final View potentialQuizView = ((ViewGroup) currentChild).getChildAt(0);
-                    if (potentialQuizView instanceof AbsQuestionView) {
-                        ((AbsQuestionView) potentialQuizView).setUserInput(savedInstanceState.getBundle(KEY_USER_INPUT));
+                    if (potentialQuizView instanceof BaseQuestionView) {
+                        ((BaseQuestionView) potentialQuizView).setUserInput(savedInstanceState.getBundle(KEY_USER_INPUT));
                     }
                 }
             }

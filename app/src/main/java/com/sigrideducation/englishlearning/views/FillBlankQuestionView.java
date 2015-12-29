@@ -17,7 +17,7 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 
 
-public class FillBlankQuestionView extends AbsQuestionView<FillBlankQuestion>
+public class FillBlankQuestionView extends BaseQuestionView<FillBlankQuestion>
         implements TextWatcher, TextView.OnEditorActionListener {
 
     private static final String KEY_ANSWER = "ANSWER";

@@ -13,7 +13,7 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 
 @SuppressLint("ViewConstructor")
-public class ContentTipQuestionView extends AbsQuestionView<ContentTipQuestion> {
+public class ContentTipQuestionView extends BaseQuestionView<ContentTipQuestion> {
 
     private static final String KEY_ANSWER = "ANSWER";
 

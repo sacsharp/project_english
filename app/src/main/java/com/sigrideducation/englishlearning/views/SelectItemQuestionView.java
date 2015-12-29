@@ -15,7 +15,7 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 
 @SuppressLint("ViewConstructor")
-public class SelectItemQuestionView extends AbsQuestionView<SelectItemQuestion> {
+public class SelectItemQuestionView extends BaseQuestionView<SelectItemQuestion> {
 
     private static final String KEY_ANSWER = "ANSWER";
 

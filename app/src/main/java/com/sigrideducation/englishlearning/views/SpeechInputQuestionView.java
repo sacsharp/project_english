@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 @SuppressLint("ViewConstructor")
-public class SpeechInputQuestionView extends AbsQuestionView<SpeechInputQuestion> {
+public class SpeechInputQuestionView extends BaseQuestionView<SpeechInputQuestion> {
 
     private static final String KEY_ANSWER = "ANSWER";
 
