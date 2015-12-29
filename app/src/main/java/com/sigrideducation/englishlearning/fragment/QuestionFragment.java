@@ -227,7 +227,6 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         final int count = mQuestionView.getAdapter().getCount();
         if (nextItem < count) {
             mQuestionView.showNext();
-            ELDatabaseHelper.updateLesson(getActivity(), mLesson);
             return true;
         }
         markLessonAttempted();
@@ -248,20 +247,13 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
             mProgressToolbar.setVisibility(View.GONE);
         }
 
-//        int score;
-//        if(mQuestionAdapter !=null){
-//            score = mQuestionAdapter.getScore();
-//        }
-//        else {
-//            mQuestionAdapter = getQuestionAdapter();
-//            score = mQuestionAdapter.getScore();
-//        }
-//        if(mScoreCard !=null)
-//        mScoreCard.setText("Correct Answers:"+ score);
-//        else{
-//            mScoreCard = (TextView) getView().findViewById(R.id.txt_score);
-//            mScoreCard.setText("Correct Answers:"+ score);
-//        }
+        final String score = mLesson.getScore();
+        if(mScoreCard !=null)
+        mScoreCard.setText("Correct Answers:"+ score);
+        else{
+            mScoreCard = (TextView) getView().findViewById(R.id.txt_score);
+            mScoreCard.setText("Correct Answers:"+ score);
+        }
         mScoreCard.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
         mRestartLesson.setVisibility(View.VISIBLE);

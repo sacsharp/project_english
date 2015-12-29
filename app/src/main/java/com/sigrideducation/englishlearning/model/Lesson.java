@@ -18,6 +18,7 @@ public class Lesson implements Parcelable {
     private final Theme mTheme;
     private List<Question> mQuestions;
     private boolean mSolved;
+    private String mScore;
 
 
     public static final Creator<Lesson> CREATOR = new Creator<Lesson>() {
@@ -32,12 +33,13 @@ public class Lesson implements Parcelable {
         }
     };
 
-    public Lesson(String name, String id, Theme theme, List<Question> questions, boolean solved) {
+    public Lesson(String name, String id, Theme theme, List<Question> questions, boolean solved, String score) {
         mName = name;
         mId = id;
         mTheme = theme;
         mQuestions = questions;
         mSolved = solved;
+        mScore = score;
     }
 
     protected Lesson(Parcel in) {
@@ -47,6 +49,7 @@ public class Lesson implements Parcelable {
         mQuestions = new ArrayList<>();
         in.readTypedList(mQuestions, Question.CREATOR);
         mSolved = ParcelableHelper.readBoolean(in);
+        mScore = in.readString();
     }
 
     public String getName() {
@@ -83,7 +86,7 @@ public class Lesson implements Parcelable {
                 ", mTheme=" + mTheme +
                 ", mQuestions=" + mQuestions +
                 ", mSolved=" + mSolved +
-                '}';
+                ", mScore="+ mScore + '}';
     }
 
     @Override
@@ -97,6 +100,7 @@ public class Lesson implements Parcelable {
         dest.writeString(mId);
         dest.writeInt(mTheme.ordinal());
         dest.writeTypedList(getQuestions());
+        dest.writeString(mScore);
         ParcelableHelper.writeBoolean(dest, mSolved);
     }
 
@@ -110,18 +114,18 @@ public class Lesson implements Parcelable {
             return false;
         }
 
-        Lesson category = (Lesson) o;
+        Lesson lesson = (Lesson) o;
 
-        if (!mId.equals(category.mId)) {
+        if (!mId.equals(lesson.mId)) {
             return false;
         }
-        if (!mName.equals(category.mName)) {
+        if (!mName.equals(lesson.mName)) {
             return false;
         }
-        if (!mQuestions.equals(category.mQuestions)) {
+        if (!mQuestions.equals(lesson.mQuestions)) {
             return false;
         }
-        if (mTheme != category.mTheme) {
+        if (mTheme != lesson.mTheme) {
             return false;
         }
 
@@ -134,6 +138,15 @@ public class Lesson implements Parcelable {
         result = 31 * result + mId.hashCode();
         result = 31 * result + mTheme.hashCode();
         result = 31 * result + mQuestions.hashCode();
+        result = 31 * result + mScore.hashCode();
         return result;
+    }
+
+    public String getScore() {
+        return mScore;
+    }
+
+    public void setScore(String mScore) {
+        this.mScore = mScore;
     }
 }

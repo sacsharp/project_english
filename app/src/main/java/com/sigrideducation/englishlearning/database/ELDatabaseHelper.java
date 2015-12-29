@@ -74,9 +74,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final Theme theme = Theme.valueOf(themeName);
         final String isSolved = cursor.getString(4);
         final boolean solved = getBooleanFromDatabase(isSolved);
+        final String score = cursor.getString(5);
 
         final List<Question> questions = getQuestions(id, readableDatabase);
-        return new Lesson(name, id, theme, questions, solved);
+        return new Lesson(name, id, theme, questions, solved, score);
     }
 
     private static boolean getBooleanFromDatabase(String isSolved) {
@@ -102,8 +103,10 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             mLessons.add(location, lesson);
         }
         SQLiteDatabase writableDatabase = getWritableDatabase(context);
-        ContentValues lessonValues = createContentValuesFor(lesson);
-        writableDatabase.update(LessonTable.NAME, lessonValues, LessonTable.COLUMN_ID + "=?",
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LessonTable.COLUMN_SOLVED, lesson.isSolved());
+        contentValues.put(LessonTable.COLUMN_SCORE,lesson.getScore());
+        writableDatabase.update(LessonTable.NAME, contentValues, LessonTable.COLUMN_ID + "=?",
                 new String[]{lesson.getId()});
     }
 
@@ -205,13 +208,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         return new MakeSentenceQuestion(question, answer);
     }
 
-    //Creates the content values to update a lesson in the database.
-    private static ContentValues createContentValuesFor(Lesson lesson) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(LessonTable.COLUMN_SOLVED, lesson.isSolved());
-        return contentValues;
-    }
-
     private static SQLiteDatabase getReadableDatabase(Context context) {
         return getInstance(context).getReadableDatabase();
     }
@@ -307,6 +303,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         values.put(LessonTable.COLUMN_NAME, lesson.getString(JsonParts.LNAME));
         values.put(LessonTable.COLUMN_THEME, lesson.getString(JsonParts.THEME));
         values.put(LessonTable.COLUMN_SOLVED, lesson.getString(JsonParts.SOLVED));
+        values.put(LessonTable.COLUMN_SCORE,lesson.getString(JsonParts.SCORE));
         db.insert(LessonTable.NAME, null, values);
     }
 
