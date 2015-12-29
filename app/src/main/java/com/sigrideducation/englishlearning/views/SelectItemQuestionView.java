@@ -10,7 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.sigrideducation.englishlearning.R;
-import com.sigrideducation.englishlearning.adapter.OptionsQuestionAdapter;
+import com.sigrideducation.englishlearning.adapter.MultipleChoiceQuestionAdapter;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
 
@@ -33,8 +33,7 @@ public class SelectItemQuestionView extends BaseQuestionView<SelectItemQuestion>
         mListView = new ListView(context);
         mListView.setDivider(null);
         mListView.setSelector(R.drawable.selector_button);
-        mListView.setAdapter(
-                new OptionsQuestionAdapter(getQuestion().getOptions(), R.layout.item_answer_start, context, true));
+        mListView.setAdapter(new MultipleChoiceQuestionAdapter(getQuestion().getOptions(), R.layout.item_answer_start));
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
