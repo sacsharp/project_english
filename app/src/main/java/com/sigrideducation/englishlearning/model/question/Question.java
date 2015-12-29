@@ -38,23 +38,16 @@ public abstract class Question<A> implements Parcelable {
     private final String mQuestion;
     private final String mQuestionType;
     private A mAnswer;
-    /**
-     * Flag indicating whether this question has already been solved.
-     * It does not give information whether the solution was correct or not.
-     */
-    private boolean mUserAnswerCorrect;
 
-    protected Question(String question, A answer, boolean status) {
+    protected Question(String question, A answer) {
         mQuestion = question;
         mAnswer = answer;
         mQuestionType = getType().getJsonName();
-        mUserAnswerCorrect = status;
     }
 
     protected Question(Parcel in) {
         mQuestion = in.readString();
         mQuestionType = getType().getJsonName();
-        mUserAnswerCorrect = ParcelableHelper.readBoolean(in);
     }
 
     /**
@@ -83,14 +76,6 @@ public abstract class Question<A> implements Parcelable {
         return mAnswer.equals(answer);
     }
 
-    public boolean isUserAnswerCorrect() {
-        return mUserAnswerCorrect;
-    }
-
-    public void setUserAnswerCorrect(boolean status) {
-        mUserAnswerCorrect = status;
-    }
-
     /**
      * @return The id of this question.
      */
@@ -107,7 +92,6 @@ public abstract class Question<A> implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         ParcelableHelper.writeEnumValue(dest, getType());
         dest.writeString(mQuestion);
-        ParcelableHelper.writeBoolean(dest, mUserAnswerCorrect);
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -122,9 +106,6 @@ public abstract class Question<A> implements Parcelable {
 
         Question question = (Question) o;
 
-        if (mUserAnswerCorrect != question.mUserAnswerCorrect) {
-            return false;
-        }
         if (!mAnswer.equals(question.mAnswer)) {
             return false;
         }
@@ -143,7 +124,6 @@ public abstract class Question<A> implements Parcelable {
         int result = mQuestion.hashCode();
         result = 31 * result + mAnswer.hashCode();
         result = 31 * result + mQuestionType.hashCode();
-        result = 31 * result + (mUserAnswerCorrect ? 1 : 0);
         return result;
     }
 

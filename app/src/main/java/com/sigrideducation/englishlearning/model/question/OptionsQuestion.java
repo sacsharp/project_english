@@ -12,8 +12,8 @@ public abstract class OptionsQuestion<T> extends Question<Integer> {
 
     private T[] mOptions;
 
-    public OptionsQuestion(String question, int answer, T[] options, boolean solved) {
-        super(question, answer, solved);
+    public OptionsQuestion(String question, int answer, T[] options) {
+        super(question, answer);
         mOptions = options;
     }
 

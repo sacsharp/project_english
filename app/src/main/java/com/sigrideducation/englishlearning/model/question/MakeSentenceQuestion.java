@@ -5,8 +5,8 @@ import android.os.Parcel;
 public final class MakeSentenceQuestion extends Question<String> {
 
 
-    public MakeSentenceQuestion(String question, String answer, boolean solved) {
-        super(question, answer, solved);
+    public MakeSentenceQuestion(String question, String answer) {
+        super(question, answer);
     }
 
     @SuppressWarnings("unused")

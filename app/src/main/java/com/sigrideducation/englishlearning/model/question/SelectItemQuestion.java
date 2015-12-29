@@ -5,8 +5,8 @@ import android.os.Parcel;
 
 public final class SelectItemQuestion extends OptionsQuestion<String> {
 
-    public SelectItemQuestion(String question, int answer, String[] options, boolean solved) {
-        super(question, answer, options, solved);
+    public SelectItemQuestion(String question, int answer, String[] options) {
+        super(question, answer, options);
     }
 
     @SuppressWarnings("unused")

@@ -105,24 +105,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         ContentValues lessonValues = createContentValuesFor(lesson);
         writableDatabase.update(LessonTable.NAME, lessonValues, LessonTable.COLUMN_ID + "=?",
                 new String[]{lesson.getId()});
-        final List<Question> questions = lesson.getQuestions();
-        updateQuestions(writableDatabase, questions);
-    }
-
-    // Updates a list of given questions.
-    private static void updateQuestions(SQLiteDatabase writableDatabase, List<Question> questions) {
-        Question question;
-        ContentValues questionValues = new ContentValues();
-        String[] questionArgs = new String[1];
-        for (int i = 0; i < questions.size(); i++) {
-            question = questions.get(i);
-            questionValues.clear();
-            questionValues.put(QuestionTable.COLUMN_CORRECT, question.isUserAnswerCorrect());
-
-            questionArgs[0] = question.getQuestion();
-            writableDatabase.update(QuestionTable.NAME, questionValues, QuestionTable.COLUMN_QUESTION + "=?",
-                    questionArgs);
-        }
     }
 
     //Resets the contents of  database to it's initial state.
@@ -160,23 +142,22 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         final String question = cursor.getString(3);
         final String answer = cursor.getString(4);
         final String options = cursor.getString(5);
-        final boolean solved = getBooleanFromDatabase(cursor.getString(6));
 
         switch (type) {
             case JsonParts.QuestionType.FILL_BLANK: {
-                return createFillBlankQuestion(question, answer, solved);
+                return createFillBlankQuestion(question, answer);
             }
             case JsonParts.QuestionType.SINGLE_SELECT_ITEM: {
-                return createSelectItemQuestion(question, answer, options, solved);
+                return createSelectItemQuestion(question, answer, options);
             }
             case JsonParts.QuestionType.SPEECH_INPUT:{
-                return createSpeechInputQuestion(question, answer, solved);
+                return createSpeechInputQuestion(question, answer);
             }
             case JsonParts.QuestionType.CONTENT_TIP:{
-                return createContentTipQuestion(question, answer, solved);
+                return createContentTipQuestion(question, answer);
             }
             case JsonParts.QuestionType.MAKE_SENTENCE:{
-                return createMakeSentenceQuestion(question,answer,solved);
+                return createMakeSentenceQuestion(question,answer);
             }
             default: {
                 throw new IllegalArgumentException("Question type " + type + " is not supported");
@@ -184,13 +165,13 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private static Question createFillBlankQuestion(String question, String answer, boolean solved) {
-        return new FillBlankQuestion(question, answer, solved);
+    private static Question createFillBlankQuestion(String question, String answer) {
+        return new FillBlankQuestion(question, answer);
     }
 
-    private static Question createSelectItemQuestion(String question, String answer, String options, boolean solved) {
+    private static Question createSelectItemQuestion(String question, String answer, String options) {
         final String[] optionsArray = jsonArrayToStringArray(options);
-        return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray, solved);
+        return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray);
     }
 
     private static String[] jsonArrayToStringArray(String json) {
@@ -209,19 +190,19 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    private static Question createSpeechInputQuestion(String question, String answer, boolean solved) {
+    private static Question createSpeechInputQuestion(String question, String answer) {
 
-        return new SpeechInputQuestion(question, answer, solved);
+        return new SpeechInputQuestion(question, answer);
     }
 
-    private static Question createContentTipQuestion(String question, String answer, boolean solved) {
+    private static Question createContentTipQuestion(String question, String answer) {
 
-        return new ContentTipQuestion(question, answer, solved);
+        return new ContentTipQuestion(question, answer);
     }
 
-    private static Question createMakeSentenceQuestion(String question, String answer, boolean solved) {
+    private static Question createMakeSentenceQuestion(String question, String answer) {
 
-        return new MakeSentenceQuestion(question, answer, solved);
+        return new MakeSentenceQuestion(question, answer);
     }
 
     //Creates the content values to update a lesson in the database.

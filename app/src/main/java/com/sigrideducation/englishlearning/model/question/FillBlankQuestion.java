@@ -4,8 +4,8 @@ import android.os.Parcel;
 
 public final class FillBlankQuestion extends Question<String> {
 
-    public FillBlankQuestion(String question, String answer, boolean solved) {
-        super(question, answer, solved);
+    public FillBlankQuestion(String question, String answer) {
+        super(question, answer);
     }
 
     @SuppressWarnings("unused")

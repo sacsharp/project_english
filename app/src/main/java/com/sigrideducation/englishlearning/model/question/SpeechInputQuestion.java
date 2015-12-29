@@ -5,8 +5,8 @@ import android.os.Parcel;
 public final class SpeechInputQuestion extends Question<String> {
 
 
-    public SpeechInputQuestion(String question, String answer, boolean solved) {
-        super(question, answer, solved);
+    public SpeechInputQuestion(String question, String answer) {
+        super(question, answer);
     }
 
     @SuppressWarnings("unused")

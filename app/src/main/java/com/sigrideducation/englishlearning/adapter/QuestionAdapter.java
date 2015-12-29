@@ -118,16 +118,5 @@ public class QuestionAdapter extends BaseAdapter {
         throw new UnsupportedOperationException(
                 "Question of type " + question.getType() + " can not be displayed.");
     }
-
-    public int getScore() {
-        int tempScore=0;
-        for (int i = 0; i < mQuestions.size(); i++) {
-            if(mQuestions.get(i).isUserAnswerCorrect())
-            {
-                ++tempScore;
-            }
-        }
-        mScore = tempScore;
-        return mScore;
-    }
+    
 }

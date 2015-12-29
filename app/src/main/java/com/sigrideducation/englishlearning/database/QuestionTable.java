@@ -31,10 +31,9 @@ public interface QuestionTable {
     String COLUMN_QUESTION = "question";
     String COLUMN_ANSWER = "answer";
     String COLUMN_OPTIONS = "options";
-    String COLUMN_CORRECT = "status";
 
     String[] PROJECTION = new String[]{COLUMN_ID, FK_LESSON, COLUMN_TYPE,
-            COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_OPTIONS, COLUMN_CORRECT};
+            COLUMN_QUESTION, COLUMN_ANSWER, COLUMN_OPTIONS};
 
     String CREATE = "CREATE TABLE " + NAME + " ("
             + COLUMN_ID + " INTEGER PRIMARY KEY, "
@@ -43,6 +42,5 @@ public interface QuestionTable {
             + COLUMN_TYPE + " TEXT NOT NULL, "
             + COLUMN_QUESTION + " TEXT NOT NULL, "
             + COLUMN_ANSWER + " TEXT NOT NULL, "
-            + COLUMN_OPTIONS + " TEXT, "
-            + COLUMN_CORRECT + ");";
+            + COLUMN_OPTIONS + " TEXT);";
 }

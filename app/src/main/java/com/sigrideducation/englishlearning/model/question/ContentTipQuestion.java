@@ -5,8 +5,8 @@ import android.os.Parcel;
 public final class ContentTipQuestion extends Question<String> {
 
 
-    public ContentTipQuestion(String question, String answer, boolean solved) {
-        super(question, answer, solved);
+    public ContentTipQuestion(String question, String answer) {
+        super(question, answer);
     }
 
     @SuppressWarnings("unused")
