@@ -2,9 +2,8 @@ package com.sigrideducation.englishlearning.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Structure of the chapter table.
- */
+//chapter table
+
 public interface ChapterTable {
 
     String NAME = "chapter";

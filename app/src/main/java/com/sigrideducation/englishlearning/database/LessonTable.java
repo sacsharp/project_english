@@ -2,9 +2,8 @@ package com.sigrideducation.englishlearning.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Structure of the lesson table.
- */
+//lesson table.
+
 public interface LessonTable {
 
     String NAME = "lesson";
