@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -92,9 +91,18 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(mCheckAnswer);
-                addFloatingActionButton(mMoveToNext);
-                addAnswerStatusText();
+                if(!mQuestion.getType().toString().equals(JsonParts.QuestionType.CONTENT_TIP))
+                {
+                    Log.i("Type", mQuestion.getType().toString());
+                    addFloatingActionButton(mCheckAnswer);
+                    addFloatingActionButton(mMoveToNext);
+                    addAnswerStatusText();
+                }
+                else {
+                    addFloatingActionButton(mMoveToNext);
+                    mMoveToNext.setVisibility(VISIBLE);
+                }
+
             }
         });
     }
@@ -134,9 +142,17 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
                                        int oldLeft,
                                        int oldTop, int oldRight, int oldBottom) {
                 removeOnLayoutChangeListener(this);
-                addFloatingActionButton(mCheckAnswer);
-                addFloatingActionButton(mMoveToNext);
-                addAnswerStatusText();
+                if(!mQuestion.getType().toString().equals("CONTENT_TIP"))
+                {
+                    Log.i("Type", mQuestion.getType().toString());
+                    addFloatingActionButton(mCheckAnswer);
+                    addFloatingActionButton(mMoveToNext);
+                    addAnswerStatusText();
+                }
+                else {
+                    addFloatingActionButton(mMoveToNext);
+                    mMoveToNext.setVisibility(VISIBLE);
+                }
             }
         });
     }
@@ -385,7 +401,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
         mCheckAnswer.hide();
         sharedPreferences = getContext().getSharedPreferences("MY_PREF",Context.MODE_PRIVATE);
-        if(!sharedPreferences.getBoolean("MoveNextTipShown",false))
+        if(!sharedPreferences.getBoolean("MoveNextTipShown", false))
         {
             mTourGuideHandler1 = TourGuide.init((Activity)mContext).with(TourGuide.Technique.Click)
                     .setPointer(new Pointer())
