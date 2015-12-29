@@ -63,13 +63,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
 
     TourGuide mTourGuideHandler,mTourGuideHandler1;
     SharedPreferences sharedPreferences;
-    /**
-     * Enables creation of views for questionzes.
-     *
-     * @param context  The context for this view.
-     * @param lesson The {@link Lesson} this view is running in.
-     * @param question     The actual {@link Question} that is going to be displayed.
-     */
+
     public AbsQuestionView(Context context, Lesson lesson, Q question) {
         super(context);
         mContext=context;
@@ -208,12 +202,10 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mCheckAnswer.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkAnswer(v);
-                    sharedPreferences = getContext().getSharedPreferences("MY_PREF",Context.MODE_PRIVATE);
-                    if(sharedPreferences.getBoolean("CheckAnswerTipShown",true))
-                    {
-                        if(null != mTourGuideHandler)
-                        {
+                    checkAnswer();
+                    sharedPreferences = getContext().getSharedPreferences("MY_PREF", Context.MODE_PRIVATE);
+                    if (sharedPreferences.getBoolean("CheckAnswerTipShown", true)) {
+                        if (null != mTourGuideHandler) {
                             mTourGuideHandler.cleanUp();
                         }
                     }
@@ -236,11 +228,11 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mMoveToNext.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    moveToText(v);
+                    moveToNext();
                     sharedPreferences = getContext().getSharedPreferences("MY_PREF", Context.MODE_PRIVATE);
                     if (sharedPreferences.getBoolean("MoveNextTipShown", true)) {
-                        if (null != mTourGuideHandler) {
-                            mTourGuideHandler.cleanUp();
+                        if (null != mTourGuideHandler1) {
+                            mTourGuideHandler1.cleanUp();
                         }
                     }
 
@@ -318,34 +310,16 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         return mLayoutInflater;
     }
 
-    /**
-     * Implementations should create the content view for the type of
-     * Question they want to display.
-     *
-     * @return the created view to solve the question.
-     */
+    //To implement the content view of a particular question type.
     protected abstract View createQuestionContentView();
 
-    /**
-     * Implementations must make sure that the answer provided is evaluated and correctly rated.
-     *
-     * @return <code>true</code> if the question has been correctly answered, else
-     * <code>false</code>.
-     */
+    //To check whether answer is correct or not
     protected abstract boolean isAnswerCorrect();
 
-    /**
-     * Save the user input to a bundle for orientation changes.
-     *
-     * @return The bundle containing the user's input.
-     */
+    //To save the user input for orientation changes.
     public abstract Bundle getUserInput();
 
-    /**
-     * Restore the user's input.
-     *
-     * @param savedInput The input that the user made in a prior instance of this view.
-     */
+    //To restore user's input.
     public abstract void setUserInput(Bundle savedInput);
 
     public Q getQuestion() {
@@ -356,11 +330,7 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         return mAnswered;
     }
 
-    /**
-     * Sets the question to answered or unanswered.
-     *
-     * @param answered <code>true</code> if an answer was selected, else <code>false</code>.
-     */
+    //This allows the user to check the answer after he has selected an answer
     protected void allowCheckAnswer(final boolean answered) {
         if (null != mCheckAnswer) {
             if (answered) {
@@ -386,27 +356,25 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         }
     }
 
-    /**
-     * Sets the question to answered if it not already has been answered.
-     * Otherwise does nothing.
-     */
+    //To allow the user to check answer without doing anything
     protected void allowCheckAnswer() {
         if (!isAnswered()) {
             allowCheckAnswer(true);
         }
     }
 
-    /**
-     * Allows children to submit an answer via code.
-     */
+    //This would check whether the user has given a correct answer on tapping checkAnswer button
     protected void checkAnswer() {
-        checkAnswer(findViewById(R.id.checkAnswer));
-    }
-
-    @SuppressWarnings("UnusedParameters")
-    private void checkAnswer(final View v) {
         final boolean answerCorrect = isAnswerCorrect();
-        mQuestion.setUserAnswerCorrect(answerCorrect);
+        if(answerCorrect){
+            Integer tempScore =Integer.parseInt(mLesson.getScore());
+            Log.i("score",tempScore.toString());
+            tempScore++;
+            mLesson.setScore(tempScore.toString());
+        }
+        else {
+            Log.i("score",mLesson.getScore());
+        }
         mTextAnswerStatus.setVisibility(VISIBLE);
         mTextAnswerStatus.setTextSize(30);
         mTextAnswerStatus.setBackgroundColor(Color.GRAY);
@@ -430,46 +398,11 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         mMoveToNext.show();
     }
 
-    /**
-     * Allows children to submit an answer via code.
-     */
-    protected void moveToText() {
-        moveToText(findViewById(R.id.moveToNext));
-    }
-
-    @SuppressWarnings("UnusedParameters")
-    private void moveToText(final View v) {
-        final boolean answerCorrect = isAnswerCorrect();
+    //To move to the new Lesson
+    private void moveToNext() {
         if(mTourGuideHandler1!=null)
             mTourGuideHandler1.cleanUp();
-        performScoreAnimation(answerCorrect);
-    }
-
-    /**
-     * Animates the view nicely when the answer has been submitted.
-     *
-     * @param answerCorrect <code>true</code> if the answer was correct, else <code>false</code>.
-     */
-    private void performScoreAnimation(final boolean answerCorrect) {
-        // Decide which background color to use.
-        final int backgroundColor = ContextCompat.getColor(getContext(),
-                answerCorrect ? R.color.green : R.color.red);
-        adjustFab(answerCorrect, backgroundColor);
-        moveViewOffScreen(answerCorrect);
-        // Animate the foreground color to match the background color.
-        // This overlays all content within the current view.
-    }
-
-    private void adjustFab(boolean answerCorrect, int backgroundColor) {
-        mCheckAnswer.setChecked(answerCorrect);
-        mCheckAnswer.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
-        mHideFabRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mCheckAnswer.hide();
-            }
-        };
-        mHandler.postDelayed(mHideFabRunnable, ANSWER_HIDE_DELAY);
+        ((QuestionActivity) getContext()).proceed();
     }
 
     @Override
@@ -481,19 +414,5 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mHandler.removeCallbacks(mMoveOffScreenRunnable);
         }
         super.onDetachedFromWindow();
-    }
-
-
-    private void moveViewOffScreen(final boolean answerCorrect) {
-        // Move the current view off the screen.
-        mMoveOffScreenRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (getContext() instanceof QuestionActivity) {
-                    ((QuestionActivity) getContext()).proceed();
-                }
-            }
-        };
-        mHandler.postDelayed(mMoveOffScreenRunnable, FOREGROUND_COLOR_CHANGE_DELAY);
     }
 }
