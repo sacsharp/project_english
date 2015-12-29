@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">English Learning</string>
 
-    <string name="last_initial">Last Initial</string>
-    <string name="first_name">First Name</string>
-    <string name="sign_in">Sign In</string>
-    <string name="question_of_questions">%1$s / %2$s</string>
-    <string name="sign_out">Sign out</string>
     <string name="up">up</string>
-    <string name="x_points">%1$d pts</string>
 
     <string name="speech_prompt">Say something&#8230;</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/spacing_normal"/>
 
@@ -31,6 +31,5 @@
         android:layout_height="0dp"
         android:layout_gravity="center|bottom"
         android:layout_weight="1"
-        android:layout_marginBottom="@dimen/spacing_normal"
-        android:transitionName="@string/transition_avatar" />
+        android:layout_marginBottom="@dimen/spacing_normal"></android.support.design.widget.FloatingActionButton>
 </LinearLayout>

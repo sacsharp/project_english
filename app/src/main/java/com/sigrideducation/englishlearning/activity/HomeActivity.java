@@ -96,8 +96,7 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(String json) {
             if(json !=null)
             {
-                ELDatabaseHelper elDatabaseHelper = new ELDatabaseHelper(getApplicationContext());
-                elDatabaseHelper.update(getApplicationContext(), json);
+                ELDatabaseHelper.update(getApplicationContext(), json);
             }
             Intent intent = new Intent(HomeActivity.this,MainActivity.class);
             startActivity(intent);

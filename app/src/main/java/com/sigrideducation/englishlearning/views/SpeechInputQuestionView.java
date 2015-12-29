@@ -28,8 +28,7 @@ public class SpeechInputQuestionView extends AbsQuestionView<SpeechInputQuestion
     private static final String KEY_ANSWER = "ANSWER";
 
     private TextView mTextSpeechInput;
-    private ImageButton mBtnSpeak;
-    private ImageButton mBtnListen;
+
 
     private SpeechRecognizer mSpeechRecognizer;
     private Intent mSpeechRecognizerIntent;
@@ -45,6 +44,8 @@ public class SpeechInputQuestionView extends AbsQuestionView<SpeechInputQuestion
     @Override
     protected View createQuestionContentView() {
         final Context context = getContext();
+        final ImageButton mBtnSpeak;
+        final ImageButton mBtnListen;
         LinearLayout container = (LinearLayout) getLayoutInflater().inflate(R.layout.question_speech_input,this,false);
 
         mTextSpeechInput = (TextView) container.findViewById(R.id.txt_speech_input);

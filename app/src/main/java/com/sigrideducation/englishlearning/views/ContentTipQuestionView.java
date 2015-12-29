@@ -17,7 +17,7 @@ public class ContentTipQuestionView extends AbsQuestionView<ContentTipQuestion> 
 
     private static final String KEY_ANSWER = "ANSWER";
 
-    private TextView mTextData;
+
 
 
     public ContentTipQuestionView(Context context, Lesson lesson, ContentTipQuestion question,boolean isScroll) {
@@ -27,6 +27,7 @@ public class ContentTipQuestionView extends AbsQuestionView<ContentTipQuestion> 
     @Override
     protected View createQuestionContentView() {
         final Context context = getContext();
+        final TextView mTextData;
         LinearLayout container = (LinearLayout) getLayoutInflater().inflate(R.layout.question_content_tip, this, false);
         mTextData =(TextView) container.findViewById(R.id.text_data);
 
