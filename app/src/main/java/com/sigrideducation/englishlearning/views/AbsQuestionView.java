@@ -169,11 +169,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
         View questionContentView = createQuestionContentView();
         questionContentView.setId(R.id.question_content);
         questionContentView.setSaveEnabled(true);
-        setDefaultPadding(questionContentView);
-        if (questionContentView instanceof ViewGroup) {
-            ((ViewGroup) questionContentView).setClipToPadding(false);
-        }
-        setMinHeightInternal(questionContentView, R.dimen.min_height_question);
         return questionContentView;
     }
 
@@ -317,10 +312,6 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             mTextAnswerStatus.setVisibility(GONE);
         }
         return mTextAnswerStatus;
-    }
-
-    private void setDefaultPadding(View view) {
-        view.setPadding(mSpacingDouble, mSpacingDouble, mSpacingDouble, mSpacingDouble);
     }
 
     protected LayoutInflater getLayoutInflater() {
@@ -504,9 +495,5 @@ public abstract class AbsQuestionView<Q extends Question> extends FrameLayout {
             }
         };
         mHandler.postDelayed(mMoveOffScreenRunnable, FOREGROUND_COLOR_CHANGE_DELAY);
-    }
-
-    private void setMinHeightInternal(View view, @DimenRes int resId) {
-        view.setMinimumHeight(getResources().getDimensionPixelSize(resId));
     }
 }
