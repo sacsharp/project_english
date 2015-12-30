@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MarginLayoutParamsCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
@@ -30,7 +31,6 @@ import com.sigrideducation.englishlearning.activity.QuestionActivity;
 import com.sigrideducation.englishlearning.model.JsonParts;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.widget.CheckableFab;
 
 import tourguide.tourguide.Pointer;
 import tourguide.tourguide.ToolTip;
@@ -51,8 +51,8 @@ public abstract class BaseQuestionView<Q extends Question> extends FrameLayout {
     private Interpolator mLinearOutSlowInInterpolator;
     private boolean mAnswered;
     private TextView mQuestionView;
-    private CheckableFab mCheckAnswer;
-    private CheckableFab mMoveToNext;
+    private FloatingActionButton mCheckAnswer;
+    private FloatingActionButton mMoveToNext;
     private Handler mHandler;
     private Runnable mHideFabRunnable;
     private Runnable mMoveOffScreenRunnable;
@@ -190,7 +190,7 @@ public abstract class BaseQuestionView<Q extends Question> extends FrameLayout {
         addView(container, layoutParams);
     }
 
-    private void addFloatingActionButton(CheckableFab fab) {
+    private void addFloatingActionButton(FloatingActionButton fab) {
         final int fabSize = getResources().getDimensionPixelSize(R.dimen.size_fab);
         final LayoutParams fabLayoutParams = new LayoutParams(fabSize, fabSize, Gravity.CENTER | Gravity.BOTTOM);
         fabLayoutParams.setMargins(0, // left
@@ -210,10 +210,9 @@ public abstract class BaseQuestionView<Q extends Question> extends FrameLayout {
         addView(mTextAnswerStatus, textLayoutParams);
     }
 
-    private CheckableFab  getCheckAnswerButton() {
+    private FloatingActionButton  getCheckAnswerButton() {
         if (null == mCheckAnswer) {
-
-            mCheckAnswer = (CheckableFab) getLayoutInflater().inflate(R.layout.answer_submit, this, false);
+            mCheckAnswer = (FloatingActionButton) getLayoutInflater().inflate(R.layout.check_answer, this, false);
             mCheckAnswer.hide();
             mCheckAnswer.setOnClickListener(new OnClickListener() {
                 @Override
@@ -235,11 +234,9 @@ public abstract class BaseQuestionView<Q extends Question> extends FrameLayout {
         return mCheckAnswer;
     }
 
-    private CheckableFab  getMoveToNextButton() {
+    private FloatingActionButton  getMoveToNextButton() {
         if (null == mMoveToNext) {
-
-            mMoveToNext = (CheckableFab) getLayoutInflater().inflate(R.layout.move_to_next, this, false);
-            mMoveToNext.setImageResource(R.drawable.ic_arrow_forward_black_48dp);
+            mMoveToNext = (FloatingActionButton) getLayoutInflater().inflate(R.layout.move_to_next, this, false);
             mMoveToNext.hide();
             mMoveToNext.setOnClickListener(new OnClickListener() {
                 @Override

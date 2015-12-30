@@ -213,11 +213,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         return mQuestionAdapter;
     }
 
-    /**
-     * Displays the next page.
-     *
-     * @return <code>true</code> if there's another quiz to solve, else <code>false</code>.
-     */
+    //Displays the next page.
     public boolean showNextPage() {
         if (null == mQuestionView) {
             return false;
@@ -257,9 +253,7 @@ public class QuestionFragment extends android.support.v4.app.Fragment {
         mScoreCard.setVisibility(View.VISIBLE);
         mQuestionView.setVisibility(View.GONE);
         mRestartLesson.setVisibility(View.VISIBLE);
-        mRestartLesson.setImageResource(R.drawable.ic_refresh_black_48dp);
         mNextLesson.setVisibility(View.VISIBLE);
-        mNextLesson.setImageResource(R.drawable.ic_arrow_forward_black_48dp);
     }
 
     private void resetLesson()

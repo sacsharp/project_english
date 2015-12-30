@@ -44,9 +44,4 @@
         <item name="android:windowBackground">@color/theme_yellow_background</item>
     </style>
 
-    <style name="AppTheme.CompoundButton" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/selector_button</item>
-        <item name="android:button">@null</item>
-    </style>
-
 </resources>

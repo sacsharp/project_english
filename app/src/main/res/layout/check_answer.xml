@@ -3,8 +3,8 @@
 <android.support.design.widget.FloatingActionButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@id/moveToNext"
-    android:src="@drawable/ic_arrow_forward_black_48dp"
+    android:id="@id/checkAnswer"
+    android:src="@drawable/ic_done_black_48dp"
     app:borderWidth="0dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
