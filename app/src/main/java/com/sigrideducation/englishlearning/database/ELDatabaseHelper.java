@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.sigrideducation.englishlearning.model.JsonParts;
@@ -317,27 +316,8 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             values.put(QuestionTable.COLUMN_TYPE, question.getString(JsonParts.TYPE));
             values.put(QuestionTable.COLUMN_QUESTION, question.getString(JsonParts.QUESTION));
             values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
-            putNonEmptyString(values, question, JsonParts.OPTIONS, QuestionTable.COLUMN_OPTIONS);
+            values.put(QuestionTable.COLUMN_OPTIONS,question.optString(JsonParts.OPTIONS));
             db.insert(QuestionTable.NAME, null, values);
         }
     }
-
-    /**
-     * Puts a non-empty string to ContentValues provided.
-     *
-     *
-     * @param values The place where the data should be put.
-     * @param question The question potentially containing the data.
-     * @param jsonKey The key to look for.
-     * @param contentKey The key use for placing the data in the database.
-     * @throws JSONException Thrown when there's an issue with JSON.
-     */
-    private void putNonEmptyString(ContentValues values, JSONObject question, String jsonKey,
-                                   String contentKey) throws JSONException {
-        final String stringToPut = question.optString(jsonKey, null);
-        if (!TextUtils.isEmpty(stringToPut)) {
-            values.put(contentKey, stringToPut);
-        }
-    }
-
 }
