@@ -5,16 +5,16 @@ import android.os.Parcel;
 import java.util.Arrays;
 
 
-public final class SelectItemQuestion extends Question<Integer> {
+public final class MultipleChoiceQuestion extends Question<Integer> {
 
     private String[] mOptions;
-    public SelectItemQuestion(String question, int answer, String[] options) {
+    public MultipleChoiceQuestion(String question, int answer, String[] options) {
         super(question, answer);
         mOptions = options;
     }
 
     @SuppressWarnings("unused")
-    public SelectItemQuestion(Parcel in) {
+    public MultipleChoiceQuestion(Parcel in) {
         super(in);
         String[] options = in.createStringArray();
         final int answer = in.readInt();

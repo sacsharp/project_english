@@ -12,17 +12,17 @@ import android.widget.ListView;
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.adapter.MultipleChoiceQuestionAdapter;
 import com.sigrideducation.englishlearning.model.Lesson;
-import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
+import com.sigrideducation.englishlearning.model.question.MultipleChoiceQuestion;
 
 @SuppressLint("ViewConstructor")
-public class SelectItemQuestionView extends BaseQuestionView<SelectItemQuestion> {
+public class MultipleChoiceQuestionView extends BaseQuestionView<MultipleChoiceQuestion> {
 
     private static final String KEY_ANSWER = "ANSWER";
 
     private int mAnswer;
     private ListView mListView;
 
-    public SelectItemQuestionView(Context context, Lesson lesson, SelectItemQuestion question) {
+    public MultipleChoiceQuestionView(Context context, Lesson lesson, MultipleChoiceQuestion question) {
         super(context, lesson, question);
         mAnswer = getAnswer();
     }

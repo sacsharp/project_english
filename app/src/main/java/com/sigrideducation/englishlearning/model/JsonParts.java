@@ -35,7 +35,7 @@ public interface JsonParts {
     interface QuestionType {
 
         String FILL_BLANK = "fill-blank";
-        String SINGLE_SELECT_ITEM = "single-select-item";
+        String MULTIPLE_CHOICE = "multiple-choice";
         String CONTENT_TIP = "content-tip";
         String SPEECH_INPUT = "speech-input";
         String MAKE_SENTENCE = "make-sentence";

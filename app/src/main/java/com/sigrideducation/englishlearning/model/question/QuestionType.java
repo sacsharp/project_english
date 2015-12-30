@@ -7,7 +7,7 @@ import com.sigrideducation.englishlearning.model.JsonParts;
  */
 public enum QuestionType {
     FILL_BLANK(JsonParts.QuestionType.FILL_BLANK, FillBlankQuestion.class),
-    SINGLE_SELECT_ITEM(JsonParts.QuestionType.SINGLE_SELECT_ITEM, SelectItemQuestion.class),
+    SINGLE_SELECT_ITEM(JsonParts.QuestionType.MULTIPLE_CHOICE, MultipleChoiceQuestion.class),
     SPEECH_INPUT(JsonParts.QuestionType.SPEECH_INPUT,SpeechInputQuestion.class),
     CONTENT_TIP(JsonParts.QuestionType.CONTENT_TIP,ContentTipQuestion.class),
     MAKE_SENTENCE(JsonParts.QuestionType.MAKE_SENTENCE,MakeSentenceQuestion.class);

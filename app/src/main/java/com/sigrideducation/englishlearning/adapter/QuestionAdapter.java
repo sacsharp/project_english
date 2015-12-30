@@ -10,13 +10,13 @@ import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
+import com.sigrideducation.englishlearning.model.question.MultipleChoiceQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 import com.sigrideducation.englishlearning.views.BaseQuestionView;
 import com.sigrideducation.englishlearning.views.ContentTipQuestionView;
 import com.sigrideducation.englishlearning.views.FillBlankQuestionView;
 import com.sigrideducation.englishlearning.views.MakeSentenceQuestionView;
-import com.sigrideducation.englishlearning.views.SelectItemQuestionView;
+import com.sigrideducation.englishlearning.views.MultipleChoiceQuestionView;
 import com.sigrideducation.englishlearning.views.SpeechInputQuestionView;
 
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class QuestionAdapter extends BaseAdapter {
             case FILL_BLANK:
                 return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);
             case SINGLE_SELECT_ITEM:
-                return new SelectItemQuestionView(mContext, mLesson, (SelectItemQuestion) question);
+                return new MultipleChoiceQuestionView(mContext, mLesson, (MultipleChoiceQuestion) question);
             case SPEECH_INPUT:
                 return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
             case CONTENT_TIP:

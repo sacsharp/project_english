@@ -15,7 +15,7 @@ import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
 import com.sigrideducation.englishlearning.model.question.Question;
-import com.sigrideducation.englishlearning.model.question.SelectItemQuestion;
+import com.sigrideducation.englishlearning.model.question.MultipleChoiceQuestion;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 
 import org.json.JSONArray;
@@ -150,7 +150,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             case JsonParts.QuestionType.FILL_BLANK: {
                 return createFillBlankQuestion(question, answer);
             }
-            case JsonParts.QuestionType.SINGLE_SELECT_ITEM: {
+            case JsonParts.QuestionType.MULTIPLE_CHOICE: {
                 return createSelectItemQuestion(question, answer, options);
             }
             case JsonParts.QuestionType.SPEECH_INPUT:{
@@ -174,7 +174,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
     private static Question createSelectItemQuestion(String question, String answer, String options) {
         final String[] optionsArray = jsonArrayToStringArray(options);
-        return new SelectItemQuestion(question, Integer.parseInt(answer), optionsArray);
+        return new MultipleChoiceQuestion(question, Integer.parseInt(answer), optionsArray);
     }
 
     private static String[] jsonArrayToStringArray(String json) {
