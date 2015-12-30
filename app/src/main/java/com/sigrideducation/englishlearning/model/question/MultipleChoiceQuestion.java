@@ -24,7 +24,7 @@ public final class MultipleChoiceQuestion extends Question<Integer> {
 
     @Override
     public QuestionType getType() {
-        return QuestionType.SINGLE_SELECT_ITEM;
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override

@@ -9,8 +9,8 @@ import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
-import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.MultipleChoiceQuestion;
+import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 import com.sigrideducation.englishlearning.views.BaseQuestionView;
 import com.sigrideducation.englishlearning.views.ContentTipQuestionView;
@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Adapter to display quizzes.
+ * Created by Sachin on 12/30/2015.
+ * Adapter for displaying the questions.
  */
 public class QuestionAdapter extends BaseAdapter {
 
@@ -33,7 +34,6 @@ public class QuestionAdapter extends BaseAdapter {
     private final List<Question> mQuestions;
     private final Lesson mLesson;
     private final int mViewTypeCount;
-    private int mScore=0;
     private List<String> mQuestionType;
 
     public QuestionAdapter(Context context, Lesson lesson) {
@@ -41,15 +41,14 @@ public class QuestionAdapter extends BaseAdapter {
         mLesson = lesson;
         mQuestions = lesson.getQuestions();
         mViewTypeCount = calculateViewTypeCount();
-
     }
 
     private int calculateViewTypeCount() {
-        Set<String> tmpTypes = new HashSet<>();
+        Set<String> typesSet = new HashSet<>();
         for (int i = 0; i < mQuestions.size(); i++) {
-            tmpTypes.add(mQuestions.get(i).getType().getJsonName());
+            typesSet.add(mQuestions.get(i).getType().getJsonName());
         }
-        mQuestionType = new ArrayList<>(tmpTypes);
+        mQuestionType = new ArrayList<>(typesSet);
         return mQuestionType.size();
     }
 
@@ -91,32 +90,30 @@ public class QuestionAdapter extends BaseAdapter {
                 return convertView;
             }
         }
-        convertView = getViewInternal(question);
+        convertView = createViewOf(question);
         return convertView;
     }
 
-    private BaseQuestionView getViewInternal(Question question) {
+    private BaseQuestionView createViewOf(Question question) {
         if (null == question) {
             throw new IllegalArgumentException("Question must not be null");
         }
-        return createViewFor(question);
-    }
-
-    private BaseQuestionView createViewFor(Question question) {
-        switch (question.getType()) {
-            case FILL_BLANK:
-                return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);
-            case SINGLE_SELECT_ITEM:
-                return new MultipleChoiceQuestionView(mContext, mLesson, (MultipleChoiceQuestion) question);
-            case SPEECH_INPUT:
-                return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
-            case CONTENT_TIP:
-                return new ContentTipQuestionView(mContext,mLesson,(ContentTipQuestion) question,true);
-            case MAKE_SENTENCE:
-                return new MakeSentenceQuestionView(mContext,mLesson,(MakeSentenceQuestion) question,true);
+        else {
+            switch (question.getType()) {
+                case CONTENT_TIP:
+                    return new ContentTipQuestionView(mContext,mLesson,(ContentTipQuestion) question,true);
+                case FILL_BLANK:
+                    return new FillBlankQuestionView(mContext, mLesson, (FillBlankQuestion) question);
+                case MAKE_SENTENCE:
+                    return new MakeSentenceQuestionView(mContext,mLesson,(MakeSentenceQuestion) question,true);
+                case MULTIPLE_CHOICE:
+                    return new MultipleChoiceQuestionView(mContext, mLesson, (MultipleChoiceQuestion) question);
+                case SPEECH_INPUT:
+                    return new SpeechInputQuestionView(mContext, mLesson, (SpeechInputQuestion) question);
+            }
+            throw new UnsupportedOperationException(
+                    "Question of type " + question.getType() + " can not be displayed.");
         }
-        throw new UnsupportedOperationException(
-                "Question of type " + question.getType() + " can not be displayed.");
     }
     
 }

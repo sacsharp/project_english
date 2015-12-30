@@ -2,12 +2,10 @@ package com.sigrideducation.englishlearning.model.question;
 
 import com.sigrideducation.englishlearning.model.JsonParts;
 
-/**
- * Available types of quizzes.
- */
+
 public enum QuestionType {
     FILL_BLANK(JsonParts.QuestionType.FILL_BLANK, FillBlankQuestion.class),
-    SINGLE_SELECT_ITEM(JsonParts.QuestionType.MULTIPLE_CHOICE, MultipleChoiceQuestion.class),
+    MULTIPLE_CHOICE(JsonParts.QuestionType.MULTIPLE_CHOICE, MultipleChoiceQuestion.class),
     SPEECH_INPUT(JsonParts.QuestionType.SPEECH_INPUT,SpeechInputQuestion.class),
     CONTENT_TIP(JsonParts.QuestionType.CONTENT_TIP,ContentTipQuestion.class),
     MAKE_SENTENCE(JsonParts.QuestionType.MAKE_SENTENCE,MakeSentenceQuestion.class);
