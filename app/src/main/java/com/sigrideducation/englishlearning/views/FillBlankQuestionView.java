@@ -56,7 +56,7 @@ public class FillBlankQuestionView extends BaseQuestionView<FillBlankQuestion>
     }
 
     protected final EditText createEditText() {
-        EditText editText = (EditText) getLayoutInflater().inflate(R.layout.question_edit_text, this, false);
+        EditText editText = (EditText) getLayoutInflater().inflate(R.layout.question_fill_blank, this, false);
         editText.addTextChangedListener(this);
         editText.setOnEditorActionListener(this);
         return editText;
