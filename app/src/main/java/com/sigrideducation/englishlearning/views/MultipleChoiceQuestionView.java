@@ -32,6 +32,7 @@ public class MultipleChoiceQuestionView extends BaseQuestionView<MultipleChoiceQ
         Context context = getContext();
         mListView = new ListView(context);
         mListView.setDivider(null);
+        mListView.setSelector(R.drawable.selector_multiple_choice);
         mListView.setAdapter(new MultipleChoiceQuestionAdapter(getQuestion().getOptions(), R.layout.option_list_item));
         mListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
