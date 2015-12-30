@@ -11,14 +11,14 @@ import android.widget.ListView;
 
 import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.activity.QuestionActivity;
-import com.sigrideducation.englishlearning.adapter.LessonAdapter;
+import com.sigrideducation.englishlearning.adapter.LessonsAdapter;
 
 /**
  * Created by Sachin on 12/6/2015.
  */
 public class TabFragment1 extends Fragment {
 
-    private LessonAdapter mLessonAdapter;
+    private LessonsAdapter mLessonsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,16 +37,16 @@ public class TabFragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Activity activity = getActivity();
-                startActivity(QuestionActivity.getStartIntent(activity, mLessonAdapter.getItem(position)));
+                startActivity(QuestionActivity.getStartIntent(activity, mLessonsAdapter.getItem(position)));
             }
         });
-        mLessonAdapter = new LessonAdapter(getActivity());
-        lessonsView.setAdapter(mLessonAdapter);
+        mLessonsAdapter = new LessonsAdapter(getActivity());
+        lessonsView.setAdapter(mLessonsAdapter);
     }
 
     @Override
     public void onResume() {
-        mLessonAdapter.notifyDataSetChanged();
+        mLessonsAdapter.notifyDataSetChanged();
         super.onResume();
     }
 }
