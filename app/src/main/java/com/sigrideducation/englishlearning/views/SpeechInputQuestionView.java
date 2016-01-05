@@ -36,6 +36,7 @@ public class SpeechInputQuestionView extends BaseQuestionView<SpeechInputQuestio
 
     String text;
     TextToSpeech tts;
+    static TextToSpeech tts1;
 
     public SpeechInputQuestionView(Context context, Lesson lesson, SpeechInputQuestion question) {
         super(context, lesson, question);
@@ -68,6 +69,7 @@ public class SpeechInputQuestionView extends BaseQuestionView<SpeechInputQuestio
                     Log.e("error", "Initilization Failed!");
             }
         });
+        tts1 = tts;
 
         mBtnListen.setOnClickListener(new OnClickListener() {
             @Override
@@ -145,6 +147,11 @@ public class SpeechInputQuestionView extends BaseQuestionView<SpeechInputQuestio
         if (mTextSpeechInput == null) {
             return;
         }
+    }
+
+    public static void destroy(){
+        if(tts1 != null)
+        tts1.shutdown();
     }
 
     protected class SpeechRecognitionListener implements RecognitionListener

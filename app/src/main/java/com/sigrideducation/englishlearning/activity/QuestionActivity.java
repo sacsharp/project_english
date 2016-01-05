@@ -32,6 +32,7 @@ import com.sigrideducation.englishlearning.R;
 import com.sigrideducation.englishlearning.database.ELDatabaseHelper;
 import com.sigrideducation.englishlearning.fragment.QuestionFragment;
 import com.sigrideducation.englishlearning.model.Lesson;
+import com.sigrideducation.englishlearning.views.SpeechInputQuestionView;
 
 import tourguide.tourguide.Overlay;
 import tourguide.tourguide.Pointer;
@@ -235,6 +236,12 @@ public class QuestionActivity extends AppCompatActivity {
             mQuestionFragment.showSummary(mLessonId);
             return;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SpeechInputQuestionView.destroy();
     }
 
     private void populate(String lessonId) {
