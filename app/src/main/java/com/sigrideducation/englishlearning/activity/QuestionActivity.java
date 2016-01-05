@@ -255,7 +255,7 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
         //noinspection PrivateResource
         mQuestionFab = (FloatingActionButton) findViewById(R.id.fab_question);
-        mQuestionFab.setImageResource(R.drawable.ic_play_arrow_black);
+        mQuestionFab.setImageResource(R.drawable.ic_play_arrow_black_48dp);
 
         Lesson lesson = ELDatabaseHelper.getLessonWith(this, lessonId);
         mQuestionContainer = (LinearLayout)findViewById(R.id.question_container);
