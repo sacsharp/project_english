@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sigrideducation.englishlearning" >
+    package="com.sigrideducation.englishlearning">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,23 +11,19 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-
-        <activity android:name=".activity.HomeActivity" >
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.MainActivity" >
-
-        </activity>
-
+        <activity android:name=".activity.MainActivity"></activity>
         <activity
             android:name=".activity.QuestionActivity"
             android:windowSoftInputMode="adjustPan" />
-
+        <activity android:name=".activity.GameMakeSentenceActivity"></activity>
     </application>
 
 </manifest>
