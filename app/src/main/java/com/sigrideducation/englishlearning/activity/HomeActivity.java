@@ -30,6 +30,7 @@ import java.net.URL;
 public class HomeActivity extends AppCompatActivity {
 
     private static String url = "http://getcult.com/static/Data/data";
+    private static String urlGame = "http://getcult.com/static/Data/dataGame";
     SharedPreferences sharedPreferences;
 
     @Override
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         new JSONParse().execute();
+        new JSONParseForGame().execute();
     }
 
     private class JSONParse extends AsyncTask<String, Void, String> {
@@ -98,12 +100,66 @@ public class HomeActivity extends AppCompatActivity {
             {
                 ELDatabaseHelper.update(getApplicationContext(), json);
             }
+//            Intent intent = new Intent(HomeActivity.this,MainActivity.class);
+//            startActivity(intent);
+//            finish();
+            dialog.hide();
+        }
+    }
+    private class JSONParseForGame extends AsyncTask<String, Void, String> {
+        ProgressDialog dialog = new ProgressDialog(HomeActivity.this);
+        @Override
+        protected void onPreExecute() {
+
+            dialog.setMessage("Please wait..");
+            dialog.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            String response;
+
+            if(hasActiveInternetConnection(getApplicationContext()))
+            {
+                try {
+                    HttpClient httpclient = new DefaultHttpClient();
+                    HttpPost httppost = new HttpPost(urlGame);
+                    HttpResponse httpResponse = httpclient.execute(httppost);
+                    HttpEntity httpEntity = httpResponse.getEntity();
+                    response = EntityUtils.toString(httpEntity);
+
+                    JSONArray jsonArray = new JSONArray(response);
+                    final JSONArray resultArray = jsonArray.getJSONObject(0).getJSONArray("games");
+                    Log.i("resultArray for Game",resultArray.toString());
+                    return resultArray.toString();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else {
+
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String json) {
+            if(json !=null)
+            {
+                ELDatabaseHelper.fillGames(getApplicationContext(), json);
+            }
             Intent intent = new Intent(HomeActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
             dialog.hide();
         }
     }
+
 
     private boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
