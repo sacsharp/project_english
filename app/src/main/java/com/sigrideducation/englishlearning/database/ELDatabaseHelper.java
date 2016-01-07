@@ -7,14 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.sigrideducation.englishlearning.model.GameQuestion;
 import com.sigrideducation.englishlearning.model.JsonParts;
 import com.sigrideducation.englishlearning.model.Lesson;
 import com.sigrideducation.englishlearning.model.Theme;
 import com.sigrideducation.englishlearning.model.question.ContentTipQuestion;
 import com.sigrideducation.englishlearning.model.question.FillBlankQuestion;
 import com.sigrideducation.englishlearning.model.question.MakeSentenceQuestion;
-import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.MultipleChoiceQuestion;
+import com.sigrideducation.englishlearning.model.question.Question;
 import com.sigrideducation.englishlearning.model.question.SpeechInputQuestion;
 
 import org.json.JSONArray;
@@ -77,6 +78,38 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
 
         final List<Question> questions = getQuestions(id, readableDatabase);
         return new Lesson(name, id, theme, questions, solved, score);
+    }
+
+    public static List<GameQuestion> getAllGameQuestions(Context context) {
+        SQLiteDatabase readableDatabase = getReadableDatabase(context);
+        Cursor cursor = readableDatabase.query(GameMakeSentenceTable.NAME, GameMakeSentenceTable.PROJECTION, null, null, null, null, null);
+        cursor.moveToFirst();
+        List<GameQuestion> tmpGameQuestions = new ArrayList<>(cursor.getCount());
+        do{
+            final GameQuestion gameQuestion = getGameQuestion(cursor);
+            tmpGameQuestions.add(gameQuestion);
+        }while(cursor.moveToNext());
+        return tmpGameQuestions;
+    }
+
+    public static List<GameQuestion> getGameQuestions(Context context,int questions) {
+        SQLiteDatabase readableDatabase = getReadableDatabase(context);
+        Cursor cursor = readableDatabase.query(GameMakeSentenceTable.NAME, GameMakeSentenceTable.PROJECTION, null, null, null, null, null);
+        cursor.moveToFirst();
+        List<GameQuestion> tmpGameQuestions = new ArrayList<>(cursor.getCount());
+        do{
+            final GameQuestion gameQuestion = getGameQuestion(cursor);
+            tmpGameQuestions.add(gameQuestion);
+        }while(cursor.moveToNext() && cursor.getPosition() <= questions-1);
+        return tmpGameQuestions;
+    }
+
+    public static GameQuestion getGameQuestion(Cursor cursor) {
+        final int id = cursor.getInt(0);
+        final String imageurl = cursor.getString(1);
+        final String question = cursor.getString(2);
+        final String answer = cursor.getString(3);
+        return new GameQuestion(id, imageurl, question, answer);
     }
 
     private static boolean getBooleanFromDatabase(String isSolved) {
@@ -221,6 +254,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(ChapterTable.CREATE);
         db.execSQL(LessonTable.CREATE);
         db.execSQL(QuestionTable.CREATE);
+        db.execSQL(GameMakeSentenceTable.CREATE);
     }
 
     @Override
@@ -318,6 +352,36 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             values.put(QuestionTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
             values.put(QuestionTable.COLUMN_OPTIONS,question.optString(JsonParts.OPTIONS));
             db.insert(QuestionTable.NAME, null, values);
+        }
+    }
+
+    public static void fillGames(Context context,String data){
+        SQLiteDatabase db = getWritableDatabase(context);
+
+        try {
+            db.beginTransaction();
+            try {
+                ContentValues values = new ContentValues();
+                JSONArray qamesArray = new JSONArray(data);
+                JSONObject game,question;
+                for (int i = 0; i < qamesArray.length(); i++) {
+                    game = qamesArray.getJSONObject(i);
+                    final JSONArray questionArray = game.getJSONArray(JsonParts.QUESTIONS);
+                    for(int j=0;j<questionArray.length();j++){
+                        question = questionArray.getJSONObject(j);
+                        values.clear();
+                        values.put(GameMakeSentenceTable.COLUMN_IMAGE_URL, question.getString(JsonParts.IMAGE_URL));
+                        values.put(GameMakeSentenceTable.COLUMN_QUESTION, question.getString(JsonParts.QUESTION));
+                        values.put(GameMakeSentenceTable.COLUMN_ANSWER, question.getString(JsonParts.ANSWER));
+                        db.insert(GameMakeSentenceTable.NAME, null, values);
+                    }
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "FillGames", e);
         }
     }
 }

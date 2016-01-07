@@ -31,6 +31,7 @@ public interface JsonParts {
     String TYPE = "type";
     String SCORE = "score";
     String SOLVED = "solved";
+    String IMAGE_URL= "imageurl";
 
     interface QuestionType {
 
