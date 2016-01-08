@@ -27,9 +27,12 @@
 
             <org.apmem.tools.layouts.FlowLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:f="http://schemas.android.com/apk/res/com.sigrideducation.englishlearning"
                 android:id="@+id/flow_layout_parts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                f:weightDefault="1"
+                android:gravity="fill">
             </org.apmem.tools.layouts.FlowLayout>
 
             <View
@@ -40,9 +43,12 @@
                 android:background="@color/colorPrimaryDark"></View>
             <org.apmem.tools.layouts.FlowLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:f="http://schemas.android.com/apk/res/com.sigrideducation.englishlearning"
                 android:id="@+id/flow_layout_sentence"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                f:weightDefault="1"
+                android:gravity="fill">
             </org.apmem.tools.layouts.FlowLayout>
         </LinearLayout>
     </LinearLayout>
