@@ -37,7 +37,6 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static List<Lesson> mLessons;
     private static ELDatabaseHelper mInstance;
-
     public ELDatabaseHelper(Context context) {
         super(context, DB_NAME + DB_SUFFIX, null, DB_VERSION);
     }

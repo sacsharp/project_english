@@ -9,6 +9,8 @@
             android:id="@+id/lesson_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_double" />
+            android:padding="@dimen/spacing_double"
+            android:text="sandeep"
+        />
 
 </LinearLayout>
