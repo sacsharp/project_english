@@ -21,4 +21,12 @@
     <item name="question_content" type="id" />
     <item name="question_done" type="id" />
     <item name="question_edit_text_two" type="id" />
+
+    <string name="app_id">1017635935806</string>
+    <string name="package_name">in.sigrid.englishlearning</string>
+    <string name="achievement_perfect_10">CgkIvqzQ_s4dEAIQAQ</string>
+    <string name="achievement_superfast">CgkIvqzQ_s4dEAIQAg</string>
+    <string name="achievement_untirable">CgkIvqzQ_s4dEAIQAw</string>
+    <string name="achievement_little_step">CgkIvqzQ_s4dEAIQBA</string>
+    <string name="achievement_way_to_go">CgkIvqzQ_s4dEAIQBQ</string>
 </resources>

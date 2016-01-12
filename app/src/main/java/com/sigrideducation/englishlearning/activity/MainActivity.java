@@ -1,5 +1,6 @@
 package com.sigrideducation.englishlearning.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -89,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
             Bundle args = new Bundle();
             switch (position){
-
+                case 1:
+                    Intent intent = new Intent(parent.getContext(),ProfileActivity.class);
+                    startActivity(intent);
+                    break;
             }
         }
     }

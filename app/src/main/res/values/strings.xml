@@ -8,8 +8,8 @@
         <item>PROFILE</item>
         <item>SUBJECTS</item>
         <item>MOCK TESTS</item>
-        <item>LEARN</item>
-        <item>EXAMS</item>
+        <item>ACHIEVEMENTS</item>
+        <item>LEADERBOARDS</item>
         <item>TELL OTHERS</item>
     </string-array>
 
@@ -21,10 +21,20 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <array name="navigation_items">
-        <item> Learned Words</item>
-        <item> Still Learning Words</item>
+        <item>Learned Words</item>
+        <item>Still Learning Words</item>
     </array>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="your_progress_will_be_uploaded">Your existing achievements and score will be uploaded shortly.</string>
+    <string name="achievements_not_available">Please sign in to view achievements.</string>
+    <string name="achievement_perfect_ten_toast">Answered all correctly!</string>
+    <string name="achievement_superfast_toast">Solved 10 questions in 2 min!</string>
+    <string name="achievement_untirable_toast">Solved 20 questions!</string>
+    <string name="achievement_littlestep_toast">Solved first question!</string>
+    <string name="achievement_waytogo_toast">All wrong! Keep Trying!!</string>
+    <string name="achievement">Achievement</string>
+
+
 </resources>
 
