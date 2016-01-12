@@ -28,6 +28,11 @@ public class GameMakeSentenceActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.frame_layout_game,fragment).commit();
                 break;
             case 2:
+                Fragment fragmentTime = new FragmentGameMakeSentence();
+                Bundle bundleTime = new Bundle();
+                bundleTime.putInt("questions",1);
+                fragmentTime.setArguments(bundleTime);
+                getFragmentManager().beginTransaction().replace(R.id.frame_layout_game,fragmentTime).commit();
                 break;
             case 3:
                 Fragment fragmentUnlimited = new FragmentGameMakeSentence();

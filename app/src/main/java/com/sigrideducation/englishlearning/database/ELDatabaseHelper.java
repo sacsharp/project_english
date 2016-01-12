@@ -254,6 +254,7 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(LessonTable.CREATE);
         db.execSQL(QuestionTable.CREATE);
         db.execSQL(GameMakeSentenceTable.CREATE);
+        db.execSQL(ScoreTable.CREATE);
     }
 
     @Override
@@ -381,6 +382,20 @@ public class ELDatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, "FillGames", e);
+        }
+    }
+
+    public static void fillScore(Context context,String type, int score){
+        SQLiteDatabase db = getWritableDatabase(context);
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ScoreTable.COLUMN_TYPE, type);
+            values.put(ScoreTable.COLUMN_SCORE, score);
+            db.insert(ScoreTable.NAME, null, values);
+            db.setTransactionSuccessful();
+        }finally {
+            db.endTransaction();
         }
     }
 }
