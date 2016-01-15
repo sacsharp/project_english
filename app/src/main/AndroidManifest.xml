@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sigrideducation.englishlearning" >
+    package="in.sigrid.englishlearning" >
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,23 +12,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".activity.HomeActivity" >
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <activity android:name="in.sigrid.englishlearning.activity.HomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name="in.sigrid.englishlearning.activity.MainActivity" />
         <activity
-            android:name=".activity.QuestionActivity"
+            android:name="in.sigrid.englishlearning.activity.QuestionActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.GameMakeSentenceActivity" />
+        <activity android:name="in.sigrid.englishlearning.activity.GameMakeSentenceActivity" />
         <activity
-            android:name=".activity.VocabActivity"
+            android:name="in.sigrid.englishlearning.activity.VocabActivity"
             android:label="@string/title_activity_vocab" >
         </activity>
-        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name="in.sigrid.englishlearning.activity.ProfileActivity" />
 
     </application>
 
